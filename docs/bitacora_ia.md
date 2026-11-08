@@ -57,8 +57,8 @@ Template:
 - **Tool:** Claude Code (Claude Opus 5.5)
 - **Related story:** US-01 to US-17
 - **What we asked:** update the acceptance criteria of every story according to its refinement and add the missing ones.
-- **What we got:** 58 own criteria (AC-O1, AC-O2, …) across the 17 stories, 28 of them negative cases; every story has at least one negative case and the three donation types are covered in US-01, US-03, US-04, US-13, US-14 and US-16. The guide's minimum criteria were left unchanged. The four conflicts with the guide stay as "waiting for the instructor" notes instead of criteria.
+- **What we got:** 58 own criteria across the 17 stories, 28 of them negative cases; every story has at least one negative case and the three donation types are covered in US-01, US-03, US-04, US-13, US-14 and US-16. The guide's minimum criteria were left unchanged. The four conflicts with the guide stay as "waiting for the instructor" notes instead of criteria.
 - **What we verified and how:** _Pending: check that each own criterion is verifiable, does not describe the "how", and does not weaken a minimum criterion._
-- **What we corrected:** _Pending_
+- **What we corrected:** the AI first put our criteria in a separate "Our own criteria" section. We asked for a single "Acceptance criteria" list, as in a real backlog: the guide's minimum criteria first (same numbers) and ours after them. The issue template was updated the same way.
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
