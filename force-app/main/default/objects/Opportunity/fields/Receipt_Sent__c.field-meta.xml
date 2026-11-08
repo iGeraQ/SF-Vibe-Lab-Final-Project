@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Receipt_Sent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Set when the receipt is sent, so it is never sent twice (US-17).</description>
+    <label>Recibo enviado</label>
+    <type>Checkbox</type>
+</CustomField>

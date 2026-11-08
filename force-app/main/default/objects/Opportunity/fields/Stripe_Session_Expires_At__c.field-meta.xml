@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stripe_Session_Expires_At__c</fullName>
+    <description>When the Stripe session expires; after it the donation becomes Expired (US-03 AC5).</description>
+    <label>Vencimiento de sesión de Stripe</label>
+    <required>false</required>
+    <type>DateTime</type>
+</CustomField>

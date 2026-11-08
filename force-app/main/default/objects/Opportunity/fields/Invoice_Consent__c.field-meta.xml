@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Invoice_Consent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Donor accepted that their data is used to issue the invoice (US-06).</description>
+    <label>Consentimiento para factura</label>
+    <type>Checkbox</type>
+</CustomField>
