@@ -62,3 +62,14 @@ Template:
 - **What we corrected:** the AI first put our criteria in a separate "Our own criteria" section. We asked for a single "Acceptance criteria" list, as in a real backlog: the guide's minimum criteria first (same numbers) and ours after them. The issue template was updated the same way.
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-07 · Cross-check with the discovery session video
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5), reading the video's auto-generated transcript in the built-in browser
+- **Related story:** US-01 to US-20
+- **What we asked:** cross-check the roles and the client's answers in the discovery session video (S20, Nov 4) with the backlog, list the questions that are still open, and apply the changes.
+- **What we got:** staff roles defined (System Admin, Campaign Manager, Moderator) and mapped to the guide's terms; US-10 (RF-S3) closed as out of scope with its tasks #36 and #37; out-of-scope stories US-18 to US-20; refinement, criteria and task updates in 13 stories and 6 tasks; a new receipt task (#44). Delivery 1 now counts 11 stories.
+- **What we verified and how:** _Pending: check the conclusions against the video timestamps cited in each issue._
+- **What we corrected:** _Pending_
+- **AI error:** yes. From our meeting notes ("el System la cantidad y el status") the AI wrote that only the System Admin could change a donation's amount and status. The video shows the client meant the system, that is the payment gateway, and that no person should change them. Caught when cross-checking the video.
+- **Speed-up:** _Pending_
