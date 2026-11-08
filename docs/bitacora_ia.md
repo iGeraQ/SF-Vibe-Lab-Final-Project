@@ -95,3 +95,14 @@ Template:
 - **What we corrected:** the AI first wrote the questions as A/B options and included one about when the donation is created. We asked for prose and suggestions instead of options, and dropped that question: RF-D3 is clear and the flow already covers the client's concern, so the team decided it and recorded it in US-03.
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-08 · Technology choice and data model
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01 to US-17
+- **What we asked:** recommend which Salesforce technologies to use, compare a declarative and a code approach, and design the data model reusing standard objects to avoid redundancy.
+- **What we got:** a hybrid approach (Flows and configuration for most of the solution; Apex for Stripe and the webhook; LWC for the public campaign pages) and `docs/architecture.md`: Campaign for campaigns, Opportunity with a "Donation" record type for donations, `Payment_Notice__c` for Stripe notices, permission sets per role, and the risks to check first.
+- **What we verified and how:** _Pending: build the objects in the org and confirm the standard fields behave as described (raised amount roll-up, stages, Marketing User)._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
