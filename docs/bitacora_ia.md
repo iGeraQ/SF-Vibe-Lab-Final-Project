@@ -27,5 +27,16 @@ Template:
 - **What we got:** a minimal Salesforce DX project, `docs/` with templates, the `develop` and `release/delivery-1` branches, the board with the Requirement, AC Status and Evidence fields, 17 stories (US-01 to US-17) and a Delivery 1 checklist issue.
 - **What we verified and how:** _Pending: compare each issue against section 4 of the guide to confirm the minimum criteria kept their meaning in translation._
 - **What we corrected:** we asked for everything in English (docs, issues, board and commits) with Conventional Commits. The AI translated it and rewrote the first commit.
-- **AI error:** yes. Its first proposal, made before it could read the guide, named a branch `entrega-1`, which clashes with the `entrega-1` tag required by section 8. The AI caught it when reading the guide and the branch became the release branch.
+- **AI error:** yes, twice. Its first proposal, made before it could read the guide, named a branch `entrega-1`, which clashes with the `entrega-1` tag required by section 8; the AI caught it when reading the guide and the branch became the release branch. It also said GitHub's API could not create board views; when asked for a Kanban view it checked the API, found `createProjectV2View` and created the view with it.
+- **Speed-up:** _Pending_
+
+### 2026-11-07 · Backlog refinement from client answers
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5) with the Slack connector
+- **Related story:** US-01 to US-17
+- **What we asked:** read the `#questions` Slack channel, tell us which client questions other teams had already asked and which were answered, then record them in each issue as refinement with a conclusion, together with our notes from the client meeting.
+- **What we got:** about 30 questions from three teams, all answered on Nov 4 except a few; a Refinement section (question, client answer, source, conclusion) in 14 issues, open questions in US-08 and US-10, and two out-of-scope items in `docs/problem.md`. It flagged 4 client answers that conflict with the guide (US-03, US-06, US-08, US-10).
+- **What we verified and how:** _Pending: check each conclusion against the Slack thread and the meeting notes._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
 - **Speed-up:** _Pending_
