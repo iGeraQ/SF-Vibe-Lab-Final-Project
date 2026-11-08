@@ -84,3 +84,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-07 · Client questions and the US-03 decision
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-02, US-03, US-05, US-06, US-11
+- **What we asked:** draft the open questions for the client as consultants, and explain how the recommended donation flow would work.
+- **What we got:** a short message with the questions in prose, each with our suggestion and its requirement, and a step-by-step flow for US-03 (statuses `Pending`, `Paid`, `Expired`).
+- **What we verified and how:** _Pending_
+- **What we corrected:** the AI first wrote the questions as A/B options and included one about when the donation is created. We asked for prose and suggestions instead of options, and dropped that question: RF-D3 is clear and the flow already covers the client's concern, so the team decided it and recorded it in US-03.
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
