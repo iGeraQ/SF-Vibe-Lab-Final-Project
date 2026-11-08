@@ -1,0 +1,77 @@
+# Mexico Dreamin Donation Portal
+
+Final project for SF Vibe Lab (UADY × Salesforce, Mérida). A public Salesforce site that takes simulated donations so program students can attend Mexico Dreamin 2026. Everything runs in a test scenario: Salesforce Developer Edition, Stripe in test mode and fictitious data.
+
+| | |
+|---|---|
+| Backlog board | [GitHub Project](https://github.com/users/iGeraQ/projects/7) |
+| Public site | _Pending_ |
+| Delivery 1 (video and checklist) | [docs/deliveries/delivery-1](docs/deliveries/delivery-1/README.md) |
+| Project guide | [Guidelines](https://claude.ai/artifact/92XBSbogpRgFEzUHCS1MZs) (Spanish) |
+
+## Team
+
+| Member | GitHub | Role |
+|---|---|---|
+| _Pending_ | | |
+| _Pending_ | | |
+| _Pending_ | | |
+
+## Progress
+
+A story is **met** when all its acceptance criteria are shown with evidence in the test scenario, without breaking minimums M1 to M3. Each story's status is in the board's **AC Status** field.
+
+| Delivery | Date | Calculation | Progress |
+|---|---|---|---|
+| Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 12 × 100 | _Pending_ |
+| Delivery 2 | Tue Nov 17, 2026 | stories met across the whole backlog ÷ 17 × 100 | _Pending_ |
+
+## Structure
+
+```
+force-app/main/default/    Salesforce metadata (backed up with Salesforce CLI)
+docs/
+  problem.md               context, problem and scope
+  requirements.md          functional and non-functional requirements, constraints
+  seguridad.md             security and personal data
+  bitacora_ia.md           AI usage log
+  contribucion.md          contribution log per milestone
+  preguntas_y_reportes.md  questions and problem reports log
+  deliveries/delivery-1/   checklist, video link and delivery material
+CLAUDE.md                  context file for the AI
+```
+
+The four Spanish file names in `docs/` are required by the course guide, so they keep those names. Their content is in English.
+
+## Branches and commits
+
+- `main`: delivered work only. Each delivery is tagged `entrega-1` / `entrega-2` (tag names required by the guide).
+- `develop`: day-to-day integration.
+- `release/delivery-1`: Delivery 1 preparation. Merged into `main` through a PR.
+- `feature/US-XX-short-name`: one branch per story, created from `develop`.
+
+Commit messages are in English and follow [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`. Example: `feat(US-03): create pending donation before checkout`.
+
+To tag a delivery after merging into `main`:
+
+```bash
+git checkout main && git pull && git tag entrega-1 && git push origin entrega-1
+```
+
+## Metadata backup (weekly and before each delivery)
+
+```bash
+sf org login web --alias donaciones
+```
+
+```bash
+sf project retrieve start --target-org donaciones --metadata CustomObject ApexClass ApexTrigger Flow LightningComponentBundle PermissionSet
+```
+
+Add to `--metadata` every type you use, such as the public site's.
+
+## Secrets (minimum M3)
+
+- Stripe keys, even test keys, never go in code, versioned metadata, screenshots, the AI log or AI prompts.
+- Review every commit before pushing: the repo is public, and so is its history.
+- If a key leaks, roll it in Stripe and tell the instructor the same day.
