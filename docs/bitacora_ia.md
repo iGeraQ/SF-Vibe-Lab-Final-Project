@@ -106,3 +106,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-08 · Data model metadata
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01 to US-09, US-15, US-17
+- **What we asked:** generate the Salesforce metadata for the data model in `docs/architecture.md`.
+- **What we got:** 42 metadata files in `force-app/`: custom fields on Campaign and Opportunity, the "Donation" record type and sales process, the `Payment_Notice__c` object, 7 validation rules (email, public name, invoice data, RFC pattern, consent, anonymous without invoice, locked payment fields), the `Donation_Payment_Updates` custom permission and 4 permission sets. Checked locally: every file is well-formed XML and the project converts to Metadata API format. It was not deployed: no org of the team was connected.
+- **What we verified and how:** _Pending: deploy to the team's Developer Edition org and test each validation rule with valid and invalid data._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
