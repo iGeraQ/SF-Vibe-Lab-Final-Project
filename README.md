@@ -19,7 +19,7 @@ Final project for SF Vibe Lab (UADY × Salesforce, Mérida). A public Salesforce
 
 ## Progress
 
-A story is **met** when all its acceptance criteria are shown with evidence in the test scenario, without breaking minimums M1 to M3. Each story's status is in the board's **AC Status** field.
+A story is **met** when all its acceptance criteria are shown with evidence in the test scenario, without breaking minimums M1 to M3. Each story's status is in the board's **AC Status** field, and its label says which delivery it counts toward: `delivery-1` (US-01 to US-12) or `delivery-2` (US-13 to US-17).
 
 | Delivery | Date | Calculation | Progress |
 |---|---|---|---|

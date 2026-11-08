@@ -4,6 +4,9 @@ about: Backlog story with its acceptance criteria
 labels: user-story
 ---
 
+<!-- Add the delivery-1 or delivery-2 label for the delivery this story counts toward. -->
+
+
 | ID | Requirement | Milestone |
 |---|---|---|
 | US-XX | RF-XX | Delivery X |
