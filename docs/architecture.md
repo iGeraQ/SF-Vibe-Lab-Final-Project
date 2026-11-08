@@ -114,10 +114,16 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 | Nonprofit Success Pack (NPSP) | A large managed package that needs the instructor's approval; too much for the time we have. |
 | Nonprofit Cloud | Paid license. |
 
+## Conventions
+
+- API names in English; labels and messages users see in Spanish.
+- The metadata lives in `force-app/`; the setup steps are in the README ("Set up the org").
+- The Opportunity stages (`Pending`, `Paid`, `Expired`) are added by hand before the first deploy, so we don't overwrite the org's standard stage list.
+
 ## Access and security
 
 - **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous. It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
-- **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand; only the payment integration sets them.
+- **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand: the `Payment_Fields_Locked` validation rule blocks it unless the user has the `Donation_Payment_Updates` custom permission, which only the "Donaciones · Payment Integration" permission set grants (site guest user and scheduled flow).
 
 | Permission set | Campaign | Donation |
 |---|---|---|

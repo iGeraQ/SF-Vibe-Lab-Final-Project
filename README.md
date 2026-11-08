@@ -59,6 +59,34 @@ To tag a delivery after merging into `main`:
 git checkout main && git pull && git tag entrega-1 && git push origin entrega-1
 ```
 
+## Set up the org
+
+The data model in `force-app/` follows `docs/architecture.md`. API names are in English; labels and messages users see are in Spanish.
+
+1. Connect the team's Developer Edition org:
+
+```bash
+sf org login web --alias donaciones
+```
+
+2. Add the donation stages to the Opportunity **Stage** picklist (Setup → Object Manager → Opportunity → Fields & Relationships → Stage → New). They must exist before the deploy, because the "Donation" sales process uses them:
+
+| Stage | Type | Probability |
+|---|---|---|
+| Pending | Open (Pipeline) | 10% |
+| Paid | Closed/Won | 100% |
+| Expired | Closed/Lost | 0% |
+
+3. Deploy the data model:
+
+```bash
+sf project deploy start --source-dir force-app --target-org donaciones
+```
+
+4. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
+5. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
+6. Once the site exists, assign "Donaciones · Payment Integration" to the site's guest user, so it can apply Stripe's confirmation.
+
 ## Metadata backup (weekly and before each delivery)
 
 ```bash
