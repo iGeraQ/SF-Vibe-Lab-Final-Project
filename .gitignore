@@ -1,0 +1,16 @@
+# Salesforce CLI
+.sf/
+.sfdx/
+.localdevserver/
+node_modules/
+coverage/
+
+# Secrets (M3): never commit keys
+.env
+.env.*
+*.key
+*.pem
+
+# OS and logs
+.DS_Store
+*.log
