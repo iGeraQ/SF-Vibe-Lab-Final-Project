@@ -73,3 +73,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** yes. From our meeting notes ("el System la cantidad y el status") the AI wrote that only the System Admin could change a donation's amount and status. The video shows the client meant the system, that is the payment gateway, and that no person should change them. Caught when cross-checking the video.
 - **Speed-up:** _Pending_
+
+### 2026-11-07 · Stripe setup issues
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5), checking Stripe's official docs
+- **Related story:** US-03, US-04, US-13, US-14, US-16, US-17
+- **What we asked:** create the issues to configure a new Stripe account so implementation runs without problems.
+- **What we got:** setup issue #45 with six steps (#46 to #51): account and sandbox, API keys and secret storage, Checkout settings, Salesforce connection, test cards and CLI, and the Delivery 2 webhook. Facts checked in Stripe's docs: new accounts start in a sandbox, restricted keys work in test, `expires_at` ranges from 30 minutes to 24 hours, `es-419` locale, the Mexico test card, and webhook signatures in the `Stripe-Signature` header.
+- **What we verified and how:** _Pending: follow the steps on the real account and note any difference in each issue._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
