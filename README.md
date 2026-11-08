@@ -33,6 +33,7 @@ force-app/main/default/    Salesforce metadata (backed up with Salesforce CLI)
 docs/
   problem.md               context, problem and scope
   requirements.md          functional and non-functional requirements, constraints
+  architecture.md          hybrid approach, data model and access
   seguridad.md             security and personal data
   bitacora_ia.md           AI usage log
   contribucion.md          contribution log per milestone

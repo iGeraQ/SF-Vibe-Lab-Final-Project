@@ -10,7 +10,7 @@ Mexico Dreamin Donation Portal, the final project for SF Vibe Lab (UADY × Sales
 - Staff (System Admin, Campaign Manager, Moderator; see `docs/requirements.md`) manages campaigns and reviews donations. Nobody changes amounts or payment status by hand. The donor gets a receipt by email from Salesforce, since Stripe sends none in test mode.
 - Delivery 2: automatic confirmation from Stripe's payment notification.
 
-Stories and their acceptance criteria are in the repo issues (US-01 to US-20; US-10 and US-18 to US-20 are out of scope). Each story's source requirement is in the board's Requirement field and in `docs/requirements.md`.
+Stories and their acceptance criteria are in the repo issues (US-01 to US-20; US-10 and US-18 to US-20 are out of scope). Each story's source requirement is in the board's Requirement field and in `docs/requirements.md`. The technical design (hybrid approach, data model reusing Campaign and Opportunity, access) is in `docs/architecture.md`.
 
 ## Constraints
 
