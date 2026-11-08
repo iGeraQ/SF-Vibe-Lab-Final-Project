@@ -53,6 +53,8 @@ The ticket price is researched during discovery with the client. The team sets t
 - Any link to the real sponsorship call.
 - Data about real people.
 - Spam protection on the public form (a known risk, documented in `seguridad.md`).
+- Donations made outside the site, such as bank transfers. Staff would add them by hand later (client, Nov 4).
+- Refunds and mistaken payments (client, Nov 4).
 
 ## Dates
 
