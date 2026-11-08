@@ -47,6 +47,7 @@ Another person must be able to repeat each test by following these steps (RF-V2,
 | Risk | Impact | What we do |
 |---|---|---|
 | Spam on the public form (out of scope) | | |
+| Malicious text in name fields (cross-site scripting, SOQL injection) | | Sanitize every text input and show it as plain text (US-12) |
 
 ## 6. Gateway notification (Delivery 2)
 

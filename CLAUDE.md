@@ -6,11 +6,11 @@ Mexico Dreamin Donation Portal, the final project for SF Vibe Lab (UADY × Sales
 
 - A public Salesforce site with no login: campaigns, each goal's progress, recognition of credited donors and a donation form.
 - Three donation types: anonymous, credited (name shown) and invoice (name and RFC, the Mexican tax ID).
-- The donation is recorded as pending in Salesforce before payment. Payment goes through Stripe in test mode and ends on a thank-you page.
-- Staff sees campaigns and donations and confirms payments manually. The donor gets a receipt by email.
+- Payment goes through Stripe in test mode and ends on a thank-you page. Payment status comes only from Stripe. Whether the donation record is created before or after payment is waiting for the instructor (US-03).
+- Staff (System Admin, Campaign Manager, Moderator; see `docs/requirements.md`) manages campaigns and reviews donations. Nobody changes amounts or payment status by hand. The donor gets a receipt by email from Salesforce, since Stripe sends none in test mode.
 - Delivery 2: automatic confirmation from Stripe's payment notification.
 
-Stories and their acceptance criteria are in the repo issues (US-01 to US-17). Each story's source requirement is in the board's Requirement field and in `docs/requirements.md`.
+Stories and their acceptance criteria are in the repo issues (US-01 to US-20; US-10 and US-18 to US-20 are out of scope). Each story's source requirement is in the board's Requirement field and in `docs/requirements.md`.
 
 ## Constraints
 

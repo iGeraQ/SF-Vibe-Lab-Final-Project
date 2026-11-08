@@ -19,12 +19,12 @@ Final project for SF Vibe Lab (UADY × Salesforce, Mérida). A public Salesforce
 
 ## Progress
 
-A story is **met** when all its acceptance criteria are shown with evidence in the test scenario, without breaking minimums M1 to M3. Each story's status is in the board's **AC Status** field, and its label says which delivery it counts toward: `delivery-1` (US-01 to US-12) or `delivery-2` (US-13 to US-17).
+A story is **met** when all its acceptance criteria are shown with evidence in the test scenario, without breaking minimums M1 to M3. Each story's status is in the board's **AC Status** field, and its label says which delivery it counts toward: `delivery-1` (US-01 to US-12, except US-10) or `delivery-2` (US-13 to US-17). Stories labeled `out-of-scope` (US-10, US-18 to US-20) were captured in discovery but are not part of the scope and do not count.
 
 | Delivery | Date | Calculation | Progress |
 |---|---|---|---|
-| Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 12 × 100 | _Pending_ |
-| Delivery 2 | Tue Nov 17, 2026 | stories met across the whole backlog ÷ 17 × 100 | _Pending_ |
+| Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 11 × 100 | _Pending_ |
+| Delivery 2 | Tue Nov 17, 2026 | in-scope stories met across the whole backlog ÷ 16 × 100 | _Pending_ |
 
 ## Structure
 
