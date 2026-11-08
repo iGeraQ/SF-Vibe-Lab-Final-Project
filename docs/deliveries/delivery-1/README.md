@@ -1,0 +1,17 @@
+# Delivery 1
+
+Deadline: Tuesday, November 10, 2026, 23:59 (Mérida time). Submit the repo link with the `entrega-1` tag in the program's delivery channel.
+
+Checklist: [issue #18](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/18).
+
+| | |
+|---|---|
+| Public site | _Pending_ |
+| Demo video (5 min) | _Pending_ |
+| Progress | _Pending_ (see the main README) |
+
+## Video
+
+The 5-minute video presents the product and shows the stories marked as met working.
+
+Upload it to YouTube (unlisted) or Drive and paste the link in the table. GitHub rejects files over 100 MB, so `video/` is only for short clips or supporting screenshots. Make sure the video shows no keys and no real data.
