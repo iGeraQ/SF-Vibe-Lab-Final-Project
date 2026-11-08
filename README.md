@@ -13,9 +13,9 @@ Final project for SF Vibe Lab (UADY × Salesforce, Mérida). A public Salesforce
 
 | Member | GitHub | Role |
 |---|---|---|
-| _Pending_ | | |
-| _Pending_ | | |
-| _Pending_ | | |
+| Gerardo Villanueva | [@iGeraQ](https://github.com/iGeraQ) | Backend |
+| Mateo Ortiz | [@jeusmateo](https://github.com/jeusmateo) | Backend |
+| Juan Poot Escamilla | [@CaballeroEscamilla](https://github.com/CaballeroEscamilla) | Frontend |
 
 ## Progress
 
