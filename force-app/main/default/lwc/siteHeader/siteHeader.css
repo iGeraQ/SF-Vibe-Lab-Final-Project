@@ -1,0 +1,88 @@
+@import 'c/donationStyles';
+
+.header {
+    background: var(--don-surface);
+    border-bottom: 1px solid var(--don-border);
+}
+
+.header-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--don-text);
+    text-decoration: none;
+}
+
+.brand:hover {
+    color: var(--don-text);
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--don-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    display: block;
+    font-weight: 800;
+    font-size: 19px;
+    line-height: 1.2;
+}
+
+.brand-tagline {
+    display: block;
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--don-muted);
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--don-text);
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: var(--don-accent-dark);
+    background: var(--don-accent-soft);
+}
+
+.nav-link-current {
+    background: var(--don-accent-soft);
+    color: var(--don-accent-dark);
+}
+
+@media (max-width: 600px) {
+    .header-inner {
+        padding: 14px 16px;
+    }
+}
