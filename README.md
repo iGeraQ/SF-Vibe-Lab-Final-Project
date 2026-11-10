@@ -94,6 +94,7 @@ sf project deploy start --source-dir force-app --target-org donaciones
    - Change the custom labels `Stripe_Success_Url` (thank-you page) and `Stripe_Cancel_Url` (cancel page) to the site's URLs (Setup → Custom Labels).
    - In the site settings, choose the default owner for records the guest user creates.
 9. Create the general donation campaign with a far end date (for example 2099-12-31), so it is always open (US-08 AC8).
+10. Receipts (#44): Setup → Organization-Wide Addresses → Add, with display name **Donaciones Mexico Dreamin** and an email the team controls, allowed for all profiles; verify it from the email Salesforce sends. Receipts are sent from it and show it as the support contact (US-11 AC6). Without it, receipts go out from the default sender and without the support line. Email deliverability (Setup → Deliverability) must be "All email".
 
 ## Metadata backup (weekly and before each delivery)
 
