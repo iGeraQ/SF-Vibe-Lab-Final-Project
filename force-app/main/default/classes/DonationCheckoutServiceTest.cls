@@ -4,12 +4,17 @@ private class DonationCheckoutServiceTest {
     private static PaymentGateway.CheckoutRequest sentRequest;
     private static String requestedSessionId;
 
-    // Stands in for StripeClient (tested in StripeClientTest); a null session means the gateway fails.
+    // Stands in for StripeClient (tested in StripeClientTest). Answers per session id, or with the '*' session;
+    // no session means the gateway fails.
     private class FakeGateway extends PaymentGateway {
-        private final PaymentGateway.CheckoutSession session;
+        private final Map<String, PaymentGateway.CheckoutSession> sessions;
 
         FakeGateway(PaymentGateway.CheckoutSession session) {
-            this.session = session;
+            this(new Map<String, PaymentGateway.CheckoutSession>{ '*' => session });
+        }
+
+        FakeGateway(Map<String, PaymentGateway.CheckoutSession> sessions) {
+            this.sessions = sessions;
         }
 
         /**
@@ -19,7 +24,7 @@ private class DonationCheckoutServiceTest {
          */
         public override PaymentGateway.CheckoutSession createCheckoutSession(PaymentGateway.CheckoutRequest request) {
             sentRequest = request;
-            return answer();
+            return answer('*');
         }
 
         /**
@@ -29,10 +34,11 @@ private class DonationCheckoutServiceTest {
          */
         public override PaymentGateway.CheckoutSession getCheckoutSession(String sessionId) {
             requestedSessionId = sessionId;
-            return answer();
+            return answer(sessionId);
         }
 
-        private PaymentGateway.CheckoutSession answer() {
+        private PaymentGateway.CheckoutSession answer(String sessionId) {
+            PaymentGateway.CheckoutSession session = sessions.containsKey(sessionId) ? sessions.get(sessionId) : sessions.get('*');
             if (session == null) {
                 throw new PaymentGateway.GatewayException('Gateway down');
             }
@@ -231,6 +237,70 @@ private class DonationCheckoutServiceTest {
     static void confirmOfFinishedDonationDoesNotCallTheGateway() {
         Assert.areEqual('Paid', confirm('cs_done', session('cs_done')));
         Assert.isNull(requestedSessionId);
+    }
+
+    @IsTest
+    static void applyGatewayStatusSavesPaidAndExpiredDonationsInOneBatch() {
+        PaymentGateway.CheckoutSession paid = session('cs_paid');
+        paid.paid = true;
+        paid.amount = 300;
+        PaymentGateway.CheckoutSession expired = session('cs_expired');
+        expired.expired = true;
+
+        List<Opportunity> changed = applyGatewayStatus(new Map<String, PaymentGateway.CheckoutSession>{
+            'cs_paid' => paid, 'cs_expired' => expired, 'cs_open' => session('cs_open')
+        });
+
+        Assert.areEqual(2, changed.size(), 'The open session has nothing to change yet');
+        Opportunity paidDonation = donationBySession('cs_paid');
+        Assert.areEqual('Paid', paidDonation.StageName);
+        Assert.areEqual(300, paidDonation.Amount);
+        Assert.areEqual('Scheduled_Check', paidDonation.Confirmation_Source__c);
+        Assert.areEqual('Expired', donationBySession('cs_expired').StageName);
+        Assert.areEqual('Pending', donationBySession('cs_open').StageName);
+    }
+
+    @IsTest
+    static void applyGatewayStatusLeavesUnreadableSessionsPending() {
+        PaymentGateway.CheckoutSession paid = session('cs_paid');
+        paid.paid = true;
+        paid.amount = 300;
+
+        // cs_open and cs_expired have no answer, so the fake gateway fails for them.
+        List<Opportunity> changed = applyGatewayStatus(new Map<String, PaymentGateway.CheckoutSession>{ 'cs_paid' => paid });
+
+        Assert.areEqual(1, changed.size());
+        Assert.areEqual('Paid', donationBySession('cs_paid').StageName);
+        Assert.areEqual('Pending', donationBySession('cs_open').StageName, 'It is asked again on the next run');
+        Assert.areEqual('Pending', donationBySession('cs_expired').StageName);
+    }
+
+    @IsTest
+    static void applyGatewayStatusSkipsFinishedDonations() {
+        List<Opportunity> done = [SELECT Id, StageName, Stripe_Session_Id__c FROM Opportunity WHERE Stripe_Session_Id__c = 'cs_done' WITH SYSTEM_MODE];
+        List<Opportunity> changed;
+        System.runAs(integrationUser()) {
+            DonationCheckoutService.gateway = new FakeGateway(session('cs_done'));
+            changed = DonationCheckoutService.applyGatewayStatus(done, 'Scheduled_Check');
+        }
+
+        Assert.areEqual(0, changed.size());
+        Assert.isNull(requestedSessionId, 'A paid donation is not asked about again');
+    }
+
+    private static List<Opportunity> applyGatewayStatus(Map<String, PaymentGateway.CheckoutSession> answers) {
+        List<Opportunity> pending = [
+            SELECT Id, StageName, Stripe_Session_Id__c
+            FROM Opportunity
+            WHERE Stripe_Session_Id__c IN ('cs_paid', 'cs_open', 'cs_expired')
+            WITH SYSTEM_MODE
+        ];
+        List<Opportunity> changed;
+        System.runAs(integrationUser()) {
+            DonationCheckoutService.gateway = new FakeGateway(answers);
+            changed = DonationCheckoutService.applyGatewayStatus(pending, 'Scheduled_Check');
+        }
+        return changed;
     }
 
     private static String checkout(DonationCheckoutService.DonationRequest request, PaymentGateway.CheckoutSession answer) {

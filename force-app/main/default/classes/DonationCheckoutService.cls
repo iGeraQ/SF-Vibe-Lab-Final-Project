@@ -57,7 +57,7 @@ public without sharing class DonationCheckoutService {
             return donation.StageName;
         }
 
-        if (!applySession(donation, readSession(sessionId))) {
+        if (!applySession(donation, readSession(sessionId), 'Return_Page')) {
             return donation.StageName;
         }
         try {
@@ -66,6 +66,41 @@ public without sharing class DonationCheckoutService {
             throw error('No pudimos registrar el estado de tu pago. Lo revisaremos y te escribiremos.');
         }
         return donation.StageName;
+    }
+
+    /**
+     * @description Applies the gateway's status to many pending donations, for the scheduled check (US-03 AC5).
+     * Not exposed to the site. A session the gateway can't read stays Pending for the next run.
+     * @param donations donations with Id, StageName and Stripe_Session_Id__c; anything not Pending is skipped
+     * @param source the Confirmation_Source__c value for donations that turn out paid, such as Scheduled_Check
+     * @return the donations whose status changed and were saved
+     */
+    // ponytail: one callout per donation, so callers send at most 100 donations per transaction (the callout limit).
+    public static List<Opportunity> applyGatewayStatus(List<Opportunity> donations, String source) {
+        List<Opportunity> changed = new List<Opportunity>();
+        for (Opportunity donation : donations) {
+            if (donation.StageName == 'Pending' && String.isNotBlank(donation.Stripe_Session_Id__c)
+                    && applySessionIfReadable(donation, source)) {
+                changed.add(donation);
+            }
+        }
+        List<Opportunity> saved = new List<Opportunity>();
+        List<Database.SaveResult> results = Database.update(changed, false, AccessLevel.SYSTEM_MODE);
+        for (Integer i = 0; i < results.size(); i++) {
+            if (results[i].isSuccess()) {
+                saved.add(changed[i]);
+            }
+        }
+        return saved;
+    }
+
+    private static Boolean applySessionIfReadable(Opportunity donation, String source) {
+        try {
+            return applySession(donation, gateway.getCheckoutSession(donation.Stripe_Session_Id__c), source);
+        } catch (PaymentGateway.GatewayException e) {
+            // Stays Pending; the next run asks again.
+            return false;
+        }
     }
 
     // Returns the campaign name, or tells the donor what is wrong.
@@ -97,13 +132,13 @@ public without sharing class DonationCheckoutService {
     }
 
     // Copies the gateway's outcome onto the donation; false when there is nothing to change yet.
-    private static Boolean applySession(Opportunity donation, PaymentGateway.CheckoutSession session) {
+    private static Boolean applySession(Opportunity donation, PaymentGateway.CheckoutSession session, String source) {
         if (session.paid) {
             donation.StageName = 'Paid';
             donation.Amount = session.amount;
             donation.CloseDate = Date.today();
             donation.Stripe_Payment_Intent_Id__c = session.paymentId;
-            donation.Confirmation_Source__c = 'Return_Page';
+            donation.Confirmation_Source__c = source;
             return true;
         }
         if (session.expired) {
