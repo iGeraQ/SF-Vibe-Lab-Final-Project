@@ -172,3 +172,14 @@ Template:
 - **What we corrected:** the AI assumed plain Apex SOQL and DML skip field access, as in older API versions; the org showed otherwise.
 - **AI error:** `List.add(0, element)` on an empty list, and test users without "Marketing User".
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Payment gateway as a dependency
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03, US-04
+- **What we asked:** refactor the Stripe calls: a `StripeClient` that extends a payment gateway provider, with one method per operation instead of a generic `callStripe`, injected into the service.
+- **What we got:** `PaymentGateway` (abstract class with `createCheckoutSession` and `getCheckoutSession`, and gateway-neutral request and session types), `StripeClient` (its Stripe implementation; it knows the form encoding, cents, `es-419` and the `{CHECKOUT_SESSION_ID}` placeholder) and `DonationCheckoutService` receiving the gateway through a `@TestVisible` static field. `StripeClientTest` checks the Stripe requests with a mocked callout; the service tests use a fake gateway, so they make no callouts.
+- **What we verified and how:** _Pending: run the three test classes in the team org._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
