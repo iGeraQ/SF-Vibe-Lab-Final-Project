@@ -9,8 +9,8 @@ We build the portal with a **hybrid approach**: configuration and Flows for most
 | Data | Standard **Campaign** and **Opportunity** plus a few custom fields | Reuse avoids duplicating what Salesforce already has: dates, status, amounts and the campaign's raised total. |
 | Public site | **Experience Cloud** site (Build Your Own template) with a guest user | Salesforce's native way to publish a site with no login. |
 | Campaign pages and donor recognition | **LWC** with a read-only Apex controller | Lets us show images and a progress bar, and exposes only public fields to the guest. |
-| Donation form | **Screen Flow** | What the team already knows: conditional fields, validation and the amount confirmation. |
-| Start the payment | **Invocable Apex** called from the Flow | Creates the donation and the Stripe Checkout Session in one controlled step. Stripe expects form-encoded requests, which Apex handles easily. |
+| Donation form | **LWC** | It must send the donor to Stripe's page, which a Screen Flow can't do without an extra component. It shows the conditional fields, the validation and the amount confirmation. |
+| Start the payment | **Apex** (`DonationCheckoutService.startCheckout`) called from the LWC | Creates the Stripe Checkout Session and then the donation in one controlled step, and returns Stripe's URL. Stripe expects form-encoded requests, which Apex handles easily. |
 | Payment confirmation (Delivery 1) | Apex that checks the session with Stripe when the donor returns, plus a **scheduled Apex** job (`Schedulable`) for pending and expired donations, scheduled by the integration user that holds the payment permission. Not a schedule-triggered flow: it runs as Automated Process, which can't get that permission set | The status always comes from Stripe, never from a person. |
 | Receipt and simulated invoice | **Record-triggered Flow** with email templates in Spanish | No code needed. |
 | Staff app | **Lightning App**, list views, page layouts and **permission sets** | Configuration only. |
@@ -79,7 +79,7 @@ Donations use their own record type "Donation", with a sales process whose stage
 | Status | `StageName` | Standard | US-03 |
 | Payment date | `CloseDate` | Standard | US-14 |
 | Record name | `Name`, set automatically, for example "DON-0001 · Campaign" | Standard | — |
-| Our reference | `Donation_Reference__c`: auto-number `DON-{0000}`, sent to Stripe as `client_reference_id` | Custom | US-03 AC2 |
+| Our reference | `Donation_Reference__c`: `DON-` plus 8 random characters, set by Apex before calling Stripe (no callout is allowed after DML in one transaction) and sent as `client_reference_id` | Custom | US-03 AC2 |
 | Anonymous | `Is_Anonymous__c` | Custom | US-02 |
 | Invoice requested | `Invoice_Requested__c` | Custom | US-06, US-07 |
 | Donation type | `Donation_Type__c`: formula from the two checkboxes (Anónima, Acreditada, Factura, Anónima con factura) | Custom | US-03, US-09 |
@@ -134,9 +134,9 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 
 ## Inventory
 
-**Flows:** donation form (Screen Flow), receipt and invoice emails (record-triggered).
+**Flows:** receipt and invoice emails (record-triggered).
 
-**Apex:** `DonationCheckoutService` (invocable: creates the donation and the Checkout Session), the payment check when the donor returns, the scheduled check for pending and expired donations, `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
+**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), the scheduled check for pending and expired donations, `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
 
 **LWC:** campaign list, campaign detail with progress and recognition.
 

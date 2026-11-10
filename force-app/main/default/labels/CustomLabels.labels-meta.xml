@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Stripe_Cancel_Url</fullName>
+        <categories>Stripe</categories>
+        <language>es</language>
+        <protected>true</protected>
+        <shortDescription>Stripe cancel URL</shortDescription>
+        <value>https://example.com/donacion-cancelada</value>
+    </labels>
+    <labels>
+        <fullName>Stripe_Success_Url</fullName>
+        <categories>Stripe</categories>
+        <language>es</language>
+        <protected>true</protected>
+        <shortDescription>Stripe success URL</shortDescription>
+        <value>https://example.com/gracias</value>
+    </labels>
+</CustomLabels>
