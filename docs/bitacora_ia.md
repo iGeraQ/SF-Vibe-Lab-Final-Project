@@ -117,3 +117,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Client answers in the backlog
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-02, US-05, US-06, US-11
+- **What we asked:** find the instructor's answers in Slack #questions and update the stories and tasks that were waiting for them.
+- **What we got:** new and changed acceptance criteria (US-02 AC3, AC5, AC7; US-05 AC8; US-06 AC9; US-11 AC6), a refinement entry per answer, scope notes in tasks #22, #26, #27, #29 and #44, the entry in `docs/preguntas_y_reportes.md`, and the `Anonymous_Without_Invoice` validation rule removed.
+- **What we verified and how:** each issue body read back from GitHub after the edit and compared with the text we sent.
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
