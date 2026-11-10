@@ -205,3 +205,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Scheduled check for pending donations
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03 (AC5 and refinement 2), US-14
+- **What we asked:** a scheduled check that applies Stripe's status to pending donations the thank-you page never confirmed, reusing the bulk `applyGatewayStatus` the other AI session added to `DonationCheckoutService`.
+- **What we got:** `PendingDonationCheck`, a Queueable with callouts that takes up to 100 pending donations older than 5 minutes and passes them to `applyGatewayStatus` with source `Scheduled_Check`; its inner `ScheduledRun` queues it, and `scheduleEveryQuarterHour()` schedules it at minutes 00, 15, 30 and 45. Paid donations then get their receipt from `DonationTrigger`. `PendingDonationCheckTest` has 4 tests with a fake gateway.
+- **What we verified and how:** check-only deploy in the team org with the five test classes: 39 tests pass; coverage `PendingDonationCheck` 100%.
+- **What we corrected:** the first version implemented `Queueable` and `Schedulable` in one class, which Salesforce rejects; the schedulable part moved to an inner class. One test ran the real Stripe client at `Test.stopTest()` until it got the fake gateway too.
+- **AI error:** the `Queueable` plus `Schedulable` combination above.
+- **Speed-up:** _Pending_
