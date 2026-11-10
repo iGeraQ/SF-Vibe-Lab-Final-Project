@@ -106,3 +106,36 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-08 · Data model metadata
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01 to US-09, US-15, US-17
+- **What we asked:** generate the Salesforce metadata for the data model in `docs/architecture.md`.
+- **What we got:** 42 metadata files in `force-app/`: custom fields on Campaign and Opportunity, the "Donation" record type and sales process, the `Payment_Notice__c` object, 7 validation rules (email, public name, invoice data, RFC pattern, consent, anonymous without invoice, locked payment fields), the `Donation_Payment_Updates` custom permission and 4 permission sets. Checked locally: every file is well-formed XML and the project converts to Metadata API format. It was not deployed: no org of the team was connected.
+- **What we verified and how:** _Pending: deploy to the team's Developer Edition org and test each validation rule with valid and invalid data._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Client answers in the backlog
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-02, US-05, US-06, US-11
+- **What we asked:** find the instructor's answers in Slack #questions and update the stories and tasks that were waiting for them.
+- **What we got:** new and changed acceptance criteria (US-02 AC3, AC5, AC7; US-05 AC8; US-06 AC9; US-11 AC6), a refinement entry per answer, scope notes in tasks #22, #26, #27, #29 and #44, the entry in `docs/preguntas_y_reportes.md`, and the `Anonymous_Without_Invoice` validation rule removed.
+- **What we verified and how:** each issue body read back from GitHub after the edit and compared with the text we sent.
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Data model review against the acceptance criteria
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01, US-03, US-05, US-06, US-08, US-09
+- **What we asked:** review PR #53 for gaps and behavior that does not match the stories and their acceptance criteria, then fix what it found.
+- **What we got:** 15 findings and their fixes: `Modify All` without `Delete` would fail the deploy; a donation could be created as `Paid`; the payment lock did not cover the campaign; rules could be skipped with another record type; campaigns had no required fields (US-08 AC3); no donation type field (US-09 AC1); credited donations did not require a name (US-03); invoice errors did not say what was missing (US-06 AC1); the Moderator could not hide a donor; System Admin could edit Stripe and consent fields; a schedule-triggered flow can't hold the payment permission; setup missed currency and time zone; `docs/seguridad.md` lacked the guest permission.
+- **What we verified and how:** XML well-formed and the project converts to Metadata API format (10 validation rules). Not deployed yet. The `Modify All` and Automated Process findings come from platform rules, not from a test in the org.
+- **What we corrected:** we chose the defaults for the open design points: the general campaign uses a far end date, the Moderator hides a donor by marking the donation anonymous, and the scheduled check is Apex run by an integration user.
+- **AI error:** the first data model version allowed the issues above; the review caught them before the deploy.
+- **Speed-up:** _Pending_

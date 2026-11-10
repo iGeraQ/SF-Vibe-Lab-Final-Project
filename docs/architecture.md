@@ -11,7 +11,7 @@ We build the portal with a **hybrid approach**: configuration and Flows for most
 | Campaign pages and donor recognition | **LWC** with a read-only Apex controller | Lets us show images and a progress bar, and exposes only public fields to the guest. |
 | Donation form | **Screen Flow** | What the team already knows: conditional fields, validation and the amount confirmation. |
 | Start the payment | **Invocable Apex** called from the Flow | Creates the donation and the Stripe Checkout Session in one controlled step. Stripe expects form-encoded requests, which Apex handles easily. |
-| Payment confirmation (Delivery 1) | Apex that checks the session with Stripe when the donor returns, plus a **Scheduled Flow** for pending and expired donations | The status always comes from Stripe, never from a person. |
+| Payment confirmation (Delivery 1) | Apex that checks the session with Stripe when the donor returns, plus a **scheduled Apex** job (`Schedulable`) for pending and expired donations, scheduled by the integration user that holds the payment permission. Not a schedule-triggered flow: it runs as Automated Process, which can't get that permission set | The status always comes from Stripe, never from a person. |
 | Receipt and simulated invoice | **Record-triggered Flow** with email templates in Spanish | No code needed. |
 | Staff app | **Lightning App**, list views, page layouts and **permission sets** | Configuration only. |
 | Webhook (Delivery 2) | **Apex REST** exposed through the site | The only option to receive Stripe's notices and verify their signature. |
@@ -58,9 +58,9 @@ erDiagram
 | Image | `Image_URL__c` (URL) | Custom | US-01 |
 | What the money is for | `Purpose__c` (text) | Custom | US-01 |
 | Progress % | `Progress__c`: formula, raised ÷ goal | Custom | US-01 |
-| Accepting donations now | `Accepts_Donations__c`: formula, `IsActive` and today within the dates (or no end date) | Custom | US-08 AC7 |
+| Accepting donations now | `Accepts_Donations__c`: formula, `IsActive` and today within the dates | Custom | US-08 AC7 |
 
-The always-open general donation campaign is a Campaign with no end date (US-08 AC8). Campaign managers need the "Marketing User" checkbox on their user to edit campaigns.
+Start date, end date, goal, description, image and purpose are required (`Campaign_Required_Fields`). The always-open general donation campaign (US-08 AC8) uses a far end date, such as 2099-12-31. Campaign managers need the "Marketing User" checkbox on their user to edit campaigns.
 
 ### Opportunity (standard): donations
 
@@ -82,6 +82,7 @@ Donations use their own record type "Donation", with a sales process whose stage
 | Our reference | `Donation_Reference__c`: auto-number `DON-{0000}`, sent to Stripe as `client_reference_id` | Custom | US-03 AC2 |
 | Anonymous | `Is_Anonymous__c` | Custom | US-02 |
 | Invoice requested | `Invoice_Requested__c` | Custom | US-06, US-07 |
+| Donation type | `Donation_Type__c`: formula from the two checkboxes (Anónima, Acreditada, Factura, Anónima con factura) | Custom | US-03, US-09 |
 | Donor email | `Donor_Email__c` (required) | Custom | US-02 |
 | Donor first and last name | `Donor_First_Name__c`, `Donor_Last_Name__c` | Custom | US-05 |
 | Company name | `Donor_Company__c` | Custom | US-05 |
@@ -94,7 +95,7 @@ Donations use their own record type "Donation", with a sales process whose stage
 | Confirmed by | `Confirmation_Source__c`: Return page or Webhook | Custom | US-15 |
 | Receipt sent | `Receipt_Sent__c`, so a receipt is never sent twice | Custom | US-17 |
 
-Anonymity and invoicing are two separate checkboxes, so the model supports both answers to the open question in US-02.
+Anonymity and invoicing are two separate checkboxes. The instructor approved anonymous donations with invoice (US-02 refinement 5, Nov 9), so no rule blocks the combination.
 
 ### Payment_Notice__c (custom, Delivery 2)
 
@@ -114,22 +115,28 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 | Nonprofit Success Pack (NPSP) | A large managed package that needs the instructor's approval; too much for the time we have. |
 | Nonprofit Cloud | Paid license. |
 
+## Conventions
+
+- API names in English; labels and messages users see in Spanish.
+- The metadata lives in `force-app/`; the setup steps are in the README ("Set up the org").
+- The Opportunity stages (`Pending`, `Paid`, `Expired`) are added by hand before the first deploy, so we don't overwrite the org's standard stage list.
+
 ## Access and security
 
-- **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous. It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
-- **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand; only the payment integration sets them.
+- **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous, plus the combined total of paid anonymous donations (US-05 AC8). It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
+- **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand: the `Payment_Fields_Locked` validation rule blocks it unless the user has the `Donation_Payment_Updates` custom permission, which only the "Donaciones · Payment Integration" permission set grants (site guest user and the integration user that schedules the Apex check). The same rule makes every new donation start as `Pending` and blocks changing its campaign. `Donation_Record_Type_Required` keeps every Opportunity on the Donation record type, so no record skips the rules.
 
 | Permission set | Campaign | Donation |
 |---|---|---|
-| System Admin | Full | Read all; amount and status read-only |
+| System Admin | Full | Read all; edit donor data; amount, status, campaign, Stripe, receipt, consent and public name read-only |
 | Campaign Manager | Create and edit | Read, including email |
-| Moderator | Read | Read, including email; edit `Public_Name__c` only |
+| Moderator | Read | Read, including email; edit `Public_Name__c` and `Is_Anonymous__c` (to hide a donor from the recognition) |
 
 ## Inventory
 
-**Flows:** donation form (Screen Flow), receipt and invoice emails (record-triggered), expiring and checking pending donations (scheduled).
+**Flows:** donation form (Screen Flow), receipt and invoice emails (record-triggered).
 
-**Apex:** `DonationCheckoutService` (invocable: creates the donation and the Checkout Session), the payment check when the donor returns, `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
+**Apex:** `DonationCheckoutService` (invocable: creates the donation and the Checkout Session), the payment check when the donor returns, the scheduled check for pending and expired donations, `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
 
 **LWC:** campaign list, campaign detail with progress and recognition.
 

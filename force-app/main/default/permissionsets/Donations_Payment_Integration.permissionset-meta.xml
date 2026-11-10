@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Donation_Payment_Updates</name>
+    </customPermissions>
+    <description>Only for the contexts that apply Stripe's confirmation: the site guest user and the integration user that schedules the Apex check. Not for schedule-triggered flows (they run as Automated Process, which can't get it). Lets it change amount, status and campaign.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Donaciones · Payment Integration</label>
+</PermissionSet>

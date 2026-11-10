@@ -26,5 +26,6 @@ Stories and their acceptance criteria are in the repo issues (US-01 to US-20; US
 - The guest visitor gets the minimum access needed. Every permission is documented in `docs/seguridad.md`.
 - No queries or DML inside loops and no hard-coded IDs. Any Apex has tests and is checked with Code Analyzer.
 - On errors, the user sees a clear message and the donation is never left in an inconsistent state.
+- Salesforce metadata: API names in English; labels and messages users see in Spanish.
 - Commit messages follow Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`), in English.
 - Log every relevant AI use in `docs/bitacora_ia.md` as it happens.

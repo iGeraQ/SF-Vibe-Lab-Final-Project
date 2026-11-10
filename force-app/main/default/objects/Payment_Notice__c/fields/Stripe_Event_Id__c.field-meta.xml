@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stripe_Event_Id__c</fullName>
+    <caseSensitive>true</caseSensitive>
+    <description>Stripe event ID; unique, so a repeated notice is ignored (US-17).</description>
+    <externalId>true</externalId>
+    <label>ID de evento de Stripe</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>
