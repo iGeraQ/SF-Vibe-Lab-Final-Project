@@ -23,7 +23,8 @@ Another person must be able to repeat each test by following these steps (RF-V2,
 | Permission | Why it is needed |
 |---|---|
 | Permission set "Donaciones · Payment Integration" (custom permission `Donation_Payment_Updates`) | When the donor returns, the guest user's Apex applies Stripe's confirmation: it changes the status and the amount, which the `Payment_Fields_Locked` validation rule blocks for everyone else. The guest user gets no object permission on Opportunity; it only works through our Apex. See the risk in section 5. |
-| _Pending: the site's other permissions (Apex classes, campaign read access)_ | |
+| Permission set "Donaciones · Sitio público": access to the `PublicCampaignController` Apex class | The campaign and recognition pages read through it. The class runs without sharing because the guest has no access to Campaign or Opportunity. It only returns public campaigns (donation campaigns that are open, or that ended while active) and only public fields: campaign data, display name and amount of paid credited donations, and the anonymous total. Never emails, real names or RFCs. Any other campaign id, or none, returns nothing. The tests check the response has no private data and that hidden campaigns return nothing; they run as an administrator, not as the guest. |
+| _Pending: the action that creates the donation from the form_ | |
 
 ## 3. Gateway keys
 

@@ -139,3 +139,14 @@ Template:
 - **What we corrected:** we chose the defaults for the open design points: the general campaign uses a far end date, the Moderator hides a donor by marking the donation anonymous, and the scheduled check is Apex run by an integration user.
 - **AI error:** the first data model version allowed the issues above; the review caught them before the deploy.
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Public site controller
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01, US-05
+- **What we asked:** the read-only Apex controller the campaign pages use: active and past campaigns with progress, and per-campaign recognition with the anonymous total.
+- **What we got:** `PublicCampaignController` (three cacheable methods that return only public fields), `PublicCampaignControllerTest` (10 tests, including one that checks no email, real name or RFC leaves the class) and the "Donaciones · Sitio público" permission set for the guest user.
+- **What we verified and how:** _Pending: run the tests in the team org. Code Analyzer run locally._
+- **What we corrected:** a review of PR #54 found that the guest could call the methods directly and get more than the site shows: `getRecognition(null)` returned donations without a campaign, any campaign id returned its donors, and past campaigns included any ended campaign (such as the Developer Edition's sample campaigns). Now only public donation campaigns are returned, the recognition filters the Donation record type, progress is computed in Apex, and the methods are not cacheable so progress is current after a payment (US-01 AC2).
+- **AI error:** the first version trusted the page to send a valid public campaign id; the guest can call the class directly.
+- **Speed-up:** _Pending_

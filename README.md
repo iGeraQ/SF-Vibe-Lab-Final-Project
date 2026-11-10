@@ -86,7 +86,7 @@ sf project deploy start --source-dir force-app --target-org donaciones
 
 5. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
 6. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
-7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Payment Integration", so it can apply Stripe's confirmation. Also assign that permission set to the integration user that schedules the pending-donations check. Both are documented in `docs/seguridad.md`.
+7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Sitio público" (campaign pages) and "Donaciones · Payment Integration" (applies Stripe's confirmation). Also assign "Donaciones · Payment Integration" (only that one) to the integration user that schedules the pending-donations check. Both are documented in `docs/seguridad.md`.
 8. Create the general donation campaign with a far end date (for example 2099-12-31), so it is always open (US-08 AC8).
 
 ## Metadata backup (weekly and before each delivery)
