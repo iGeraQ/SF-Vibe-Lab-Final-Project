@@ -139,3 +139,14 @@ Template:
 - **What we corrected:** we chose the defaults for the open design points: the general campaign uses a far end date, the Moderator hides a donor by marking the donation anonymous, and the scheduled check is Apex run by an integration user.
 - **AI error:** the first data model version allowed the issues above; the review caught them before the deploy.
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Public site controller
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01, US-05
+- **What we asked:** the read-only Apex controller the campaign pages use: active and past campaigns with progress, and per-campaign recognition with the anonymous total.
+- **What we got:** `PublicCampaignController` (three cacheable methods that return only public fields), `PublicCampaignControllerTest` (7 tests, including one that checks no email, real name or RFC leaves the class) and the "Donaciones · Sitio público" permission set for the guest user.
+- **What we verified and how:** _Pending: run the tests in the team org. Code Analyzer run locally._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
