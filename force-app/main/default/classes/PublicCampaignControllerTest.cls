@@ -3,17 +3,35 @@ private class PublicCampaignControllerTest {
 
     @TestSetup
     static void setup() {
-        // Paid donations need the payment permission (Payment_Fields_Locked).
-        Id permSetId = [SELECT Id FROM PermissionSet WHERE Name = 'Donations_Payment_Integration'].Id;
-        if ([SELECT COUNT() FROM PermissionSetAssignment WHERE AssigneeId = :UserInfo.getUserId() AND PermissionSetId = :permSetId] == 0) {
-            insert new PermissionSetAssignment(AssigneeId = UserInfo.getUserId(), PermissionSetId = permSetId);
-        }
-        // runAs applies the new permission and keeps the setup DML apart from the data DML.
+        // Paid donations need the payment permission (Payment_Fields_Locked), so the data is created by a
+        // test user that holds it, as the payment integration would.
+        User integration = new User(
+            ProfileId = UserInfo.getProfileId(),
+            Username = 'integracion.' + UserInfo.getOrganizationId() + '@example.com',
+            LastName = 'Integración',
+            Email = 'integracion@example.com',
+            Alias = 'integra',
+            TimeZoneSidKey = 'America/Merida',
+            LocaleSidKey = 'es_MX',
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'es'
+        );
+        // runAs lifts the license limit for the test user and keeps the setup DML apart from the data DML.
         System.runAs(new User(Id = UserInfo.getUserId())) {
+            insert integration;
+            insert new PermissionSetAssignment(
+                AssigneeId = integration.Id,
+                PermissionSetId = [SELECT Id FROM PermissionSet WHERE Name = 'Donations_Payment_Integration'].Id
+            );
+        }
+
+        System.runAs(integration) {
             Campaign active = campaign('Activa', -1, 30);
             Campaign paused = campaign('Pausada', -1, 30);
             paused.IsActive = false;
-            insert new List<Campaign>{ active, paused, campaign('Pasada', -30, -1), campaign('Futura', 5, 30) };
+            Campaign endedInactive = campaign('Pasada inactiva', -30, -1);
+            endedInactive.IsActive = false;
+            insert new List<Campaign>{ active, paused, endedInactive, campaign('Pasada', -30, -1), campaign('Futura', 5, 30) };
 
             Opportunity older = donation('Paid', 100, 'Empresa Uno');
             older.CloseDate = Date.today().addDays(-1);
@@ -27,6 +45,9 @@ private class PublicCampaignControllerTest {
             for (Opportunity record : donations) {
                 record.CampaignId = active.Id;
             }
+            Opportunity hidden = donation('Paid', 300, 'Donante Oculto');
+            hidden.CampaignId = paused.Id;
+            donations.add(hidden);
             insert donations;
         }
     }
@@ -45,16 +66,16 @@ private class PublicCampaignControllerTest {
 
         Assert.areEqual(1000, active.goal);
         Assert.areEqual(500, active.raised, 'Paid donations only: the pending 999 does not count');
-        Assert.areEqual(50, active.progress);
+        Assert.areEqual(50, active.progress, 'Progress is a percentage');
         Assert.areEqual('Boletos para estudiantes', active.purpose);
         Assert.areEqual('https://example.com/campana.png', active.imageUrl);
     }
 
     @IsTest
-    static void pastCampaignsListOnlyEndedOnes() {
+    static void pastCampaignsListOnlyCampaignsThatEndedWhileActive() {
         List<PublicCampaignController.CampaignView> campaigns = PublicCampaignController.getPastCampaigns();
 
-        Assert.areEqual(1, campaigns.size());
+        Assert.areEqual(1, campaigns.size(), 'An ended campaign that was inactive is not public');
         Assert.areEqual('Pasada', campaigns[0].name);
     }
 
@@ -85,10 +106,25 @@ private class PublicCampaignControllerTest {
     }
 
     @IsTest
-    static void recognitionOfCampaignWithoutDonationsIsEmpty() {
-        PublicCampaignController.Recognition recognition = PublicCampaignController.getRecognition(campaignId('Futura'));
+    static void recognitionOfPublicCampaignWithoutDonationsIsEmpty() {
+        PublicCampaignController.Recognition recognition = PublicCampaignController.getRecognition(campaignId('Pasada'));
 
         Assert.areEqual(0, recognition.donors.size());
+        Assert.areEqual(0, recognition.anonymousTotal);
+    }
+
+    @IsTest
+    static void recognitionOfHiddenCampaignIsEmpty() {
+        PublicCampaignController.Recognition recognition = PublicCampaignController.getRecognition(campaignId('Pausada'));
+
+        Assert.areEqual(0, recognition.donors.size(), 'A paused campaign is not public, even with paid donations');
+    }
+
+    @IsTest
+    static void recognitionWithoutCampaignIsEmpty() {
+        PublicCampaignController.Recognition recognition = PublicCampaignController.getRecognition(null);
+
+        Assert.areEqual(0, recognition.donors.size(), 'A null id must not match donations without a campaign');
         Assert.areEqual(0, recognition.anonymousTotal);
     }
 
