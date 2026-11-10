@@ -86,7 +86,7 @@ sf project deploy start --source-dir force-app --target-org donaciones
 
 5. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
 6. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
-7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Sitio público" (campaign pages) and "Donaciones · Payment Integration" (applies Stripe's confirmation). Also assign "Donaciones · Payment Integration" (only that one) to the integration user that schedules the pending-donations check. Both are documented in `docs/seguridad.md`.
+7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Sitio público" (campaign pages) and "Donaciones · Payment Integration" (applies Stripe's confirmation). Also assign "Donaciones · Payment Integration" (only that one) and access to the Stripe credential to the integration user, and, logged in as that user, schedule the pending-donations check (US-03 AC5) once from the Developer Console → Execute Anonymous: `PendingDonationCheck.scheduleEveryQuarterHour();` Both are documented in `docs/seguridad.md`.
 8. Connect Stripe (#49). The key only lives in Setup, never in the repo:
    - **External Credential** "Stripe": Custom protocol, a named principal `StripeKey` with an authentication parameter `ApiKey` holding the restricted key (`rk_test_…`), and a custom header `Authorization` = `{!'Bearer ' & $Credential.Stripe.ApiKey}`.
    - **Named Credential** "Stripe": URL `https://api.stripe.com`, the External Credential above, "Allow Formulas in HTTP Header" on, "Generate Authorization Header" off.
