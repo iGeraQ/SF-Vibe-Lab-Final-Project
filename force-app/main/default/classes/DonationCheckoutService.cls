@@ -1,44 +1,43 @@
 /**
- * Starts and confirms a donation's Stripe test payment (US-03, US-04), called by the site's guest user from the LWC.
- * Stripe is the only source of the payment status and amount. The guest has no access to Opportunity, so the class
- * runs without sharing and in system mode, and it only touches the donation it creates or the one tied to a session.
+ * Starts and confirms a donation's test payment (US-03, US-04), called by the site's guest user from the LWC.
+ * The payment gateway is the only source of the payment status and amount. The guest has no access to Opportunity,
+ * so the class runs without sharing and in system mode, and it only touches the donation it creates or the one
+ * tied to a session.
  */
 public without sharing class DonationCheckoutService {
 
     private static final Integer SESSION_MINUTES = 60;
     private static final Decimal MINIMUM_AMOUNT = 10;
-    private static final String STRIPE_DOWN = 'No pudimos abrir la pasarela de pago. Intenta de nuevo en unos minutos.';
+    private static final String GATEWAY_DOWN = 'No pudimos abrir la pasarela de pago. Intenta de nuevo en unos minutos.';
+
+    // The gateway is a dependency: Stripe in production, a fake in tests.
+    @TestVisible
+    private static PaymentGateway gateway = new StripeClient();
 
     /**
-     * @description Creates the Stripe Checkout Session and saves the donation as Pending (US-03 AC1, AC2).
+     * @description Creates the checkout session and saves the donation as Pending (US-03 AC1, AC2).
      * @param request the donation form
-     * @return the Stripe Checkout URL to send the donor to
+     * @return the gateway's checkout URL to send the donor to
      */
     @AuraEnabled
     public static String startCheckout(DonationRequest request) {
-        String campaignName = request == null ? null : openCampaignName(request.campaignId);
-        if (campaignName == null) {
-            throw error('Esta campaña ya no recibe donaciones.');
-        }
-        if (request.amount == null || request.amount < MINIMUM_AMOUNT) {
-            throw error('El monto mínimo es de $10 MXN.');
-        }
+        String campaignName = validCampaignName(request);
         Opportunity donation = newDonation(request, campaignName);
-        // Stripe goes first: Salesforce allows no callout after DML in the same transaction.
-        Map<String, Object> session = callStripe('/v1/checkout/sessions', checkoutForm(donation, campaignName));
-        donation.Stripe_Session_Id__c = (String) session.get('id');
+        // The gateway goes first: Salesforce allows no callout after DML in the same transaction.
+        PaymentGateway.CheckoutSession session = createSession(checkoutRequest(donation, campaignName));
+        donation.Stripe_Session_Id__c = session.id;
         try {
             insert as system donation;
         } catch (DmlException e) {
-            // The unused Stripe session expires on its own.
+            // The unused session expires on its own.
             throw error(e.getDmlMessage(0));
         }
-        return (String) session.get('url');
+        return session.url;
     }
 
     /**
-     * @description Applies Stripe's status to the donation when the donor returns to the thank-you page (US-04).
-     * @param sessionId the Checkout Session ID from the thank-you page URL
+     * @description Applies the gateway's status to the donation when the donor returns to the thank-you page (US-04).
+     * @param sessionId the checkout session id from the thank-you page URL
      * @return the donation status: Pending, Paid or Expired
      */
     @AuraEnabled
@@ -58,16 +57,7 @@ public without sharing class DonationCheckoutService {
             return donation.StageName;
         }
 
-        Map<String, Object> session = callStripe('/v1/checkout/sessions/' + EncodingUtil.urlEncode(sessionId, 'UTF-8'), null);
-        if ('paid'.equals(session.get('payment_status'))) {
-            donation.StageName = 'Paid';
-            donation.Amount = Decimal.valueOf(String.valueOf(session.get('amount_total'))) / 100;
-            donation.CloseDate = Date.today();
-            donation.Stripe_Payment_Intent_Id__c = (String) session.get('payment_intent');
-            donation.Confirmation_Source__c = 'Return_Page';
-        } else if ('expired'.equals(session.get('status'))) {
-            donation.StageName = 'Expired';
-        } else {
+        if (!applySession(donation, readSession(sessionId))) {
             return donation.StageName;
         }
         try {
@@ -76,6 +66,51 @@ public without sharing class DonationCheckoutService {
             throw error('No pudimos registrar el estado de tu pago. Lo revisaremos y te escribiremos.');
         }
         return donation.StageName;
+    }
+
+    // Returns the campaign name, or tells the donor what is wrong.
+    private static String validCampaignName(DonationRequest request) {
+        String campaignName = request == null ? null : openCampaignName(request.campaignId);
+        if (campaignName == null) {
+            throw error('Esta campaña ya no recibe donaciones.');
+        }
+        if (request.amount == null || request.amount < MINIMUM_AMOUNT) {
+            throw error('El monto mínimo es de $10 MXN.');
+        }
+        return campaignName;
+    }
+
+    private static PaymentGateway.CheckoutSession createSession(PaymentGateway.CheckoutRequest request) {
+        try {
+            return gateway.createCheckoutSession(request);
+        } catch (PaymentGateway.GatewayException e) {
+            throw error(GATEWAY_DOWN);
+        }
+    }
+
+    private static PaymentGateway.CheckoutSession readSession(String sessionId) {
+        try {
+            return gateway.getCheckoutSession(sessionId);
+        } catch (PaymentGateway.GatewayException e) {
+            throw error(GATEWAY_DOWN);
+        }
+    }
+
+    // Copies the gateway's outcome onto the donation; false when there is nothing to change yet.
+    private static Boolean applySession(Opportunity donation, PaymentGateway.CheckoutSession session) {
+        if (session.paid) {
+            donation.StageName = 'Paid';
+            donation.Amount = session.amount;
+            donation.CloseDate = Date.today();
+            donation.Stripe_Payment_Intent_Id__c = session.paymentId;
+            donation.Confirmation_Source__c = 'Return_Page';
+            return true;
+        }
+        if (session.expired) {
+            donation.StageName = 'Expired';
+            return true;
+        }
+        return false;
     }
 
     private static Opportunity newDonation(DonationRequest request, String campaignName) {
@@ -121,23 +156,21 @@ public without sharing class DonationCheckoutService {
         return donation;
     }
 
-    private static Map<String, String> checkoutForm(Opportunity donation, String campaignName) {
-        return new Map<String, String>{
-            'mode' => 'payment',
-            'locale' => 'es-419',
-            'client_reference_id' => donation.Donation_Reference__c,
-            'line_items[0][quantity]' => '1',
-            'line_items[0][price_data][currency]' => 'mxn',
-            'line_items[0][price_data][unit_amount]' => String.valueOf((donation.Amount * 100).setScale(0)),
-            'line_items[0][price_data][product_data][name]' => 'Donación · ' + campaignName,
-            'metadata[donation_reference]' => donation.Donation_Reference__c,
-            'metadata[campaign_id]' => String.valueOf(donation.CampaignId),
-            'metadata[anonymous]' => String.valueOf(donation.Is_Anonymous__c),
-            'metadata[invoice]' => String.valueOf(donation.Invoice_Requested__c),
-            'expires_at' => String.valueOf(donation.Stripe_Session_Expires_At__c.getTime() / 1000),
-            'success_url' => System.Label.Stripe_Success_Url + '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => System.Label.Stripe_Cancel_Url
+    private static PaymentGateway.CheckoutRequest checkoutRequest(Opportunity donation, String campaignName) {
+        PaymentGateway.CheckoutRequest request = new PaymentGateway.CheckoutRequest();
+        request.reference = donation.Donation_Reference__c;
+        request.amount = donation.Amount;
+        request.description = 'Donación · ' + campaignName;
+        request.expiresAt = donation.Stripe_Session_Expires_At__c;
+        request.successUrl = System.Label.Stripe_Success_Url;
+        request.cancelUrl = System.Label.Stripe_Cancel_Url;
+        request.metadata = new Map<String, String>{
+            'donation_reference' => donation.Donation_Reference__c,
+            'campaign_id' => String.valueOf(donation.CampaignId),
+            'anonymous' => String.valueOf(donation.Is_Anonymous__c),
+            'invoice' => String.valueOf(donation.Invoice_Requested__c)
         };
+        return request;
     }
 
     private static String openCampaignName(Id campaignId) {
@@ -147,32 +180,6 @@ public without sharing class DonationCheckoutService {
             }
         }
         return null;
-    }
-
-    // A form means POST; its client_reference_id doubles as the Idempotency-Key, so a retried submit makes one session.
-    private static Map<String, Object> callStripe(String path, Map<String, String> form) {
-        HttpRequest request = new HttpRequest();
-        request.setEndpoint('callout:Stripe' + path);
-        request.setMethod(form == null ? 'GET' : 'POST');
-        if (form != null) {
-            List<String> pairs = new List<String>();
-            for (String key : form.keySet()) {
-                pairs.add(key + '=' + EncodingUtil.urlEncode(form.get(key), 'UTF-8'));
-            }
-            request.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-            request.setBody(String.join(pairs, '&'));
-            request.setHeader('Idempotency-Key', form.get('client_reference_id'));
-        }
-        HttpResponse response;
-        try {
-            response = new Http().send(request);
-        } catch (CalloutException e) {
-            throw error(STRIPE_DOWN);
-        }
-        if (response.getStatusCode() != 200) {
-            throw error(STRIPE_DOWN);
-        }
-        return (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
     }
 
     private static String clean(String value) {

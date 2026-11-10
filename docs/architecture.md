@@ -136,7 +136,7 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 
 **Flows:** receipt and invoice emails (record-triggered).
 
-**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), the scheduled check for pending and expired donations, `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
+**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), which receives the payment gateway as a dependency: `PaymentGateway` (abstract: create and read a checkout session) and `StripeClient`, its Stripe implementation through the `Stripe` Named Credential, the scheduled check for pending and expired donations, `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
 
 **LWC:** campaign list, campaign detail with progress and recognition.
 
