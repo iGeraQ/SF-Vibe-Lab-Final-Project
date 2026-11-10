@@ -161,3 +161,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · First validation in the team org
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01, US-03, US-04, US-05
+- **What we asked:** run a check-only deploy (`--dry-run`) in the team org with the controller and checkout tests, and fix what failed.
+- **What we got:** the deploy validates and the 22 tests pass (coverage: `PublicCampaignController` 100%, `DonationCheckoutService` 96%). Fixes: the Opportunity sales process can't have a default value; `startsWith` doesn't exist in Spanish (we keep `gender`, so the org must be in Spanish); a permission set description was over 255 characters; test users need "Marketing User" to create campaigns; with API version 67, plain SOQL and DML check field access, so test data and helper queries run in system mode; `getPastCampaigns` failed on an empty list (`add(0, ...)`).
+- **What we verified and how:** `sf project deploy start --dry-run --test-level RunSpecifiedTests` in the team org, until it succeeded.
+- **What we corrected:** the AI assumed plain Apex SOQL and DML skip field access, as in older API versions; the org showed otherwise.
+- **AI error:** `List.add(0, element)` on an empty list, and test users without "Marketing User".
+- **Speed-up:** _Pending_

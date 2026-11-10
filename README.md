@@ -69,7 +69,7 @@ The data model in `force-app/` follows `docs/architecture.md`. API names are in 
 sf org login web --alias donaciones
 ```
 
-2. Set the org's currency and time zone (Setup → Company Information): currency locale **Spanish (Mexico) – MXN** and time zone **America/Merida**. Amounts are in MXN, and campaign dates close at midnight Mérida time.
+2. Set the org's language, currency and time zone (Setup → Company Information): default language **Spanish** (the metadata uses Spanish grammatical gender, so a deploy to an English org fails), default locale **Spanish (Mexico)**, currency locale **Spanish (Mexico) – MXN** and time zone **America/Merida**. Amounts are in MXN, and campaign dates close at midnight Mérida time.
 3. Add the donation stages to the Opportunity **Stage** picklist (Setup → Object Manager → Opportunity → Fields & Relationships → Stage → New). They must exist before the deploy, because the "Donation" sales process uses them:
 
 | Stage | Type | Probability |

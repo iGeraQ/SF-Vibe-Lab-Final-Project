@@ -1,33 +1,42 @@
 @IsTest
 private class DonationCheckoutServiceTest {
 
-    private static final String NEW_SESSION = '{"id":"cs_test_new","url":"https://checkout.stripe.com/c/pay/cs_test_new","status":"open","payment_status":"unpaid"}';
-    private static final String PAID_SESSION = '{"id":"cs_paid","status":"complete","payment_status":"paid","amount_total":30000,"payment_intent":"pi_test_1"}';
-    private static final String OPEN_SESSION = '{"id":"cs_open","status":"open","payment_status":"unpaid"}';
-    private static final String EXPIRED_SESSION = '{"id":"cs_expired","status":"expired","payment_status":"unpaid"}';
+    private static PaymentGateway.CheckoutRequest sentRequest;
+    private static String requestedSessionId;
 
-    private static HttpRequest lastRequest;
+    // Stands in for StripeClient (tested in StripeClientTest); a null session means the gateway fails.
+    private class FakeGateway extends PaymentGateway {
+        private final PaymentGateway.CheckoutSession session;
 
-    private class StripeMock implements HttpCalloutMock {
-        private final Integer status;
-        private final String body;
-
-        StripeMock(Integer status, String body) {
-            this.status = status;
-            this.body = body;
+        FakeGateway(PaymentGateway.CheckoutSession session) {
+            this.session = session;
         }
 
         /**
-         * @description Answers like Stripe and keeps the request for the asserts.
-         * @param request the callout
-         * @return the canned response
+         * @description Keeps the request and answers with the canned session.
+         * @param request the checkout the service asked for
+         * @return the canned session
          */
-        public HttpResponse respond(HttpRequest request) {
-            lastRequest = request;
-            HttpResponse response = new HttpResponse();
-            response.setStatusCode(status);
-            response.setBody(body);
-            return response;
+        public override PaymentGateway.CheckoutSession createCheckoutSession(PaymentGateway.CheckoutRequest request) {
+            sentRequest = request;
+            return answer();
+        }
+
+        /**
+         * @description Keeps the session id and answers with the canned session.
+         * @param sessionId the session the service asked for
+         * @return the canned session
+         */
+        public override PaymentGateway.CheckoutSession getCheckoutSession(String sessionId) {
+            requestedSessionId = sessionId;
+            return answer();
+        }
+
+        private PaymentGateway.CheckoutSession answer() {
+            if (session == null) {
+                throw new PaymentGateway.GatewayException('Gateway down');
+            }
+            return session;
         }
     }
 
@@ -43,7 +52,8 @@ private class DonationCheckoutServiceTest {
             TimeZoneSidKey = 'America/Merida',
             LocaleSidKey = 'es_MX',
             EmailEncodingKey = 'UTF-8',
-            LanguageLocaleKey = 'es'
+            LanguageLocaleKey = 'es',
+            UserPermissionsMarketingUser = true // creating campaigns needs Marketing User, even from Apex
         );
         System.runAs(new User(Id = UserInfo.getUserId())) {
             insert integration;
@@ -57,9 +67,9 @@ private class DonationCheckoutServiceTest {
             Campaign open = campaign('Abierta');
             Campaign closed = campaign('Cerrada');
             closed.IsActive = false;
-            insert new List<Campaign>{ open, closed };
-            // Donations already waiting for Stripe, created here so the tests make no DML before their callouts.
-            insert new List<Opportunity>{
+            // as system: the new fields have no field access on any profile until a permission set grants it.
+            insert as system new List<Campaign>{ open, closed };
+            insert as system new List<Opportunity>{
                 savedDonation(open.Id, 'cs_paid', 'Pending'),
                 savedDonation(open.Id, 'cs_open', 'Pending'),
                 savedDonation(open.Id, 'cs_expired', 'Pending'),
@@ -69,10 +79,10 @@ private class DonationCheckoutServiceTest {
     }
 
     @IsTest
-    static void startCheckoutSavesPendingDonationAndReturnsStripeUrl() {
-        String url = checkout(credited(250), new StripeMock(200, NEW_SESSION));
+    static void startCheckoutSavesPendingDonationAndReturnsGatewayUrl() {
+        String url = checkout(credited(250), newSession());
 
-        Assert.areEqual('https://checkout.stripe.com/c/pay/cs_test_new', url);
+        Assert.areEqual('https://checkout.example.com/cs_test_new', url);
         Opportunity donation = newDonation();
         Assert.areEqual('Pending', donation.StageName);
         Assert.areEqual(250, donation.Amount);
@@ -83,18 +93,18 @@ private class DonationCheckoutServiceTest {
     }
 
     @IsTest
-    static void startCheckoutSendsAmountCurrencyAndReferenceToStripe() {
-        checkout(credited(250), new StripeMock(200, NEW_SESSION));
+    static void startCheckoutSendsTheDonationToTheGateway() {
+        checkout(credited(250), newSession());
 
-        String reference = newDonation().Donation_Reference__c;
-        String body = EncodingUtil.urlDecode(lastRequest.getBody(), 'UTF-8');
-        Assert.areEqual('callout:Stripe/v1/checkout/sessions', lastRequest.getEndpoint());
-        Assert.areEqual(reference, lastRequest.getHeader('Idempotency-Key'));
-        Assert.isTrue(body.contains('line_items[0][price_data][currency]=mxn'), body);
-        Assert.isTrue(body.contains('line_items[0][price_data][unit_amount]=25000'), body);
-        Assert.isTrue(body.contains('locale=es-419'), body);
-        Assert.isTrue(body.contains('client_reference_id=' + reference), body);
-        Assert.isTrue(body.contains('session_id={CHECKOUT_SESSION_ID}'), body);
+        Opportunity donation = newDonation();
+        Assert.areEqual(donation.Donation_Reference__c, sentRequest.reference);
+        Assert.areEqual(250, sentRequest.amount);
+        Assert.areEqual('Donación · Abierta', sentRequest.description);
+        Assert.areEqual(donation.Stripe_Session_Expires_At__c, sentRequest.expiresAt);
+        Assert.areEqual(System.Label.Stripe_Success_Url, sentRequest.successUrl);
+        Assert.areEqual(System.Label.Stripe_Cancel_Url, sentRequest.cancelUrl);
+        Assert.areEqual(String.valueOf(campaignId('Abierta')), sentRequest.metadata.get('campaign_id'));
+        Assert.areEqual('false', sentRequest.metadata.get('anonymous'));
     }
 
     @IsTest
@@ -102,7 +112,7 @@ private class DonationCheckoutServiceTest {
         DonationCheckoutService.DonationRequest request = credited(100);
         request.anonymous = true;
 
-        checkout(request, new StripeMock(200, NEW_SESSION));
+        checkout(request, newSession());
 
         Opportunity donation = newDonation();
         Assert.isTrue(donation.Is_Anonymous__c);
@@ -120,7 +130,7 @@ private class DonationCheckoutServiceTest {
         request.rfc = ' xaxx010101000 ';
         request.invoiceConsent = true;
 
-        checkout(request, new StripeMock(200, NEW_SESSION));
+        checkout(request, newSession());
 
         Opportunity donation = newDonation();
         Assert.areEqual('Familia Prueba', donation.Public_Name__c, 'HTML tags and spaces are removed');
@@ -130,28 +140,28 @@ private class DonationCheckoutServiceTest {
     }
 
     @IsTest
-    static void closedCampaignIsRejectedWithoutCallingStripe() {
+    static void closedCampaignIsRejectedWithoutCallingTheGateway() {
         DonationCheckoutService.DonationRequest request = credited(250);
         request.campaignId = campaignId('Cerrada');
 
-        String message = checkoutError(request, new StripeMock(200, NEW_SESSION));
+        String message = checkoutError(request, newSession());
 
         Assert.areEqual('Esta campaña ya no recibe donaciones.', message);
-        Assert.isNull(lastRequest, 'Stripe is not called');
+        Assert.isNull(sentRequest, 'The gateway is not called');
         Assert.areEqual(0, newDonationCount());
     }
 
     @IsTest
-    static void amountBelowStripeMinimumIsRejected() {
-        String message = checkoutError(credited(5), new StripeMock(200, NEW_SESSION));
+    static void amountBelowMinimumIsRejected() {
+        String message = checkoutError(credited(5), newSession());
 
         Assert.areEqual('El monto mínimo es de $10 MXN.', message);
-        Assert.isNull(lastRequest, 'Stripe is not called');
+        Assert.isNull(sentRequest, 'The gateway is not called');
     }
 
     @IsTest
-    static void stripeErrorSavesNothing() {
-        String message = checkoutError(credited(250), new StripeMock(400, '{"error":{"message":"Invalid request"}}'));
+    static void gatewayErrorSavesNothing() {
+        String message = checkoutError(credited(250), null);
 
         Assert.areEqual('No pudimos abrir la pasarela de pago. Intenta de nuevo en unos minutos.', message);
         Assert.areEqual(0, newDonationCount());
@@ -162,34 +172,42 @@ private class DonationCheckoutServiceTest {
         DonationCheckoutService.DonationRequest request = credited(250);
         request.publicName = null;
 
-        String message = checkoutError(request, new StripeMock(200, NEW_SESSION));
+        String message = checkoutError(request, newSession());
 
         Assert.areEqual('Escribe el nombre que quieres que aparezca públicamente.', message);
         Assert.areEqual(0, newDonationCount());
     }
 
     @IsTest
-    static void confirmMarksPaidWithStripeAmount() {
-        String status = confirm('cs_paid', new StripeMock(200, PAID_SESSION));
+    static void confirmMarksPaidWithTheGatewayAmount() {
+        PaymentGateway.CheckoutSession paid = session('cs_paid');
+        paid.paid = true;
+        paid.amount = 300;
+        paid.paymentId = 'pi_test_1';
+
+        String status = confirm('cs_paid', paid);
 
         Assert.areEqual('Paid', status);
+        Assert.areEqual('cs_paid', requestedSessionId);
         Opportunity donation = donationBySession('cs_paid');
         Assert.areEqual('Paid', donation.StageName);
-        Assert.areEqual(300, donation.Amount, 'The amount comes from Stripe, not from the form');
+        Assert.areEqual(300, donation.Amount, 'The amount comes from the gateway, not from the form');
         Assert.areEqual('pi_test_1', donation.Stripe_Payment_Intent_Id__c);
         Assert.areEqual('Return_Page', donation.Confirmation_Source__c);
-        Assert.areEqual('callout:Stripe/v1/checkout/sessions/cs_paid', lastRequest.getEndpoint());
     }
 
     @IsTest
     static void confirmKeepsUnpaidSessionPending() {
-        Assert.areEqual('Pending', confirm('cs_open', new StripeMock(200, OPEN_SESSION)));
+        Assert.areEqual('Pending', confirm('cs_open', session('cs_open')));
         Assert.areEqual('Pending', donationBySession('cs_open').StageName);
     }
 
     @IsTest
     static void confirmMarksExpiredSession() {
-        Assert.areEqual('Expired', confirm('cs_expired', new StripeMock(200, EXPIRED_SESSION)));
+        PaymentGateway.CheckoutSession expired = session('cs_expired');
+        expired.expired = true;
+
+        Assert.areEqual('Expired', confirm('cs_expired', expired));
         Assert.areEqual('Expired', donationBySession('cs_expired').StageName);
     }
 
@@ -197,62 +215,68 @@ private class DonationCheckoutServiceTest {
     static void confirmOfUnknownSessionFails() {
         String message;
         System.runAs(integrationUser()) {
-            Test.setMock(HttpCalloutMock.class, new StripeMock(200, PAID_SESSION));
-            Test.startTest();
+            DonationCheckoutService.gateway = new FakeGateway(session('cs_unknown'));
             try {
                 DonationCheckoutService.confirmCheckout('cs_unknown');
             } catch (AuraHandledException e) {
                 message = e.getMessage();
             }
-            Test.stopTest();
         }
 
         Assert.areEqual('No encontramos tu donación.', message);
-        Assert.isNull(lastRequest, 'Stripe is not called for a session that is not ours');
+        Assert.isNull(requestedSessionId, 'The gateway is not asked about a session that is not ours');
     }
 
     @IsTest
-    static void confirmOfFinishedDonationDoesNotCallStripe() {
-        Assert.areEqual('Paid', confirm('cs_done', new StripeMock(200, EXPIRED_SESSION)));
-        Assert.isNull(lastRequest);
+    static void confirmOfFinishedDonationDoesNotCallTheGateway() {
+        Assert.areEqual('Paid', confirm('cs_done', session('cs_done')));
+        Assert.isNull(requestedSessionId);
     }
 
-    private static String checkout(DonationCheckoutService.DonationRequest request, StripeMock mock) {
+    private static String checkout(DonationCheckoutService.DonationRequest request, PaymentGateway.CheckoutSession answer) {
         String url;
         System.runAs(integrationUser()) {
-            Test.setMock(HttpCalloutMock.class, mock);
-            Test.startTest();
+            DonationCheckoutService.gateway = new FakeGateway(answer);
             url = DonationCheckoutService.startCheckout(request);
-            Test.stopTest();
         }
         return url;
     }
 
-    private static String checkoutError(DonationCheckoutService.DonationRequest request, StripeMock mock) {
+    private static String checkoutError(DonationCheckoutService.DonationRequest request, PaymentGateway.CheckoutSession answer) {
         String message;
         System.runAs(integrationUser()) {
-            Test.setMock(HttpCalloutMock.class, mock);
-            Test.startTest();
+            DonationCheckoutService.gateway = new FakeGateway(answer);
             try {
                 DonationCheckoutService.startCheckout(request);
             } catch (AuraHandledException e) {
                 message = e.getMessage();
             }
-            Test.stopTest();
         }
         Assert.isNotNull(message, 'Expected an error for the donor');
         return message;
     }
 
-    private static String confirm(String sessionId, StripeMock mock) {
+    private static String confirm(String sessionId, PaymentGateway.CheckoutSession answer) {
         String status;
         System.runAs(integrationUser()) {
-            Test.setMock(HttpCalloutMock.class, mock);
-            Test.startTest();
+            DonationCheckoutService.gateway = new FakeGateway(answer);
             status = DonationCheckoutService.confirmCheckout(sessionId);
-            Test.stopTest();
         }
         return status;
+    }
+
+    private static PaymentGateway.CheckoutSession newSession() {
+        PaymentGateway.CheckoutSession created = session('cs_test_new');
+        created.url = 'https://checkout.example.com/cs_test_new';
+        return created;
+    }
+
+    private static PaymentGateway.CheckoutSession session(String id) {
+        PaymentGateway.CheckoutSession result = new PaymentGateway.CheckoutSession();
+        result.id = id;
+        result.paid = false;
+        result.expired = false;
+        return result;
     }
 
     private static DonationCheckoutService.DonationRequest credited(Decimal amount) {
@@ -274,11 +298,12 @@ private class DonationCheckoutServiceTest {
                 Is_Anonymous__c, Donor_First_Name__c, Donor_Email__c, RFC__c, Invoice_Consent__c, Invoice_Consent_Date__c
             FROM Opportunity
             WHERE Stripe_Session_Id__c = 'cs_test_new'
+            WITH SYSTEM_MODE
         ];
     }
 
     private static Integer newDonationCount() {
-        return [SELECT COUNT() FROM Opportunity WHERE Donation_Reference__c != NULL];
+        return [SELECT COUNT() FROM Opportunity WHERE Donation_Reference__c != NULL WITH SYSTEM_MODE];
     }
 
     private static Opportunity donationBySession(String sessionId) {
@@ -286,6 +311,7 @@ private class DonationCheckoutServiceTest {
             SELECT StageName, Amount, Stripe_Payment_Intent_Id__c, Confirmation_Source__c
             FROM Opportunity
             WHERE Stripe_Session_Id__c = :sessionId
+            WITH SYSTEM_MODE
         ];
     }
 

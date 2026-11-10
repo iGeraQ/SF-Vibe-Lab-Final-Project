@@ -14,7 +14,8 @@ private class PublicCampaignControllerTest {
             TimeZoneSidKey = 'America/Merida',
             LocaleSidKey = 'es_MX',
             EmailEncodingKey = 'UTF-8',
-            LanguageLocaleKey = 'es'
+            LanguageLocaleKey = 'es',
+            UserPermissionsMarketingUser = true // creating campaigns needs Marketing User, even from Apex
         );
         // runAs lifts the license limit for the test user and keeps the setup DML apart from the data DML.
         System.runAs(new User(Id = UserInfo.getUserId())) {
@@ -31,7 +32,8 @@ private class PublicCampaignControllerTest {
             paused.IsActive = false;
             Campaign endedInactive = campaign('Pasada inactiva', -30, -1);
             endedInactive.IsActive = false;
-            insert new List<Campaign>{ active, paused, endedInactive, campaign('Pasada', -30, -1), campaign('Futura', 5, 30) };
+            // as system: the new fields have no field access on any profile until a permission set grants it.
+            insert as system new List<Campaign>{ active, paused, endedInactive, campaign('Pasada', -30, -1), campaign('Futura', 5, 30) };
 
             Opportunity older = donation('Paid', 100, 'Empresa Uno');
             older.CloseDate = Date.today().addDays(-1);
@@ -48,7 +50,7 @@ private class PublicCampaignControllerTest {
             Opportunity hidden = donation('Paid', 300, 'Donante Oculto');
             hidden.CampaignId = paused.Id;
             donations.add(hidden);
-            insert donations;
+            insert as system donations;
         }
     }
 
