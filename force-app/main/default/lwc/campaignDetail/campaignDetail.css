@@ -1,0 +1,85 @@
+@import 'c/donationStyles';
+
+.detail-page {
+    padding-top: 32px;
+}
+
+.layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-top: 12px;
+    align-items: flex-start;
+}
+
+.main {
+    flex: 999 1 520px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.side {
+    flex: 1 1 320px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero {
+    height: 300px;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.badge-gap {
+    margin-bottom: 8px;
+}
+
+.section-title {
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.text {
+    font-size: 17px;
+    white-space: pre-line;
+}
+
+.summary {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.raised {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--don-accent);
+    line-height: 1.1;
+}
+
+.percent {
+    margin-top: 6px;
+    font-weight: 800;
+}
+
+.btn-big {
+    min-height: 52px;
+    font-size: 17px;
+}
+
+.note {
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .hero {
+        height: 200px;
+    }
+}

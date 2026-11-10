@@ -1,0 +1,107 @@
+@import 'c/donationStyles';
+
+.recognition {
+    padding: 24px;
+}
+
+.title {
+    margin-bottom: 4px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.subtitle {
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+
+.ticker {
+    max-height: 260px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--don-bg);
+}
+
+.ticker-on {
+    height: 260px;
+}
+
+.ticker-on .ticker-track {
+    animation-name: donor-scroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.ticker:hover .ticker-track,
+.ticker:focus-within .ticker-track,
+.ticker:focus .ticker-track {
+    animation-play-state: paused;
+}
+
+@keyframes donor-scroll {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker-on .ticker-track {
+        animation: none;
+    }
+
+    .ticker-on {
+        overflow-y: auto;
+    }
+}
+
+.donors {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.donor {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--don-track);
+    font-size: 15px;
+}
+
+.donor-name {
+    overflow-wrap: anywhere;
+}
+
+.donor-amount {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.anonymous {
+    margin-top: 12px;
+    border: 1px solid var(--don-border);
+    border-radius: 12px;
+    background: var(--don-accent-soft);
+    color: var(--don-accent-dark);
+    font-weight: 700;
+}
+
+.empty {
+    border: 2px dashed var(--don-border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.empty-title {
+    font-weight: 800;
+    font-size: 17px;
+}
