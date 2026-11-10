@@ -94,7 +94,7 @@ Donations use their own record type "Donation", with a sales process whose stage
 | Confirmed by | `Confirmation_Source__c`: Return page or Webhook | Custom | US-15 |
 | Receipt sent | `Receipt_Sent__c`, so a receipt is never sent twice | Custom | US-17 |
 
-Anonymity and invoicing are two separate checkboxes, so the model supports both answers to the open question in US-02.
+Anonymity and invoicing are two separate checkboxes. The instructor approved anonymous donations with invoice (US-02 refinement 5, Nov 9), so no rule blocks the combination.
 
 ### Payment_Notice__c (custom, Delivery 2)
 
@@ -122,7 +122,7 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 
 ## Access and security
 
-- **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous. It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
+- **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous, plus the combined total of paid anonymous donations (US-05 AC8). It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
 - **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand: the `Payment_Fields_Locked` validation rule blocks it unless the user has the `Donation_Payment_Updates` custom permission, which only the "Donaciones · Payment Integration" permission set grants (site guest user and scheduled flow).
 
 | Permission set | Campaign | Donation |
