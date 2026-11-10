@@ -194,3 +194,14 @@ Template:
 - **What we corrected:** the AI used a trigger instead of the record-triggered Flow in `docs/architecture.md`, because a hand-written Flow is hard to test; Code Analyzer asked to move the trigger's branching into the class and to split the send step.
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Bulk confirmation for the scheduled check
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03
+- **What we asked:** a bulk version of the payment confirmation for the scheduled check of pending and expired donations, agreed with the session that writes the scheduled job.
+- **What we got:** `DonationCheckoutService.applyGatewayStatus(donations, source)`: one gateway call per pending donation, one update with partial success, and a session the gateway can't read stays `Pending` for the next run. Plus the `Scheduled_Check` value of `Confirmation_Source__c` and 3 tests with a fake gateway.
+- **What we verified and how:** _Pending: run the tests in the team org._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
