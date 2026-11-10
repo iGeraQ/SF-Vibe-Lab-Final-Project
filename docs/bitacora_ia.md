@@ -150,3 +150,14 @@ Template:
 - **What we corrected:** a review of PR #54 found that the guest could call the methods directly and get more than the site shows: `getRecognition(null)` returned donations without a campaign, any campaign id returned its donors, and past campaigns included any ended campaign (such as the Developer Edition's sample campaigns). Now only public donation campaigns are returned, the recognition filters the Donation record type, progress is computed in Apex, and the methods are not cacheable so progress is current after a payment (US-01 AC2).
 - **AI error:** the first version trusted the page to send a valid public campaign id; the guest can call the class directly.
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Stripe checkout
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03, US-04
+- **What we asked:** the Apex the donation form and the thank-you page call: create the Stripe Checkout Session and the pending donation, and confirm the payment when the donor returns. Plan in #24.
+- **What we got:** `DonationCheckoutService` (`startCheckout` and `confirmCheckout`), 13 tests with a mocked Stripe, the `Stripe_Success_Url` and `Stripe_Cancel_Url` labels, and `Donation_Reference__c` changed from auto-number to text: Salesforce allows no callout after DML, so Stripe is called before saving and the reference is generated in Apex.
+- **What we verified and how:** _Pending: run the tests in the team org and make a test payment once the Stripe credential exists (#49)._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
