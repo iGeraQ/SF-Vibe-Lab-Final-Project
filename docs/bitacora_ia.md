@@ -183,3 +183,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Receipt email
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-14, US-02, US-11 (task #44)
+- **What we asked:** send the donor's receipt in Spanish when a donation becomes paid, coordinating files and commits with the other AI session that was refactoring the Stripe client in the same branch.
+- **What we got:** `DonationTrigger` and `DonationReceiptService`: when a donation becomes `Paid`, `Receipt_Sent__c` is set and one plain-text receipt is sent with the reference, campaign, amount, date, donation type and, if not anonymous, the donor's name. The sender and support email come from an Org-Wide Email Address set up in Setup, so no address is in the repo. A failed send never undoes the payment: the flag goes back to false. `DonationReceiptServiceTest` has 6 tests.
+- **What we verified and how:** check-only deploy in the team org with the four test classes: 32 tests pass; coverage `DonationReceiptService` 88%, `DonationTrigger` 100%. Code Analyzer: only low-severity `runAs` notices.
+- **What we corrected:** the AI used a trigger instead of the record-triggered Flow in `docs/architecture.md`, because a hand-written Flow is hard to test; Code Analyzer asked to move the trigger's branching into the class and to split the send step.
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
