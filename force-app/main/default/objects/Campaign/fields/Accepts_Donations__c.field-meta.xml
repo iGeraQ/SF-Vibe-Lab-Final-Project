@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Accepts_Donations__c</fullName>
-    <description>Active and today within the dates; no end date means always open (US-08).</description>
-    <formula>AND(IsActive, OR(ISBLANK(StartDate), StartDate &lt;= TODAY()), OR(ISBLANK(EndDate), EndDate &gt;= TODAY()))</formula>
+    <description>Active and today within the dates (US-08). Dates are required; the general campaign uses a far end date. TODAY() follows the viewing user's time zone, so the guest user must use America/Merida.</description>
+    <formula>AND(IsActive, StartDate &lt;= TODAY(), EndDate &gt;= TODAY())</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Acepta donaciones</label>
     <type>Checkbox</type>

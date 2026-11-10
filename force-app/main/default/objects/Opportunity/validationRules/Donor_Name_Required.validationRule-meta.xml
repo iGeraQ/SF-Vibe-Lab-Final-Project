@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Donor_Name_Required</fullName>
+    <active>true</active>
+    <description>US-03 refinement 3 and US-06 AC1: credited donations need first and last name or a company; invoices need the company (legal entity) or first and last name (individual).</description>
+    <errorConditionFormula>AND(RecordType.DeveloperName = 'Donation', OR(NOT(Is_Anonymous__c), Invoice_Requested__c), IF(AND(Invoice_Requested__c, ISPICKVAL(Person_Type__c, 'Company')), ISBLANK(Donor_Company__c), IF(AND(Invoice_Requested__c, ISPICKVAL(Person_Type__c, 'Individual')), OR(ISBLANK(Donor_First_Name__c), ISBLANK(Donor_Last_Name__c)), AND(ISBLANK(Donor_Company__c), OR(ISBLANK(Donor_First_Name__c), ISBLANK(Donor_Last_Name__c))))))</errorConditionFormula>
+    <errorMessage>Captura tu nombre y apellidos o, si eres persona moral, el nombre de tu empresa.</errorMessage>
+</ValidationRule>

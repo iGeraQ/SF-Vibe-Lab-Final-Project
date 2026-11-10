@@ -69,7 +69,8 @@ The data model in `force-app/` follows `docs/architecture.md`. API names are in 
 sf org login web --alias donaciones
 ```
 
-2. Add the donation stages to the Opportunity **Stage** picklist (Setup → Object Manager → Opportunity → Fields & Relationships → Stage → New). They must exist before the deploy, because the "Donation" sales process uses them:
+2. Set the org's currency and time zone (Setup → Company Information): currency locale **Spanish (Mexico) – MXN** and time zone **America/Merida**. Amounts are in MXN, and campaign dates close at midnight Mérida time.
+3. Add the donation stages to the Opportunity **Stage** picklist (Setup → Object Manager → Opportunity → Fields & Relationships → Stage → New). They must exist before the deploy, because the "Donation" sales process uses them:
 
 | Stage | Type | Probability |
 |---|---|---|
@@ -77,15 +78,16 @@ sf org login web --alias donaciones
 | Paid | Closed/Won | 100% |
 | Expired | Closed/Lost | 0% |
 
-3. Deploy the data model:
+4. Deploy the data model:
 
 ```bash
 sf project deploy start --source-dir force-app --target-org donaciones
 ```
 
-4. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
-5. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
-6. Once the site exists, assign "Donaciones · Payment Integration" to the site's guest user, so it can apply Stripe's confirmation.
+5. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
+6. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
+7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Payment Integration", so it can apply Stripe's confirmation. Also assign that permission set to the integration user that schedules the pending-donations check. Both are documented in `docs/seguridad.md`.
+8. Create the general donation campaign with a far end date (for example 2099-12-31), so it is always open (US-08 AC8).
 
 ## Metadata backup (weekly and before each delivery)
 

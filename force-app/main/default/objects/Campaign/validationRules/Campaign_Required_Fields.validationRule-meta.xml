@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Campaign_Required_Fields</fullName>
+    <active>true</active>
+    <description>US-08 AC3 and US-01 refinement 2: every campaign needs dates, goal, description, image and purpose. The general campaign uses a far end date (US-08 AC8).</description>
+    <errorConditionFormula>OR(ISBLANK(StartDate), ISBLANK(EndDate), ISBLANK(ExpectedRevenue), ISBLANK(Description), ISBLANK(Image_URL__c), ISBLANK(Purpose__c))</errorConditionFormula>
+    <errorMessage>Para guardar la campaña captura fecha de inicio, fecha de fin, meta, descripción, URL de imagen y propósito.</errorMessage>
+</ValidationRule>

@@ -2,7 +2,7 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Payment_Fields_Locked</fullName>
     <active>true</active>
-    <description>US-09: only the payment integration changes the amount or the status (users with the Donation_Payment_Updates custom permission).</description>
-    <errorConditionFormula>AND(RecordType.DeveloperName = 'Donation', NOT(ISNEW()), OR(ISCHANGED(StageName), ISCHANGED(Amount)), NOT($Permission.Donation_Payment_Updates))</errorConditionFormula>
-    <errorMessage>El monto y el estado solo los actualiza la integración con Stripe.</errorMessage>
+    <description>US-09: only the payment integration (users with the Donation_Payment_Updates custom permission) sets the status, the amount or the campaign. A new donation always starts as Pending.</description>
+    <errorConditionFormula>AND(NOT($Permission.Donation_Payment_Updates), IF(ISNEW(), NOT(ISPICKVAL(StageName, 'Pending')), OR(ISCHANGED(StageName), ISCHANGED(Amount), ISCHANGED(CampaignId))))</errorConditionFormula>
+    <errorMessage>Una donación nueva empieza en Pending, y el estado, el monto y la campaña solo los cambia la integración con Stripe.</errorMessage>
 </ValidationRule>
