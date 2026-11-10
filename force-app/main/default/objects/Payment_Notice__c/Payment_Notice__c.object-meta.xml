@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>One record per Stripe notice that reaches Salesforce (Delivery 2: US-15, US-16, US-17).</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <gender>Masculine</gender>
+    <label>Aviso de pago</label>
+    <nameField>
+        <displayFormat>PN-{00000}</displayFormat>
+        <label>Número de aviso</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Avisos de pago</pluralLabel>
+    <sharingModel>Private</sharingModel>
+</CustomObject>

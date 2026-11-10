@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Donation_Record_Type_Required</fullName>
+    <active>true</active>
+    <description>Opportunity is only used for donations, and the other rules check the Donation record type. Without this rule, a record with another record type would skip them.</description>
+    <errorConditionFormula>RecordType.DeveloperName &lt;&gt; 'Donation'</errorConditionFormula>
+    <errorMessage>Las oportunidades de esta org son donaciones: usa el tipo de registro Donación.</errorMessage>
+</ValidationRule>
