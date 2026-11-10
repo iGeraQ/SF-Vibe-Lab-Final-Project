@@ -5,14 +5,11 @@
     <isActive>true</isActive>
     <values>
         <fullName>Pending</fullName>
-        <default>true</default>
     </values>
     <values>
         <fullName>Paid</fullName>
-        <default>false</default>
     </values>
     <values>
         <fullName>Expired</fullName>
-        <default>false</default>
     </values>
 </BusinessProcess>

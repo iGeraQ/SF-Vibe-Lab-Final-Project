@@ -150,3 +150,69 @@ Template:
 - **What we corrected:** a review of PR #54 found that the guest could call the methods directly and get more than the site shows: `getRecognition(null)` returned donations without a campaign, any campaign id returned its donors, and past campaigns included any ended campaign (such as the Developer Edition's sample campaigns). Now only public donation campaigns are returned, the recognition filters the Donation record type, progress is computed in Apex, and the methods are not cacheable so progress is current after a payment (US-01 AC2).
 - **AI error:** the first version trusted the page to send a valid public campaign id; the guest can call the class directly.
 - **Speed-up:** _Pending_
+
+### 2026-11-09 · Stripe checkout
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03, US-04
+- **What we asked:** the Apex the donation form and the thank-you page call: create the Stripe Checkout Session and the pending donation, and confirm the payment when the donor returns. Plan in #24.
+- **What we got:** `DonationCheckoutService` (`startCheckout` and `confirmCheckout`), 13 tests with a mocked Stripe, the `Stripe_Success_Url` and `Stripe_Cancel_Url` labels, and `Donation_Reference__c` changed from auto-number to text: Salesforce allows no callout after DML, so Stripe is called before saving and the reference is generated in Apex.
+- **What we verified and how:** _Pending: run the tests in the team org and make a test payment once the Stripe credential exists (#49)._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · First validation in the team org
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01, US-03, US-04, US-05
+- **What we asked:** run a check-only deploy (`--dry-run`) in the team org with the controller and checkout tests, and fix what failed.
+- **What we got:** the deploy validates and the 22 tests pass (coverage: `PublicCampaignController` 100%, `DonationCheckoutService` 96%). Fixes: the Opportunity sales process can't have a default value; `startsWith` doesn't exist in Spanish (we keep `gender`, so the org must be in Spanish); a permission set description was over 255 characters; test users need "Marketing User" to create campaigns; with API version 67, plain SOQL and DML check field access, so test data and helper queries run in system mode; `getPastCampaigns` failed on an empty list (`add(0, ...)`).
+- **What we verified and how:** `sf project deploy start --dry-run --test-level RunSpecifiedTests` in the team org, until it succeeded.
+- **What we corrected:** the AI assumed plain Apex SOQL and DML skip field access, as in older API versions; the org showed otherwise.
+- **AI error:** `List.add(0, element)` on an empty list, and test users without "Marketing User".
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Payment gateway as a dependency
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03, US-04
+- **What we asked:** refactor the Stripe calls: a `StripeClient` that extends a payment gateway provider, with one method per operation instead of a generic `callStripe`, injected into the service.
+- **What we got:** `PaymentGateway` (abstract class with `createCheckoutSession` and `getCheckoutSession`, and gateway-neutral request and session types), `StripeClient` (its Stripe implementation; it knows the form encoding, cents, `es-419` and the `{CHECKOUT_SESSION_ID}` placeholder) and `DonationCheckoutService` receiving the gateway through a `@TestVisible` static field. `StripeClientTest` checks the Stripe requests with a mocked callout; the service tests use a fake gateway, so they make no callouts.
+- **What we verified and how:** _Pending: run the three test classes in the team org._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Receipt email
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-14, US-02, US-11 (task #44)
+- **What we asked:** send the donor's receipt in Spanish when a donation becomes paid, coordinating files and commits with the other AI session that was refactoring the Stripe client in the same branch.
+- **What we got:** `DonationTrigger` and `DonationReceiptService`: when a donation becomes `Paid`, `Receipt_Sent__c` is set and one plain-text receipt is sent with the reference, campaign, amount, date, donation type and, if not anonymous, the donor's name. The sender and support email come from an Org-Wide Email Address set up in Setup, so no address is in the repo. A failed send never undoes the payment: the flag goes back to false. `DonationReceiptServiceTest` has 6 tests.
+- **What we verified and how:** check-only deploy in the team org with the four test classes: 32 tests pass; coverage `DonationReceiptService` 88%, `DonationTrigger` 100%. Code Analyzer: only low-severity `runAs` notices.
+- **What we corrected:** the AI used a trigger instead of the record-triggered Flow in `docs/architecture.md`, because a hand-written Flow is hard to test; Code Analyzer asked to move the trigger's branching into the class and to split the send step.
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Bulk confirmation for the scheduled check
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03
+- **What we asked:** a bulk version of the payment confirmation for the scheduled check of pending and expired donations, agreed with the session that writes the scheduled job.
+- **What we got:** `DonationCheckoutService.applyGatewayStatus(donations, source)`: one gateway call per pending donation, one update with partial success, and a session the gateway can't read stays `Pending` for the next run. Plus the `Scheduled_Check` value of `Confirmation_Source__c` and 3 tests with a fake gateway.
+- **What we verified and how:** _Pending: run the tests in the team org._
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Scheduled check for pending donations
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03 (AC5 and refinement 2), US-14
+- **What we asked:** a scheduled check that applies Stripe's status to pending donations the thank-you page never confirmed, reusing the bulk `applyGatewayStatus` the other AI session added to `DonationCheckoutService`.
+- **What we got:** `PendingDonationCheck`, a Queueable with callouts that takes up to 100 pending donations older than 5 minutes and passes them to `applyGatewayStatus` with source `Scheduled_Check`; its inner `ScheduledRun` queues it, and `scheduleEveryQuarterHour()` schedules it at minutes 00, 15, 30 and 45. Paid donations then get their receipt from `DonationTrigger`. `PendingDonationCheckTest` has 4 tests with a fake gateway.
+- **What we verified and how:** check-only deploy in the team org with the five test classes: 39 tests pass; coverage `PendingDonationCheck` 100%.
+- **What we corrected:** the first version implemented `Queueable` and `Schedulable` in one class, which Salesforce rejects; the schedulable part moved to an inner class. One test ran the real Stripe client at `Test.stopTest()` until it got the fake gateway too.
+- **AI error:** the `Queueable` plus `Schedulable` combination above.
+- **Speed-up:** _Pending_

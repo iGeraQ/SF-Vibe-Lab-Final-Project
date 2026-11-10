@@ -69,7 +69,7 @@ The data model in `force-app/` follows `docs/architecture.md`. API names are in 
 sf org login web --alias donaciones
 ```
 
-2. Set the org's currency and time zone (Setup → Company Information): currency locale **Spanish (Mexico) – MXN** and time zone **America/Merida**. Amounts are in MXN, and campaign dates close at midnight Mérida time.
+2. Set the org's language, currency and time zone (Setup → Company Information): default language **Spanish** (the metadata uses Spanish grammatical gender, so a deploy to an English org fails), default locale **Spanish (Mexico)**, currency locale **Spanish (Mexico) – MXN** and time zone **America/Merida**. Amounts are in MXN, and campaign dates close at midnight Mérida time.
 3. Add the donation stages to the Opportunity **Stage** picklist (Setup → Object Manager → Opportunity → Fields & Relationships → Stage → New). They must exist before the deploy, because the "Donation" sales process uses them:
 
 | Stage | Type | Probability |
@@ -86,8 +86,15 @@ sf project deploy start --source-dir force-app --target-org donaciones
 
 5. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
 6. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
-7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Sitio público" (campaign pages) and "Donaciones · Payment Integration" (applies Stripe's confirmation). Also assign "Donaciones · Payment Integration" (only that one) to the integration user that schedules the pending-donations check. Both are documented in `docs/seguridad.md`.
-8. Create the general donation campaign with a far end date (for example 2099-12-31), so it is always open (US-08 AC8).
+7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Sitio público" (campaign pages) and "Donaciones · Payment Integration" (applies Stripe's confirmation). Also assign "Donaciones · Payment Integration" (only that one) and access to the Stripe credential to the integration user, and, logged in as that user, schedule the pending-donations check (US-03 AC5) once from the Developer Console → Execute Anonymous: `PendingDonationCheck.scheduleEveryQuarterHour();` Both are documented in `docs/seguridad.md`.
+8. Connect Stripe (#49). The key only lives in Setup, never in the repo:
+   - **External Credential** "Stripe": Custom protocol, a named principal `StripeKey` with an authentication parameter `ApiKey` holding the restricted key (`rk_test_…`), and a custom header `Authorization` = `{!'Bearer ' & $Credential.Stripe.ApiKey}`.
+   - **Named Credential** "Stripe": URL `https://api.stripe.com`, the External Credential above, "Allow Formulas in HTTP Header" on, "Generate Authorization Header" off.
+   - Give the `Stripe-StripeKey` principal access in "Donaciones · Payment Integration", then retrieve the credential metadata and check `git grep rk_test_` finds nothing.
+   - Change the custom labels `Stripe_Success_Url` (thank-you page) and `Stripe_Cancel_Url` (cancel page) to the site's URLs (Setup → Custom Labels).
+   - In the site settings, choose the default owner for records the guest user creates.
+9. Create the general donation campaign with a far end date (for example 2099-12-31), so it is always open (US-08 AC8).
+10. Receipts (#44): Setup → Organization-Wide Addresses → Add, with display name **Donaciones Mexico Dreamin** and an email the team controls, allowed for all profiles; verify it from the email Salesforce sends. Receipts are sent from it and show it as the support contact (US-11 AC6). Without it, receipts go out from the default sender and without the support line. Email deliverability (Setup → Deliverability) must be "All email".
 
 ## Metadata backup (weekly and before each delivery)
 

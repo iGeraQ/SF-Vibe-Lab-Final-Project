@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Donation_Reference__c</fullName>
-    <description>Our reference, sent to Stripe as client_reference_id (US-03 AC2).</description>
-    <displayFormat>DON-{0000}</displayFormat>
-    <externalId>false</externalId>
+    <caseSensitive>false</caseSensitive>
+    <description>Our reference (DON- plus 8 random characters), set by DonationCheckoutService before calling Stripe and sent as client_reference_id (US-03 AC2). Not an auto-number: Stripe is called before the donation is saved.</description>
+    <externalId>true</externalId>
     <label>Referencia de donación</label>
-    <type>AutoNumber</type>
+    <length>20</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>true</unique>
 </CustomField>

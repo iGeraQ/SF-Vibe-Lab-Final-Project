@@ -4,7 +4,7 @@
         <enabled>true</enabled>
         <name>Donation_Payment_Updates</name>
     </customPermissions>
-    <description>Only for the contexts that apply Stripe's confirmation: the site guest user and the integration user that schedules the Apex check. Not for schedule-triggered flows (they run as Automated Process, which can't get it). Lets it change amount, status and campaign.</description>
+    <description>For the site guest user and the integration user that schedules the Apex check (not schedule-triggered flows). Lets them change a donation's amount, status and campaign.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Donaciones · Payment Integration</label>
 </PermissionSet>

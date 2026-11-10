@@ -29,9 +29,10 @@ public without sharing class PublicCampaignController {
     @AuraEnabled
     public static List<CampaignView> getPastCampaigns() {
         List<CampaignView> views = new List<CampaignView>();
-        for (Campaign record : publicCampaigns()) {
-            if (!record.Accepts_Donations__c) {
-                views.add(0, new CampaignView(record));
+        List<Campaign> campaigns = publicCampaigns();
+        for (Integer i = campaigns.size() - 1; i >= 0; i--) {
+            if (!campaigns[i].Accepts_Donations__c) {
+                views.add(new CampaignView(campaigns[i]));
             }
         }
         return views;
