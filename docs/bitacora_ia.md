@@ -216,3 +216,14 @@ Template:
 - **What we corrected:** the first version implemented `Queueable` and `Schedulable` in one class, which Salesforce rejects; the schedulable part moved to an inner class. One test ran the real Stripe client at `Test.stopTest()` until it got the fake gateway too.
 - **AI error:** the `Queueable` plus `Schedulable` combination above.
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · Staff roles as permission set groups
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-05, US-08, US-09
+- **What we asked:** explain how the roles are covered, and fix the access gap it showed.
+- **What we got:** the role permission sets only granted custom fields, so with a minimal profile a Campaign Manager couldn't fill dates or goal and nobody saw a donation's amount or campaign; with Standard User the profile gave too much. We chose a shared "Donaciones · Staff base" permission set plus one permission set group per role, with the Minimum Access - Salesforce profile for Campaign Manager and Moderator, and `StaffRolesTest` (7 tests in user mode for US-05 AC7, US-08 AC1, AC3, AC6 and US-09 AC1 to AC4).
+- **What we verified and how:** check-only deploy to the team org: the groups validate and the 46 tests pass.
+- **What we corrected:** _Pending_
+- **AI error:** the first permission sets missed standard field access; it only showed up when we asked how each role works with a minimal profile.
+- **Speed-up:** _Pending_
