@@ -12,7 +12,7 @@ We build the portal with a **hybrid approach**: configuration and Flows for most
 | Donation form | **LWC** | It must send the donor to Stripe's page, which a Screen Flow can't do without an extra component. It shows the conditional fields, the validation and the amount confirmation. |
 | Start the payment | **Apex** (`DonationCheckoutService.startCheckout`) called from the LWC | Creates the Stripe Checkout Session and then the donation in one controlled step, and returns Stripe's URL. Stripe expects form-encoded requests, which Apex handles easily. |
 | Payment confirmation (Delivery 1) | Apex that checks the session with Stripe when the donor returns, plus a **scheduled Apex** job (`PendingDonationCheck`, every 15 minutes) for pending and expired donations, scheduled by the integration user that holds the payment permission. Not a schedule-triggered flow: it runs as Automated Process, which can't get that permission set | The status always comes from Stripe, never from a person. |
-| Receipt and simulated invoice | **Record-triggered Flow** with email templates in Spanish | No code needed. |
+| Receipt and simulated invoice | **Apex trigger** (`DonationTrigger` + `DonationReceiptService`): one email in Spanish when a donation becomes paid; if the donor asked for an invoice, it carries a simulated invoice as a PDF (`Blob.toPdf`) | Easier to test than a Flow, and one email per donation keeps within the Developer Edition's daily email limit. |
 | Staff app | **Lightning App**, list views, page layouts and **permission sets** | Configuration only. |
 | Webhook (Delivery 2) | **Apex REST** exposed through the site | The only option to receive Stripe's notices and verify their signature. |
 | Stripe credentials | **Named Credential + External Credential** | The key never appears in code or metadata (M3). |
@@ -136,9 +136,8 @@ Each role is a permission set group: "Donaciones · Staff base" (read campaigns 
 
 ## Inventory
 
-**Flows:** receipt and invoice emails (record-triggered).
 
-**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), which receives the payment gateway as a dependency: `PaymentGateway` (abstract: create and read a checkout session) and `StripeClient`, its Stripe implementation through the `Stripe` Named Credential, `PendingDonationCheck` (the scheduled check for pending and expired donations: a Queueable with callouts that calls `DonationCheckoutService.applyGatewayStatus`), `DonationReceiptService` with `DonationTrigger` (the receipt), `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
+**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), which receives the payment gateway as a dependency: `PaymentGateway` (abstract: create and read a checkout session) and `StripeClient`, its Stripe implementation through the `Stripe` Named Credential, `PendingDonationCheck` (the scheduled check for pending and expired donations: a Queueable with callouts that calls `DonationCheckoutService.applyGatewayStatus`), `DonationReceiptService` with `DonationTrigger` (the receipt, with the simulated invoice PDF attached when the donor asked for one), `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
 
 **LWC:** campaign list, campaign detail with progress and recognition.
 
