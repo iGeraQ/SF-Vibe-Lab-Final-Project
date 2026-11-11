@@ -238,3 +238,14 @@ Template:
 - **What we corrected:** the README's `git grep rk_test_` check matched its own examples; it now uses a pattern for real keys and also searches the history.
 - **AI error:** the first check command we wrote in the README gave false matches.
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · Simulated invoice PDF
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-06 (#29)
+- **What we asked:** send the simulated invoice by email with a PDF attached.
+- **What we got:** when a donation that asked for an invoice becomes paid, the receipt email carries `Factura-simulada-<reference>.pdf` (made with `Blob.toPdf`): folio, date, fictitious issuer, recipient, RFC, person type, concept and total, and "No es un comprobante fiscal (CFDI)". One email per donation, sent once with the receipt's existing flag. 5 new tests in `DonationReceiptServiceTest`, including one that escapes donor text.
+- **What we verified and how:** check-only deploy to the team org: 51 tests pass; `DonationReceiptService` coverage 92%. The PDF is generated inside the trigger without errors.
+- **What we corrected:** one test expected accented text, but `escapeHtml4` turns accents into HTML entities (the PDF shows them correctly); the test now compares the unescaped text.
+- **AI error:** see the correction above.
+- **Speed-up:** _Pending_
