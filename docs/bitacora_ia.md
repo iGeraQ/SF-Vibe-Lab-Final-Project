@@ -118,6 +118,28 @@ Template:
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
 
+### 2026-11-08 · Backlog review for the frontend tasks
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5) with the GitHub CLI, read only
+- **Related story:** #19, #21, #23, #25, #26, #28, #30, #32, #34, #38
+- **What we asked:** read the repo docs (`main` and `develop`) and every issue, to understand how the backlog is organized and what the frontend tasks need.
+- **What we got:** a summary of the 51 issues (20 stories, the Delivery 1 checklist, 22 tasks and the Stripe setup) and a detailed read of the 11 Delivery 1 stories and the 10 frontend tasks. Findings: the 10 frontend tasks had an empty "To refine" section; US-06 AC8 (invoice sent by email automatically) contradicts the US-07 conclusion (sending the invoice is out of scope); US-05 says "no blocklist", which clashes with the moderation we wanted; an empty state for "no active campaign" is not in the backlog, and US-08 AC8 says the general campaign is always open.
+- **What we verified and how:** each finding was checked against the text of the issue it cites.
+- **What we corrected:** nothing; the findings were inputs for the next documents.
+- **AI error:** no
+- **Speed-up:** _Pending_
+
+### 2026-11-08 · Organization of the visual layer
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01 to US-12
+- **What we asked:** describe in text, without visual design, how the donor site and the staff app should be organized.
+- **What we got:** a document with the principles, the public site map (7 pages plus the not found page), the content of each page, the 4-step form with its fields per donation type, the donor flow, the staff app (Campaigns, Donations and Notices tabs, views, record pages and permissions per role), the staff flows, the emails, a table of pages against frontend tasks and open points.
+- **What we verified and how:** every element cites the story and criterion it covers. The AI marked its own assumptions: the form as a separate 4-step page, and the Campaign Manager not seeing rejected notices.
+- **What we corrected:** _Pending_
+- **AI error:** no
+- **Speed-up:** _Pending_
+
 ### 2026-11-09 · Client answers in the backlog
 - **Author:** @iGeraQ
 - **Tool:** Claude Code (Claude Opus 5.5)
@@ -217,6 +239,50 @@ Template:
 - **AI error:** the `Queueable` plus `Schedulable` combination above.
 - **Speed-up:** _Pending_
 
+### 2026-11-09 · Plan from the designs to Salesforce
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01 to US-12
+- **What we asked:** plan how to move the public site and staff design proposals to Salesforce, taking into account the client answers of Nov 9 (an anonymous donor can ask for an invoice, anonymous donations are added up and shown apart in the recognition, support email in the receipt from Delivery 1).
+- **What we got:** a plan with the changes from the client answers, what moves from the designs and what doesn't, the Salesforce piece for each public page and each staff view, the work order until Delivery 1, the risks and what the frontend needs from the backend.
+- **What we verified and how:** the AI read both prototypes, `docs/architecture.md` and the `feature/data-model` branch. It flagged three things to check: the `Anonymous_Without_Invoice` validation rule contradicts client answer 1; the staff prototype locks the goal, which contradicts US-08 AC2; the prototypes use fictitious names and dates (Puentes Tech, 2027) instead of Mexico Dreamin 2026.
+- **What we corrected:** _Pending_
+- **AI error:** no
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Public site components
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01, US-02, US-04, US-11 (#19, #21, #23, #25, #26, #28, #38)
+- **What we asked:** implement the public site from the plan, after reading the issues again.
+- **What we got:** LWC for the header, footer, active and past campaign lists, campaign page, recognition with the anonymous donors row, the 4-step form, the thank-you page, the payment not completed page and the not found page, with every text as a Spanish Custom Label. Step 2 of the form asks two separate questions (appear in the list, ask for an invoice). The form is an LWC, not a Screen Flow (plan B in `architecture.md`), because the design doesn't fit Flow screens.
+- **What we verified and how:** the AI re-read the issues and PRs first: the data model was already in `develop` (PR #53), `PublicCampaignController` was in review (PR #54) and `DonationCheckoutService` didn't exist yet. A credited donor is asked for first and last name or company, besides the public name, because the `Donor_Name_Required` rule requires it.
+- **What we corrected:** see the next three entries.
+- **AI error:** see the next three entries.
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Unit tests for the public site
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01, US-02, US-04, US-11
+- **What we asked:** add unit tests, since they count in the evaluation.
+- **What we got:** Jest tests with `sfdx-lwc-jest`, one file per component, each test naming the acceptance criterion it covers, plus ESLint with Salesforce's LWC rules.
+- **What we verified and how:** all tests and the linter run clean, with coverage over the 90% threshold.
+- **What we corrected:** a test found a real bug: the form moved the focus to the first field with an error before the errors were on screen. It now moves the focus after the render.
+- **AI error:** yes. The AI's own form code had the focus bug; its own test caught it.
+- **Speed-up:** _Pending_
+
+### 2026-11-09 · Frontend on its own branch with fictitious data
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01, US-04
+- **What we asked:** put the frontend on its own branch from `develop`, working with fictitious data and without depending on the backend.
+- **What we got:** all data access goes through one module, `donationDataService`, which answers with fictitious data shaped like the controller's; connecting the backend only changes that file (`docs/public-site.md`). In fictitious mode an email starting with `cancelar@` goes to payment not completed and one with `error@` shows the form error, so every path can be recorded without Stripe.
+- **What we verified and how:** the tests pass with no Apex class in the project.
+- **What we corrected:** the first version was built on the backend branch and imported Apex classes that didn't exist yet.
+- **AI error:** yes. Juan caught that the work was on the wrong branch and depended on unfinished backend code.
+- **Speed-up:** _Pending_
+
 ### 2026-11-10 · Staff roles as permission set groups
 - **Author:** @iGeraQ
 - **Tool:** Claude Code (Claude Opus 5.5)
@@ -281,4 +347,148 @@ Template:
 - **What we verified and how:** the matrix and the public controller checks ran in the team org as anonymous Apex with a rollback (0 records left); the site check ran in the built-in browser as a visitor; the site, the receipt sender, the scheduled jobs and the guest user were read from the org. The code fixes passed Code Analyzer and compile only when deployed: _Pending until the deploy is allowed_.
 - **What we corrected:** the AI first read the 60 "Queued" rows of `AsyncApexJob` as stuck jobs; they are the schedules themselves (`ScheduledApex`). It also gave a wrong clock for when the Stripe session would expire and had to wait; the check by hand then showed the logic works and the schedules are what fails (R-13, cause not determined). It also assumed anonymous Apex could run DML in system mode and call `AuraHandledException` code paths; both fail there, so those checks stayed in Apex tests.
 - **AI error:** the first matrix script didn't compile (a placeholder line, and method declarations aren't allowed in anonymous Apex).
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Frontend contract against the real backend
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01, US-04 (#21, #25, #28)
+- **What we asked:** review the frontend files for errors.
+- **What we got:** comparing with `develop` after PR #55, four differences with the real backend: the form sent `isAnonymous` and `invoiceRequested` instead of `anonymous` and `invoice`; the thank-you page called `confirmReturn` and expected the campaign name, but the service has `confirmCheckout`, which returns the status; the fictitious mode only accepted suggested amounts while the service accepts from $10 MXN; and the frontend labels file would have replaced the backend's `Stripe_Success_Url` and `Stripe_Cancel_Url`.
+- **What we verified and how:** each difference was checked against the `DonationCheckoutService` code in `develop`; the four were fixed and the tests updated.
+- **What we corrected:** the four differences. Pending for the team: `Stripe_Cancel_Url` must point to the `pago-no-completado` page.
+- **AI error:** yes. The AI had invented the `DonationCheckoutService` contract instead of waiting for the backend's; it caught the differences when asked to review.
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Invalid style binding in campaignCard
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-01 (#19)
+- **What we asked:** fix the error VS Code showed in `campaignCard.html`, line 37.
+- **What we got:** the cause was `style={campaign.barStyle}`: the editor validates the `style` attribute as CSS, and an LWC expression isn't CSS. The same pattern was in three other places. The progress bars are now a `progressBar` component that sets the width from JavaScript, and the recognition sets its animation duration the same way.
+- **What we verified and how:** no `style={...}` is left in any template; tests and linter pass.
+- **What we corrected:** the four bindings.
+- **AI error:** yes. Juan found the error in VS Code; the AI's previous review had missed it.
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Staff app configuration
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-07, US-08, US-09 (#30, #32, #34)
+- **What we asked:** build the staff app.
+- **What we got:** the AI walked through the "Staff A" prototype with the three roles and moved it to configuration, as the plan said: the "Donaciones Mexico Dreamin" Lightning app, 4 campaign list views and 6 donation list views (including "Solicitan factura" with name, RFC, person type and consent) and two record pages with Dynamic Forms. The Invoice section only shows when an invoice was requested. The prototype's login is the org's standard login, and its role switcher is replaced by three test users.
+- **What we verified and how:** XML checked for well-formedness and every field checked against the objects in `develop`. Only list view columns found in reference projects were used, so the campaign goal is on the record page, not in the list. The deploy was not tested in this session.
+- **What we corrected:** the app was added to `Donations_Staff_Base`, a backend file; flagged to the team.
+- **AI error:** yes. The AI delivered only configuration without saying it didn't follow the design's visual style; Juan caught it (next entry).
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Staff app components
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude (Claude Opus 5.5)
+- **Related story:** US-07, US-08, US-09 (#30, #32, #34)
+- **What we asked:** add LWC with the design's style for everything possible in the staff app.
+- **What we got:** 7 LWC with the "Staff A" look: "Campañas" and "Donaciones" tabs with the design's tabs and counts, the campaign progress and situation card, the campaign donations, the donation summary and payment card, and the donor card, where only users with field permission (the Moderator) get the input to change the public name. They read through GraphQL and Lightning Data Service with no Apex, so the user's permissions apply and no backend code changes. Editing campaigns stays on the standard forms, which apply the validation rules. 80 staff Custom Labels.
+- **What we verified and how:** 77 new Jest tests (197 in total, 99% of lines) and a clean linter. The GraphQL queries were only tested with fictitious data before the deploy.
+- **What we corrected:** Jest coverage showed 0% on Node 22 with the default provider; it was switched to `coverageProvider: 'v8'`.
+- **AI error:** no
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Public site connected to the Apex backend
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01, US-03, US-04, US-05 (#19, #23, #25, #26)
+- **What we asked:** connect the public site to the backend that was already in `develop`, and later check whether the new backend commits (receipt email, simulated invoice, Stripe credential, staff role groups) needed frontend changes.
+- **What we got:** `donationDataService` now calls `PublicCampaignController` (`getActiveCampaigns`, `getPastCampaigns`, `getRecognition`) and `DonationCheckoutService` (`startCheckout`, `confirmCheckout`) imperatively, because those methods are not cacheable. The fictitious data module was removed, the service tests now mock the Apex imports, and `docs/public-site.md` describes the full deploy and org setup. The review of the new backend commits found no new `@AuraEnabled` methods, no change to `DonationRequest` and no change to guest access, so no frontend change was needed.
+- **What we verified and how:** Jest (111 tests) and the linter. After the deploy, the campaign page in the site preview showed the real "Donación general" figures from the org. The method names and shapes were compared with the Apex classes.
+- **What we corrected:** _Pending_
+- **AI error:** yes, found later. The connection was only tested with mocked Apex imports. A real submission on 2026-11-11 showed that `startCheckout` receives an empty request (see "Test donation through the site").
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Logo for the donation form wizard
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01 (#21)
+- **What we asked:** design a logo to show in the donation form wizard.
+- **What we got:** three original concepts in the site's colors, shown on a mock of the wizard header. Juan chose "mano que impulsa" (a hand offering a star). It is inline SVG in `donationForm`, next to the program name, using the site's design tokens and hidden from screen readers, so it needs no static resource or extra guest access. The AI also exported it as SVG and PNG files for other uses. It was designed on purpose not to imitate the official Mexico Dreamin' event logo.
+- **What we verified and how:** a new Jest test (112 in total) and the linter. Checked in the site preview on the "Donar" page.
+- **What we corrected:** _Pending_
+- **AI error:** no
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Experience Cloud site setup
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5) with Claude in Chrome and the Salesforce CLI
+- **Related story:** US-11, US-01, US-04 (#38)
+- **What we asked:** find out why the deployed components didn't show, and then build the site pages in Experience Builder.
+- **What we got:**
+  - The first diagnosis: the org had no Experience Cloud site yet and still had the version of the components with fictitious data.
+  - Once the site existed, the AI created the "Campaña", "Donar", "Gracias", "Pago no completado" and "Campañas pasadas" pages (one full-width column, with the URLs the components link to) and set "Campañas pasadas" to past mode.
+  - It hid the header's search and notifications and removed the default English error component.
+  - It assigned "Donaciones · Sitio público" and "Donaciones · Payment Integration" to the site guest user, after Juan approved each one.
+  - It found why visitors were sent to the login page: Public Access was off, and the Home page of the Customer Account Portal template requires login by default.
+- **What we verified and how:**
+  - Each page checked in the preview and then on the published site as a visitor: campaign, donation form, thank-you, payment not completed, past campaigns and the error page.
+  - Permission set assignments confirmed with SOQL.
+- **What we corrected:**
+  - Juan dragged the components onto the pages, because Experience Builder did not accept automated drag and drop.
+  - Juan turned on Public Access, because enabling it from the AI was blocked as a permission change.
+  - Pending: a duplicated footer on Home.
+- **AI error:** yes. "Hide the header region" also hid our `siteHeader`; the AI saw it in the builder and undid it, then hid only the search and notifications.
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Staff app deploy and navigation
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5) with Claude in Chrome and the Salesforce CLI
+- **Related story:** US-07, US-08, US-09 (#30, #32, #34)
+- **What we asked:** build the staff app pages in the org.
+- **What we got:**
+  - The staff metadata was not in the org (checked in Setup and with the CLI), so the AI deployed it in the order of `docs/staff-app.md`.
+  - The record pages arrived ready through the app's overrides, so nothing had to be built in Lightning App Builder.
+  - The admin user needed the System Admin role group to open the app; the AI assigned it after Juan approved.
+  - It renamed the Opportunity tab to "Donación" / "Donaciones". That left two "Donaciones" tabs, so it removed the standard Campaign and Opportunity tabs from the app and turned off temporary tabs.
+- **What we verified and how:** opened the app in Chrome. The campaign and donation lists showed the org's counts, and the campaign and donation pages showed every card and section. Checked the navigation after the rename, including with a record open.
+- **What we corrected:** the duplicated "Donaciones" tab, and the guide now says the list views open from the App Launcher.
+- **AI error:** yes, minor. The AI suggested renaming the Opportunity tab without expecting the duplicated tab name; it noticed it when checking the result.
+- **Speed-up:** _Pending_
+
+### 2026-11-11 · Campaign images and card buttons
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5) with Claude in Chrome
+- **Related story:** US-01 (#19)
+- **What we asked:** find out why no campaign image showed; then serve the images from Salesforce, show a placeholder when an image fails, and fix the "Ver campaña" button wrapping to a second line.
+- **What we got:**
+  - The diagnosis: the images were external URLs. `placehold.co` was blocked by the site's Content Security Policy (`img-src`), and one URL pointed to an image that doesn't exist.
+  - Four original fictitious SVGs in a public `Donation_Campaign_Images` static resource. `Image_URL__c` now accepts a file name, which `donationUtils.campaignImageUrl` turns into the resource's address; a full https address still works, and anything else is ignored.
+  - Card, campaign page and form show the heart placeholder when an image fails to load.
+  - The two card buttons share a two-column grid with no wrapping.
+  - The field got Spanish help text, and the four campaigns in the org were updated.
+- **What we verified and how:** 196 Jest tests (7 new) and the linter. Images, placeholder and buttons checked on the published site as a visitor.
+- **What we corrected:** the linter rejected a `javascript:` string literal in a test (`no-script-url`); it is now built from parts.
+- **AI error:** yes, minor (the test literal). Juan noticed the button wrapping.
+- **Speed-up:** _Pending_
+
+### 2026-11-11 · Test donation through the site
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5) with Claude in Chrome and the Salesforce CLI
+- **Related story:** US-03 (#23)
+- **What we asked:** make a test donation on the published site.
+- **What we got:**
+  - The AI filled in the form with fictitious data (credited, no invoice, $100 MXN) up to the review step; it does not enter card data, so the Stripe step was left to Juan.
+  - "Ir a pagar" answered "Esta campaña ya no recibe donaciones", even though the campaign accepts donations.
+  - With a temporary debug log on the guest user, the AI found that `DonationCheckoutService.startCheckout` receives an empty request, with a null `campaignId`. As admin, deserializing the same JSON works.
+  - Its hypothesis: the `DonationRequest` fields need `{ get; set; }` to be filled from an LWC call.
+- **What we verified and how:** the org's Apex classes match the repo, the campaign is active and matches the id, and the debug log shows the empty request.
+- **What we corrected:** _Pending: fix `DonationRequest`, deploy and repeat the donation up to Stripe's page._
+- **AI error:** _Pending: the hypothesis is not confirmed yet._
+- **Speed-up:** _Pending_
+
+### 2026-11-11 · Task board update
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5) with Claude in Chrome
+- **Related story:** #19, #21, #23, #25, #26, #28, #30, #32, #34, #38
+- **What we asked:** move the frontend tasks on the GitHub Project and replace each task's "To refine" placeholder with the plan we followed.
+- **What we got:** the Project's Status has only Todo, In Progress and Done, and the 10 tasks were in Todo. Juan's account has read-only access to the Project (the CLI token can't see it, and GitHub refused the change in the browser), so no Status was changed. The "To refine" text for #19 was drafted and shown as a diff; no issue was edited yet.
+- **What we verified and how:** the Status field and the read-only notice on the board and on the issue page.
+- **What we corrected:** _Pending: write access to the Project from its owner, then the Status changes and the "To refine" edits._
+- **AI error:** no
 - **Speed-up:** _Pending_
