@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Assign this to the Campaign Manager, with the Minimum Access - Salesforce profile and Marketing User: Staff base plus Campaign Manager.</description>
+    <label>Rol · Campaign Manager</label>
+    <permissionSets>Donations_Staff_Base</permissionSets>
+    <permissionSets>Donations_Campaign_Manager</permissionSets>
+</PermissionSetGroup>

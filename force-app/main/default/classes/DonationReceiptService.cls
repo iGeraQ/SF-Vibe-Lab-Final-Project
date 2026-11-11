@@ -2,7 +2,8 @@
  * Sends the donor's receipt, in Spanish, once, when a donation becomes paid (US-14 AC2 to AC6, #44). Stripe sends no
  * receipts in test mode. The sender and the support email (US-11 AC6) are the Org-Wide Email Address named
  * SENDER_NAME, set up in Setup so no address lives in the repo. Runs in the context that confirmed the payment
- * (the site guest user or the integration user), so it reads in system mode.
+ * (the site guest user or the integration user), so it reads in system mode. When the donor asked for an invoice,
+ * the same email carries a simulated invoice as a PDF (US-06 AC8): one email per donation, sent once.
  */
 public without sharing class DonationReceiptService {
 
@@ -82,7 +83,8 @@ public without sharing class DonationReceiptService {
     private static List<Opportunity> loadDonations(Set<Id> ids) {
         return [
             SELECT Id, Donation_Reference__c, Donor_Email__c, Amount, CloseDate, Donation_Type__c, Is_Anonymous__c,
-                Donor_First_Name__c, Donor_Last_Name__c, Donor_Company__c, Campaign.Name
+                Donor_First_Name__c, Donor_Last_Name__c, Donor_Company__c, Campaign.Name, Invoice_Requested__c, RFC__c,
+                toLabel(Person_Type__c)
             FROM Opportunity
             WHERE Id IN :ids
             WITH SYSTEM_MODE
@@ -106,6 +108,9 @@ public without sharing class DonationReceiptService {
         }
         lines.add('');
         lines.add('Este recibo no es un comprobante fiscal (CFDI).');
+        if (donation.Invoice_Requested__c) {
+            lines.add('Adjuntamos tu factura simulada en PDF; tampoco es un comprobante fiscal.');
+        }
         if (sender != null) {
             lines.add('Si tienes un problema con tu recibo o tu factura, escríbenos a ' + sender.Address + '.');
         }
@@ -118,7 +123,45 @@ public without sharing class DonationReceiptService {
         if (sender?.Id != null) {
             email.setOrgWideEmailAddressId(sender.Id);
         }
+        if (donation.Invoice_Requested__c) {
+            email.setFileAttachments(new List<Messaging.EmailFileAttachment>{ invoicePdf(donation) });
+        }
         return email;
+    }
+
+    private static Messaging.EmailFileAttachment invoicePdf(Opportunity donation) {
+        Messaging.EmailFileAttachment pdf = new Messaging.EmailFileAttachment();
+        pdf.setFileName('Factura-simulada-' + donation.Donation_Reference__c + '.pdf');
+        pdf.setContentType('application/pdf');
+        pdf.setBody(Blob.toPdf(invoiceHtml(donation)));
+        return pdf;
+    }
+
+    // US-06 AC3 and AC8: a simulated invoice, clearly not a tax document; no CFDI and no SAT or third-party service.
+    // ponytail: name, RFC and person type only; a real CFDI 4.0 also needs tax regime, ZIP code and CFDI use.
+    @TestVisible
+    private static String invoiceHtml(Opportunity donation) {
+        List<String> rows = new List<String>{
+            row('Folio', donation.Donation_Reference__c),
+            row('Fecha', donation.CloseDate.format()),
+            row('Emisor', 'Programa de donaciones Mexico Dreamin (ficticio)'),
+            row('Receptor', donorName(donation)),
+            row('RFC', donation.RFC__c),
+            row('Tipo de persona', donation.Person_Type__c),
+            row('Concepto', 'Donación · ' + donation.Campaign.Name),
+            row('Total', '$' + (donation.Amount ?? 0).setScale(2).format() + ' MXN')
+        };
+        return '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head>'
+            + '<body style="font-family: Arial Unicode MS, sans-serif;">'
+            + '<h1>Factura simulada</h1>'
+            + '<p><b>No es un comprobante fiscal (CFDI).</b> Documento generado para una demostración: '
+            + 'no fue timbrado ante el SAT y no sirve para deducir impuestos.</p>'
+            + '<table>' + String.join(rows, '') + '</table></body></html>';
+    }
+
+    // Donor text is escaped, so it shows as plain text in the PDF (US-12).
+    private static String row(String label, String value) {
+        return '<tr><td><b>' + label + '</b></td><td>' + (value ?? '').escapeHtml4() + '</td></tr>';
     }
 
     private static String donorName(Opportunity donation) {

@@ -114,6 +114,64 @@ private class DonationReceiptServiceTest {
         Assert.isTrue(body.contains('soporte@example.com'), 'US-11 AC6: the receipt shows the support email');
     }
 
+    @IsTest
+    static void invoiceDonationGetsTheSimulatedInvoiceAttached() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, null);
+
+        Assert.areEqual(1, email.getFileAttachments().size(), 'US-06 AC8: the invoice arrives with the receipt');
+        Messaging.EmailFileAttachment pdf = email.getFileAttachments()[0];
+        Assert.areEqual('Factura-simulada-DON-ANONIMA1.pdf', pdf.getFileName());
+        Assert.areEqual('application/pdf', pdf.getContentType());
+        Assert.isTrue(pdf.getBody().size() > 0, 'The PDF has content');
+        Assert.isTrue(email.getPlainTextBody().contains('factura simulada'), email.getPlainTextBody());
+    }
+
+    @IsTest
+    static void donationWithoutInvoiceGetsNoAttachment() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-CREDITO1').Id })[0];
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, null);
+
+        Assert.isTrue(email.getFileAttachments() == null || email.getFileAttachments().isEmpty());
+    }
+
+    @IsTest
+    static void invoiceShowsTaxDataAndSaysItIsNotATaxDocument() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
+
+        // escapeHtml4 also turns accents into entities, which the PDF shows correctly.
+        String invoice = DonationReceiptService.invoiceHtml(record).unescapeHtml4();
+
+        for (String expected : new List<String>{
+            'DON-ANONIMA1', 'Zacarias Prueba', 'XAXX010101000', 'Persona física', 'Donación · Becas 2026', '250',
+            'No es un comprobante fiscal (CFDI)'
+        }) {
+            Assert.isTrue(invoice.contains(expected), 'Missing ' + expected + ' (US-06 AC3, AC8)');
+        }
+    }
+
+    @IsTest
+    static void invoiceEscapesTheDonorText() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
+        record.Donor_First_Name__c = '<script>alert(1)</script>';
+
+        String invoice = DonationReceiptService.invoiceHtml(record);
+
+        Assert.isFalse(invoice.contains('<script>'), 'Donor text is shown as plain text (US-12)');
+    }
+
+    @IsTest
+    static void paidInvoiceDonationSendsOneEmail() {
+        System.runAs(integrationUser()) {
+            markPaid('DON-ANONIMA1');
+
+            Assert.areEqual(1, Limits.getEmailInvocations(), 'Receipt and invoice go in one email');
+        }
+        Assert.isTrue(donation('DON-ANONIMA1').Receipt_Sent__c);
+    }
+
     private static void markPaid(String reference) {
         Opportunity record = donation(reference);
         record.StageName = 'Paid';
