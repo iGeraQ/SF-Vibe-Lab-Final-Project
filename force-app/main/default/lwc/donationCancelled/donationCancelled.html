@@ -1,0 +1,14 @@
+<template>
+    <section class="center-page">
+        <div class="icon-circle cancel-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6E3D00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 8v5"></path>
+                <path d="M12 16h.01"></path>
+            </svg>
+        </div>
+        <h1 class="page-title">{labels.cancelTitle}</h1>
+        <p class="lead muted">{labels.cancelText}</p>
+        <a class="btn btn-primary" href={retryUrl}>{labels.tryAgain}</a>
+    </section>
+</template>

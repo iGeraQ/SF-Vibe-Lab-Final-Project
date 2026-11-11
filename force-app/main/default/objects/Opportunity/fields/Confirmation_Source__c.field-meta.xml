@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Confirmation_Source__c</fullName>
+    <description>How Stripe's confirmation arrived: return page, scheduled check (US-03 AC5) or webhook (US-15).</description>
+    <label>Confirmado por</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Return_Page</fullName>
+                <default>false</default>
+                <label>Página de regreso</label>
+            </value>
+            <value>
+                <fullName>Scheduled_Check</fullName>
+                <default>false</default>
+                <label>Revisión programada</label>
+            </value>
+            <value>
+                <fullName>Webhook</fullName>
+                <default>false</default>
+                <label>Webhook</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

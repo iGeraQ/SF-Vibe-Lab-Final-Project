@@ -18,7 +18,7 @@ What the client asks for:
 | Anonymous donor | Donate without their name appearing anywhere public |
 | Credited donor | Appear with their name and amount in the campaign's donor recognition |
 | Invoice donor | Enter their name and RFC so the program can issue an invoice |
-| Staff (coordination or treasury) | Manage campaigns, see donations, confirm payments and send receipts |
+| Staff: System Admin, Campaign Manager, Moderator | Manage campaigns, review donations and moderate public names (roles in `requirements.md`) |
 | Visitor without login | See campaigns and donate without creating an account |
 
 ## Real and simulated
@@ -53,6 +53,11 @@ The ticket price is researched during discovery with the client. The team sets t
 - Any link to the real sponsorship call.
 - Data about real people.
 - Spam protection on the public form (a known risk, documented in `seguridad.md`).
+- Donations made outside the site, such as bank transfers or OXXO. Staff would add them by hand later (client, Nov 4).
+- Refunds and mistaken payments (client, Nov 4).
+- Manual payment confirmation by staff (RF-S3), dropped in the discovery session (Nov 4).
+- Custom reports; Salesforce's standard reports are enough (discovery session, Nov 4).
+- Legal limits on online transactions (SAT, anti-money laundering) (discovery session, Nov 4).
 
 ## Dates
 

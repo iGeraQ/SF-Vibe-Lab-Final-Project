@@ -15,7 +15,7 @@ The full stories, with their acceptance criteria, are in the issues and on the [
 | US-07 Flag invoice requests | RF-F2 | Delivery 1 | [#7](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/7) |
 | US-08 Manage campaigns | RF-S1 | Delivery 1 | [#8](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/8) |
 | US-09 View all donations | RF-S2 | Delivery 1 | [#9](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/9) |
-| US-10 Confirm a payment manually | RF-S3 | Delivery 1 | [#10](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/10) |
+| US-10 Confirm a payment manually | RF-S3 | Out of scope | [#10](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/10) |
 | US-11 Scoped public site | RF-V1 | Delivery 1 | [#11](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/11) |
 | US-12 Visitor security test | RF-V2 | Delivery 1 | [#12](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/12) |
 | US-13 Donate any amount | RF-D1b | Delivery 2 | [#13](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/13) |
@@ -23,6 +23,26 @@ The full stories, with their acceptance criteria, are in the issues and on the [
 | US-15 View automatic confirmations and rejected notifications | RF-S4 | Delivery 2 | [#15](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/15) |
 | US-16 Receive the payment notification (minimum level) | RF-V3a | Delivery 2 | [#16](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/16) |
 | US-17 Only authentic, non-duplicated notifications (second level) | RF-V3b | Delivery 2 | [#17](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/17) |
+| US-18 Donations outside the gateway | — | Out of scope | [#41](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/41) |
+| US-19 Refunds and mistaken payments | — | Out of scope | [#42](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/42) |
+| US-20 Custom donation reports | — | Out of scope | [#43](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/43) |
+
+RF-S3 (US-10) was dropped in the discovery session (S20, Nov 4): the instructor said it was an AI hallucination and that payment status comes only from the gateway. Out-of-scope stories stay in the backlog so the scope documents what was left out and why.
+
+## Staff roles
+
+Roles agreed in the discovery session (S20, Nov 4). The guide's story roles map to them as shown.
+
+| Role | Guide term | What it does |
+|---|---|---|
+| System Admin | — | Full access. Decides when campaigns go live. Trained, not restricted, on data that should not change. |
+| Campaign Manager | Program coordination | Creates and configures campaigns: name, goal, dates, status, description, image and purpose. |
+| Moderator | Treasury | Reviews donations against Stripe and edits public display names. |
+| Staff | Staff | Any of the three. All of them see donor names and emails. |
+
+Nobody changes a donation's amount or payment status by hand: only the payment integration does.
+
+## Refining the backlog
 
 Rules for refining the backlog:
 

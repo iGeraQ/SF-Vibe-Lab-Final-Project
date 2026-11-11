@@ -1,0 +1,49 @@
+<template>
+    <article class="card campaign-card">
+        <div class={imageClass} aria-hidden="true">
+            <template lwc:if={campaign.hasImage}>
+                <img class="cover" src={campaign.imageUrl} alt="" loading="lazy" />
+            </template>
+            <template lwc:else>
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path>
+                </svg>
+            </template>
+        </div>
+        <div class="body">
+            <div class="heading">
+                <template lwc:if={past}>
+                    <span class="badge badge-finished">{labels.finished}</span>
+                </template>
+                <template lwc:if={campaign.exceeded}>
+                    <span class="badge badge-exceeded">{labels.goalExceeded}</span>
+                </template>
+                <h2 class="name">{campaign.name}</h2>
+                <p class="purpose muted">{campaign.purpose}</p>
+            </div>
+            <div>
+                <div class="progress-top">
+                    <span class={percentClass}>{campaign.percentLabel}</span>
+                    <span class="close muted">{campaign.closeLabel}</span>
+                </div>
+                <c-progress-bar percent={campaign.percent} label={campaign.progressLabel} muted={past}></c-progress-bar>
+            </div>
+            <div class="figures">
+                <div>
+                    <p class="caption muted">{raisedCaption}</p>
+                    <p class="figure">{campaign.raisedLabel}</p>
+                </div>
+                <div>
+                    <p class="caption muted">{labels.goal}</p>
+                    <p class="figure">{campaign.goalLabel}</p>
+                </div>
+            </div>
+            <template lwc:if={showActions}>
+                <div class="actions">
+                    <a class="btn btn-primary grow" href={campaign.donateUrl}>{labels.donate}</a>
+                    <a class="btn btn-secondary" href={campaign.pageUrl} aria-label={viewLabel}>{labels.viewCampaign}</a>
+                </div>
+            </template>
+        </div>
+    </article>
+</template>

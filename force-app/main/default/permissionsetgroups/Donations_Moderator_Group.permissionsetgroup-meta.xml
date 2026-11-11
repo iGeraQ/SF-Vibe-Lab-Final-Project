@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Assign this to the Moderator, with the Minimum Access - Salesforce profile: Staff base plus Moderator.</description>
+    <label>Rol · Moderator</label>
+    <permissionSets>Donations_Staff_Base</permissionSets>
+    <permissionSets>Donations_Moderator</permissionSets>
+</PermissionSetGroup>

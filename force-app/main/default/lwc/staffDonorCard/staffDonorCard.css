@@ -1,0 +1,38 @@
+@import 'c/staffStyles';
+
+.eyebrow {
+    margin-bottom: 16px;
+}
+
+.editable {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--staff-brand);
+    font-weight: 600;
+}
+
+.edit-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.input {
+    flex: 1;
+    min-width: 0;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--staff-neutral-line);
+    border-radius: 6px;
+    font: inherit;
+    color: var(--staff-text);
+}
+
+.save-error {
+    margin-top: 8px;
+}
+
+.locked-note {
+    margin-top: 4px;
+}

@@ -1,0 +1,396 @@
+<template>
+    <section class="page form-page">
+        <a class="back-link" href={backUrl}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+            {labels.backToCampaign}
+        </a>
+
+        <template lwc:if={isLoading}>
+            <p class="status" role="status">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasLoadError}>
+            <p class="alert" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:elseif={notAvailable}>
+            <div class="center-page">
+                <h1 class="page-title">{labels.campaignNotAvailable}</h1>
+                <a class="btn btn-primary" href={homeUrl}>{labels.goHome}</a>
+            </div>
+        </template>
+        <template lwc:else>
+            <div class="layout">
+                <div class="card form-card">
+                    <div class="wizard-brand">
+                        <span class="wizard-logo" aria-hidden="true">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path class="wizard-logo-star" d="M12 3l1.2 2.5 2.7.4-2 1.9.5 2.7L12 9.2l-2.4 1.3.5-2.7-2-1.9 2.7-.4z"></path>
+                                <path d="M3 14h3.5l3.5 1.5h4.5a1.5 1.5 0 0 1 0 3H10"></path>
+                                <path d="M14.5 18.5l5-2.5a1.5 1.5 0 0 1 1.5 2.5l-6 3.5H3"></path>
+                            </svg>
+                        </span>
+                        <span class="wizard-brand-name">{labels.programName}</span>
+                    </div>
+                    <ol class="steps" aria-label={labels.stepsLabel}>
+                        <template for:each={steps} for:item="item">
+                            <li key={item.key} class="step" aria-current={item.ariaCurrent}>
+                                <span class={item.barClass}></span>
+                                <span class={item.textClass}>{item.text}</span>
+                            </li>
+                        </template>
+                    </ol>
+
+                    <!-- Step 1: amount -->
+                    <template lwc:if={isStep1}>
+                        <h1 class="step-title">{labels.amountTitle}</h1>
+                        <p class="step-intro muted">{labels.amountIntro}</p>
+                        <div class="amounts" role="group" aria-label={labels.stepAmount}>
+                            <template for:each={amountOptions} for:item="option">
+                                <button
+                                    key={option.key}
+                                    type="button"
+                                    class={option.className}
+                                    aria-pressed={option.pressed}
+                                    data-value={option.value}
+                                    onclick={handleAmount}
+                                >
+                                    {option.label}<span class="amount-currency">MXN</span>
+                                </button>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Step 2: list and invoice, two separate decisions -->
+                    <template lwc:if={isStep2}>
+                        <h1 class="step-title">{labels.typeTitle}</h1>
+                        <fieldset class="question">
+                            <legend class="question-title">{labels.listQuestion}</legend>
+                            <div class="choices" role="radiogroup">
+                                <template for:each={listOptions} for:item="option">
+                                    <button
+                                        key={option.key}
+                                        type="button"
+                                        role="radio"
+                                        class={option.className}
+                                        aria-checked={option.checked}
+                                        data-group={option.group}
+                                        data-value={option.value}
+                                        onclick={handleChoice}
+                                    >
+                                        <span class="choice-ring" aria-hidden="true"><span class="choice-dot"></span></span>
+                                        <span class="choice-text">
+                                            <span class="choice-title">{option.title}</span>
+                                            <span class="choice-line">{option.line}</span>
+                                        </span>
+                                    </button>
+                                </template>
+                            </div>
+                        </fieldset>
+                        <fieldset class="question">
+                            <legend class="question-title">{labels.invoiceQuestion}</legend>
+                            <div class="choices" role="radiogroup">
+                                <template for:each={invoiceOptions} for:item="option">
+                                    <button
+                                        key={option.key}
+                                        type="button"
+                                        role="radio"
+                                        class={option.className}
+                                        aria-checked={option.checked}
+                                        data-group={option.group}
+                                        data-value={option.value}
+                                        onclick={handleChoice}
+                                    >
+                                        <span class="choice-ring" aria-hidden="true"><span class="choice-dot"></span></span>
+                                        <span class="choice-text">
+                                            <span class="choice-title">{option.title}</span>
+                                            <span class="choice-line">{option.line}</span>
+                                        </span>
+                                    </button>
+                                </template>
+                            </div>
+                        </fieldset>
+                    </template>
+
+                    <!-- Step 3: data -->
+                    <template lwc:if={isStep3}>
+                        <h1 class="step-title">{labels.dataTitle}</h1>
+                        <p class="step-intro muted">{labels.dataIntro}</p>
+                        <template lwc:if={hasStep3Errors}>
+                            <p class="alert alert-gap" role="alert">{labels.errFixFields}</p>
+                        </template>
+                        <div class="fields">
+                            <div class="field">
+                                <label class="field-label" for="email">{labels.email}</label>
+                                <input
+                                    id="email"
+                                    class={fieldState.email.className}
+                                    type="email"
+                                    autocomplete="email"
+                                    maxlength={maxLength.email}
+                                    value={email}
+                                    data-field="email"
+                                    aria-invalid={fieldState.email.invalid}
+                                    aria-describedby="email-note email-error"
+                                    oninput={handleInput}
+                                />
+                                <span id="email-note" class="field-note muted">{labels.emailNote}</span>
+                                <template lwc:if={fieldState.email.error}>
+                                    <span id="email-error" class="field-error">{fieldState.email.error}</span>
+                                </template>
+                            </div>
+
+                            <template lwc:if={needsDonorName}>
+                                <fieldset class="field">
+                                    <legend class="field-label">{labels.personType}</legend>
+                                    <div class="radios">
+                                        <template for:each={personOptions} for:item="option">
+                                            <label key={option.key} class={option.className}>
+                                                <input
+                                                    type="radio"
+                                                    name="person-type"
+                                                    value={option.value}
+                                                    checked={option.checked}
+                                                    aria-invalid={fieldState.personType.invalid}
+                                                    onchange={handlePersonType}
+                                                />
+                                                {option.label}
+                                            </label>
+                                        </template>
+                                    </div>
+                                    <template lwc:if={fieldState.personType.error}>
+                                        <span class="field-error">{fieldState.personType.error}</span>
+                                    </template>
+                                </fieldset>
+                            </template>
+
+                            <template lwc:if={showIndividualFields}>
+                                <div class="field-row">
+                                    <div class="field">
+                                        <label class="field-label" for="first-name">{labels.firstName}</label>
+                                        <input
+                                            id="first-name"
+                                            class={fieldState.firstName.className}
+                                            type="text"
+                                            autocomplete="given-name"
+                                            maxlength={maxLength.firstName}
+                                            value={firstName}
+                                            data-field="firstName"
+                                            aria-invalid={fieldState.firstName.invalid}
+                                            oninput={handleInput}
+                                            onblur={handleNameBlur}
+                                        />
+                                        <template lwc:if={fieldState.firstName.error}>
+                                            <span class="field-error">{fieldState.firstName.error}</span>
+                                        </template>
+                                    </div>
+                                    <div class="field">
+                                        <label class="field-label" for="last-name">{labels.lastName}</label>
+                                        <input
+                                            id="last-name"
+                                            class={fieldState.lastName.className}
+                                            type="text"
+                                            autocomplete="family-name"
+                                            maxlength={maxLength.lastName}
+                                            value={lastName}
+                                            data-field="lastName"
+                                            aria-invalid={fieldState.lastName.invalid}
+                                            oninput={handleInput}
+                                            onblur={handleNameBlur}
+                                        />
+                                        <template lwc:if={fieldState.lastName.error}>
+                                            <span class="field-error">{fieldState.lastName.error}</span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template lwc:if={showCompanyFields}>
+                                <div class="field">
+                                    <label class="field-label" for="company">{labels.company}</label>
+                                    <input
+                                        id="company"
+                                        class={fieldState.company.className}
+                                        type="text"
+                                        autocomplete="organization"
+                                        maxlength={maxLength.company}
+                                        value={company}
+                                        data-field="company"
+                                        aria-invalid={fieldState.company.invalid}
+                                        oninput={handleInput}
+                                        onblur={handleNameBlur}
+                                    />
+                                    <template lwc:if={fieldState.company.error}>
+                                        <span class="field-error">{fieldState.company.error}</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <template lwc:if={showNameFields}>
+                                <template lwc:if={nameNote}>
+                                    <p class="field-note muted">{nameNote}</p>
+                                </template>
+                            </template>
+
+                            <template lwc:if={needsPublicName}>
+                                <div class="field">
+                                    <label class="field-label" for="public-name">{labels.publicName}</label>
+                                    <input
+                                        id="public-name"
+                                        class={fieldState.publicName.className}
+                                        type="text"
+                                        maxlength={maxLength.publicName}
+                                        value={publicName}
+                                        data-field="publicName"
+                                        aria-invalid={fieldState.publicName.invalid}
+                                        aria-describedby="public-name-note"
+                                        oninput={handleInput}
+                                    />
+                                    <span id="public-name-note" class="field-note muted">{labels.publicNameNote}</span>
+                                    <template lwc:if={fieldState.publicName.error}>
+                                        <span class="field-error">{fieldState.publicName.error}</span>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <template lwc:if={isInvoice}>
+                                <div class="field">
+                                    <label class="field-label" for="rfc">{labels.rfc}</label>
+                                    <input
+                                        id="rfc"
+                                        class={fieldState.rfc.className}
+                                        type="text"
+                                        maxlength="13"
+                                        autocomplete="off"
+                                        value={rfc}
+                                        data-field="rfc"
+                                        aria-invalid={fieldState.rfc.invalid}
+                                        aria-describedby="rfc-note"
+                                        oninput={handleInput}
+                                    />
+                                    <span id="rfc-note" class="field-note muted">{labels.rfcNote}</span>
+                                    <template lwc:if={fieldState.rfc.error}>
+                                        <span class="field-error">{fieldState.rfc.error}</span>
+                                    </template>
+                                </div>
+                                <div class="field">
+                                    <label class="consent">
+                                        <input
+                                            type="checkbox"
+                                            checked={consent}
+                                            aria-invalid={fieldState.consent.invalid}
+                                            onchange={handleConsent}
+                                        />
+                                        <span>{labels.consent}</span>
+                                    </label>
+                                    <template lwc:if={fieldState.consent.error}>
+                                        <span class="field-error">{fieldState.consent.error}</span>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Step 4: confirmation -->
+                    <template lwc:if={isStep4}>
+                        <h1 class="step-title">{labels.confirmTitle}</h1>
+                        <p class="step-intro muted">{labels.confirmIntro}</p>
+                        <template lwc:if={submitError}>
+                            <p class="alert alert-gap" role="alert">{submitError}</p>
+                        </template>
+                        <dl class="summary">
+                            <div class="summary-row">
+                                <dt class="muted">{labels.summaryCampaign}</dt>
+                                <dd>{campaign.name}</dd>
+                            </div>
+                            <template lwc:if={isBigAmount}>
+                                <div class="summary-row summary-big">
+                                    <dt>{labels.summaryAmount}</dt>
+                                    <dd>{amountLabel}</dd>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <div class="summary-row">
+                                    <dt class="muted">{labels.summaryAmount}</dt>
+                                    <dd>{amountLabel}</dd>
+                                </div>
+                            </template>
+                            <div class="summary-row">
+                                <dt class="muted">{labels.summaryList}</dt>
+                                <dd>{listSummary}</dd>
+                            </div>
+                            <div class="summary-row">
+                                <dt class="muted">{labels.summaryInvoice}</dt>
+                                <dd>{invoiceSummary}</dd>
+                            </div>
+                            <template lwc:if={invoiceName}>
+                                <div class="summary-row">
+                                    <dt class="muted">{labels.summaryInvoiceName}</dt>
+                                    <dd>{invoiceName}</dd>
+                                </div>
+                            </template>
+                            <div class="summary-row">
+                                <dt class="muted">{labels.summaryEmail}</dt>
+                                <dd class="wrap">{trimmedEmail}</dd>
+                            </div>
+                        </dl>
+                        <p class="gateway-note muted">{labels.gatewayNote}</p>
+                    </template>
+
+                    <!-- Buttons -->
+                    <div class="buttons">
+                        <div class="buttons-left">
+                            <template lwc:if={showBack}>
+                                <button type="button" class="btn btn-secondary" onclick={handleBack}>{labels.back}</button>
+                            </template>
+                            <template lwc:if={isStep4}>
+                                <button type="button" class="btn btn-secondary" disabled={processing} onclick={handleChangeAmount}>
+                                    {labels.changeAmount}
+                                </button>
+                                <button type="button" class="btn btn-secondary" disabled={processing} onclick={handleChangeData}>
+                                    {labels.changeData}
+                                </button>
+                            </template>
+                        </div>
+                        <template lwc:if={showNext}>
+                            <button type="button" class="btn btn-primary" disabled={nextDisabled} onclick={handleNext}>
+                                {labels.nextStep}
+                            </button>
+                        </template>
+                        <template lwc:if={isStep4}>
+                            <button type="button" class="btn btn-primary" disabled={processing} aria-live="polite" onclick={handlePay}>
+                                {payLabel}
+                            </button>
+                        </template>
+                    </div>
+                    <template lwc:if={nextHint}>
+                        <p class="hint muted">{nextHint}</p>
+                    </template>
+                </div>
+
+                <aside class="card side" aria-label={labels.donatingTo}>
+                    <div class="side-image image-placeholder" aria-hidden="true">
+                        <template lwc:if={campaign.hasImage}>
+                            <img class="cover" src={campaign.imageUrl} alt="" />
+                        </template>
+                        <template lwc:else>
+                            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path>
+                            </svg>
+                        </template>
+                    </div>
+                    <div class="side-body">
+                        <p class="eyebrow muted">{labels.donatingTo}</p>
+                        <p class="side-name">{campaign.name}</p>
+                        <p class="side-purpose muted">{campaign.purpose}</p>
+                        <c-progress-bar percent={campaign.percent} label={campaign.progressLabel} size="small"></c-progress-bar>
+                        <p class="side-figures"><strong>{campaign.percentLabel}</strong> · {campaign.raisedLabel} / {campaign.goalLabel}</p>
+                        <template lwc:if={hasAmount}>
+                            <p class="side-amount">{labels.yourDonation}: <strong>{amountLabel}</strong></p>
+                        </template>
+                    </div>
+                </aside>
+            </div>
+        </template>
+    </section>
+</template>

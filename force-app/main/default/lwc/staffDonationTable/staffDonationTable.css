@@ -1,0 +1,7 @@
+@import 'c/staffStyles';
+
+.table-flush {
+    border: 0;
+    border-top: 1px solid var(--staff-line);
+    border-radius: 0;
+}

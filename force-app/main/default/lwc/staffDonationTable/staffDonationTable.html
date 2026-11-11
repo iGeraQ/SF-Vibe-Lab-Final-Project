@@ -1,0 +1,57 @@
+<template>
+    <div class={wrapClass}>
+        <template lwc:if={hasRows}>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">{labels.colId}</th>
+                        <th scope="col">{labels.colStatus}</th>
+                        <th scope="col" class="num">{labels.colAmount}</th>
+                        <template lwc:if={isInvoice}>
+                            <th scope="col">{labels.colPersonType}</th>
+                            <th scope="col">{labels.colInvoiceName}</th>
+                            <th scope="col">{labels.colRfc}</th>
+                            <th scope="col">{labels.colConsent}</th>
+                        </template>
+                        <template lwc:else>
+                            <th scope="col">{labels.colType}</th>
+                        </template>
+                        <template lwc:if={showCampaign}>
+                            <th scope="col">{labels.colCampaign}</th>
+                        </template>
+                        <th scope="col">{labels.colDate}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={rows} for:item="row">
+                        <tr key={row.id} class="row" data-id={row.id} onclick={handleOpen}>
+                            <td>
+                                <button type="button" class="link mono" data-id={row.id} onclick={handleOpen}>
+                                    {row.reference}
+                                </button>
+                            </td>
+                            <td><span class={row.pillClass}>{row.stageLabel}</span></td>
+                            <td class="num strong">{row.amountLabel}</td>
+                            <template lwc:if={isInvoice}>
+                                <td>{row.personType}</td>
+                                <td>{row.invoiceName}</td>
+                                <td class="mono">{row.rfc}</td>
+                                <td>{row.consentLabel}</td>
+                            </template>
+                            <template lwc:else>
+                                <td>{row.type}</td>
+                            </template>
+                            <template lwc:if={showCampaign}>
+                                <td>{row.campaign}</td>
+                            </template>
+                            <td>{row.dateLabel}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+        <template lwc:else>
+            <p class="state">{emptyText}</p>
+        </template>
+    </div>
+</template>

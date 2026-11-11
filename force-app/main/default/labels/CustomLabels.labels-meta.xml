@@ -1,0 +1,1547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Donations_AboutCampaign</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign description heading</shortDescription>
+        <value>Sobre esta campaña</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ActiveIntro</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Home page intro</shortDescription>
+        <value>Elige la campaña que quieras apoyar. Cada peso se destina a esa campaña y aquí mismo puedes ver cuánto llevamos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ActiveTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Home page title</shortDescription>
+        <value>Campañas activas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AllCampaigns</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Back link to the home page</shortDescription>
+        <value>Todas las campañas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AlwaysOpen</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>End date text for the general campaign</shortDescription>
+        <value>Siempre abierta</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AmountHint</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Hint while no amount is chosen</shortDescription>
+        <value>Elige un monto para continuar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AmountIntro</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 1 intro</shortDescription>
+        <value>Cualquier monto suma. Todos los montos son en pesos mexicanos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AmountTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 1 title</shortDescription>
+        <value>¿Cuánto quieres donar?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AnonymousDonors</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Row with the total of anonymous donations</shortDescription>
+        <value>Donantes anónimos</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Back</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form back button</shortDescription>
+        <value>Atrás</value>
+    </labels>
+    <labels>
+        <fullName>Donations_BackToCampaign</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Back link from the form</shortDescription>
+        <value>Volver a la campaña</value>
+    </labels>
+    <labels>
+        <fullName>Donations_BackToCampaigns</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Thank-you button</shortDescription>
+        <value>Volver a las campañas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_BeFirst</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Recognition empty state</shortDescription>
+        <value>Sé la primera persona en apoyar esta campaña</value>
+    </labels>
+    <labels>
+        <fullName>Donations_CampaignNotAvailable</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign page or form for a campaign that is not active</shortDescription>
+        <value>Esta campaña ya no recibe donaciones o no existe.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_CancelText</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancel page text</shortDescription>
+        <value>Puedes intentarlo otra vez cuando quieras.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_CancelTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancel page title (US-04 AC5)</shortDescription>
+        <value>Tu donación no se completó y no se hizo ningún cargo</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ChangeAmount</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 4 button back to step 1</shortDescription>
+        <value>Cambiar monto</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ChangeData</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 4 button back to step 3</shortDescription>
+        <value>Cambiar datos</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ClosedOn</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Past campaign end date, {0} is the date</shortDescription>
+        <value>Finalizó el {0}</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ClosesOn</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign end date, {0} is the date</shortDescription>
+        <value>Cierra el {0}</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Company</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Company field</shortDescription>
+        <value>Nombre o razón social de la empresa</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ConfirmIntro</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 4 intro</shortDescription>
+        <value>Confirma que todo esté bien antes de ir a pagar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ConfirmTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 4 title</shortDescription>
+        <value>Revisa tu donación</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Consent</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Invoice consent checkbox</shortDescription>
+        <value>Autorizo que se usen mis datos para emitir la factura de esta donación.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_DataIntro</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 3 intro</shortDescription>
+        <value>No necesitas crear una cuenta.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_DataTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 3 title</shortDescription>
+        <value>Tus datos</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Donate</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donate button</shortDescription>
+        <value>Donar</value>
+    </labels>
+    <labels>
+        <fullName>Donations_DonatingTo</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form side panel caption</shortDescription>
+        <value>Estás donando a</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Email</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Email field</shortDescription>
+        <value>Correo electrónico</value>
+    </labels>
+    <labels>
+        <fullName>Donations_EmailNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Email field note (US-03 AC7)</shortDescription>
+        <value>Aquí te enviaremos tu comprobante.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrConsent</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Consent not ticked</shortDescription>
+        <value>Necesitamos tu autorización para emitir la factura.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrEmail</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Invalid email</shortDescription>
+        <value>El correo no tiene un formato válido. Ejemplo: nombre@dominio.com</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrFixFields</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary when step 3 has errors</shortDescription>
+        <value>Revisa los campos marcados para continuar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrRequired</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Missing value</shortDescription>
+        <value>Este campo es obligatorio.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrRfc</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>RFC does not match the SAT pattern</shortDescription>
+        <value>El RFC no tiene un formato válido. Revisa las letras, la fecha y la homoclave.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrRfcLengthCompany</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>RFC length for a company</shortDescription>
+        <value>Para persona moral el RFC tiene 12 caracteres.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrRfcLengthIndividual</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>RFC length for an individual</shortDescription>
+        <value>Para persona física el RFC tiene 13 caracteres.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ExternalPayment</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Note under the donate button</shortDescription>
+        <value>El pago se realiza en una pasarela externa. No necesitas crear una cuenta.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FinalAmount</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Final amount caption on past campaigns</shortDescription>
+        <value>Monto final</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Finished</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Badge on past campaigns</shortDescription>
+        <value>Finalizada</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FirstName</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>First name field</shortDescription>
+        <value>Nombre(s)</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FooterNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Footer text</shortDescription>
+        <value>Los pagos se procesan en una pasarela externa. No necesitas crear una cuenta.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_GatewayNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 4 note</shortDescription>
+        <value>Al continuar irás a una pasarela de pago externa.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Goal</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Goal caption</shortDescription>
+        <value>Meta</value>
+    </labels>
+    <labels>
+        <fullName>Donations_GoalExceeded</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Badge when progress is 100% or more</shortDescription>
+        <value>Meta superada</value>
+    </labels>
+    <labels>
+        <fullName>Donations_GoHome</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Link to the home page</shortDescription>
+        <value>Ir al inicio</value>
+    </labels>
+    <labels>
+        <fullName>Donations_InvoiceNo</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: no invoice</shortDescription>
+        <value>No</value>
+    </labels>
+    <labels>
+        <fullName>Donations_InvoiceNoLine</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: no invoice, explanation</shortDescription>
+        <value>Solo recibirás tu comprobante por correo.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_InvoiceQuestion</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 2 second question</shortDescription>
+        <value>¿Necesitas factura?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_InvoiceYes</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: invoice</shortDescription>
+        <value>Sí, quiero factura</value>
+    </labels>
+    <labels>
+        <fullName>Donations_InvoiceYesLine</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: invoice, explanation</shortDescription>
+        <value>Recibirás una factura simulada por correo. Tu RFC nunca se muestra en público.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_LastName</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Last name field</shortDescription>
+        <value>Apellidos</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ListNo</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: anonymous</shortDescription>
+        <value>No, prefiero que sea anónima</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ListNoLine</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: anonymous, explanation</shortDescription>
+        <value>Tu nombre no aparecerá en ningún lugar público. Tu monto se suma al total de donantes anónimos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ListQuestion</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 2 first question</shortDescription>
+        <value>¿Quieres aparecer en la lista de donantes?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ListYes</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: credited</shortDescription>
+        <value>Sí, con un nombre público</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ListYesLine</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option: credited, explanation</shortDescription>
+        <value>Tu nombre público y tu monto aparecerán en la lista de donantes.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_LoadError</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Generic load error</shortDescription>
+        <value>No pudimos cargar la información. Recarga la página en unos minutos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Loading</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Loading state</shortDescription>
+        <value>Cargando…</value>
+    </labels>
+    <labels>
+        <fullName>Donations_MoneyFor</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign purpose heading</shortDescription>
+        <value>¿Para qué es el dinero?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NameNoteInvoice</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Note under the name fields of an anonymous invoice</shortDescription>
+        <value>Solo se usa para tu factura; nunca se muestra en público.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NavCampaigns</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Header link to active campaigns</shortDescription>
+        <value>Campañas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NavLabel</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of the header navigation</shortDescription>
+        <value>Principal</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NavPastCampaigns</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Header link to past campaigns</shortDescription>
+        <value>Campañas pasadas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NextStep</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form next button</shortDescription>
+        <value>Continuar</value>
+    </labels>
+    <labels>
+        <fullName>Donations_No</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>No</shortDescription>
+        <value>No</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NotFoundEyebrow</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Not found eyebrow</shortDescription>
+        <value>Página no disponible</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NotFoundText</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Not found text</shortDescription>
+        <value>Puede que el enlace haya cambiado o que la página ya no exista.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NotFoundTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Not found title</shortDescription>
+        <value>No encontramos lo que buscabas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PastEmpty</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Past campaigns empty state</shortDescription>
+        <value>Todavía no hay campañas finalizadas.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PastIntro</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Past campaigns intro</shortDescription>
+        <value>Así cerraron las campañas anteriores, gracias a quienes donaron.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PastTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Past campaigns title</shortDescription>
+        <value>Campañas pasadas</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Pay</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 4 submit button</shortDescription>
+        <value>Ir a pagar</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PercentOfGoal</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Progress caption, {0} is the percentage</shortDescription>
+        <value>{0} de la meta</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PersonCompany</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Person type: company</shortDescription>
+        <value>Persona moral (empresa)</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PersonIndividual</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Person type: individual</shortDescription>
+        <value>Persona física</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PersonType</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Person type question</shortDescription>
+        <value>Donas como</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Processing</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Submit button while processing</shortDescription>
+        <value>Procesando…</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ProgramName</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Program name in the site header and footer</shortDescription>
+        <value>Donaciones Mexico Dreamin</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ProgramTagline</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Header tagline</shortDescription>
+        <value>Juntos llevamos a nuestros alumnos a Mexico Dreamin 2026.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ProgressOf</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of a progress bar, {0} is the campaign</shortDescription>
+        <value>Avance de {0}</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PublicName</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Public display name field</shortDescription>
+        <value>Nombre público</value>
+    </labels>
+    <labels>
+        <fullName>Donations_PublicNameNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Public display name note</shortDescription>
+        <value>Así aparecerás en la lista de donantes. Puede ser tu nombre, el de tu familia o el de tu empresa.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Raised</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Raised amount caption</shortDescription>
+        <value>Recaudado</value>
+    </labels>
+    <labels>
+        <fullName>Donations_RaisedOfGoal</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Under the raised amount, {0} is the goal</shortDescription>
+        <value>recaudados de una meta de {0}</value>
+    </labels>
+    <labels>
+        <fullName>Donations_RecognitionListLabel</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of the scrolling list</shortDescription>
+        <value>Lista de donantes, se desplaza automáticamente</value>
+    </labels>
+    <labels>
+        <fullName>Donations_RecognitionNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Recognition note</shortDescription>
+        <value>Solo aparecen quienes eligieron ser reconocidos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_RecognitionTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Recognition heading</shortDescription>
+        <value>Reconocimiento de donantes</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Rfc</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>RFC field</shortDescription>
+        <value>RFC</value>
+    </labels>
+    <labels>
+        <fullName>Donations_RfcNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>RFC field note</shortDescription>
+        <value>13 caracteres para persona física y 12 para persona moral.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_StepAmount</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form step 1</shortDescription>
+        <value>Monto</value>
+    </labels>
+    <labels>
+        <fullName>Donations_StepConfirm</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form step 4</shortDescription>
+        <value>Confirmación</value>
+    </labels>
+    <labels>
+        <fullName>Donations_StepData</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form step 3</shortDescription>
+        <value>Tus datos</value>
+    </labels>
+    <labels>
+        <fullName>Donations_StepsLabel</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of the step list</shortDescription>
+        <value>Pasos de la donación</value>
+    </labels>
+    <labels>
+        <fullName>Donations_StepType</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form step 2</shortDescription>
+        <value>Tipo de donación</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SubmitError</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Generic submit error (US-03 AC4)</shortDescription>
+        <value>No pudimos registrar tu donación y no se hizo ningún cargo. Intenta de nuevo en unos minutos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryAmount</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary row</shortDescription>
+        <value>Monto</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryCampaign</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary row</shortDescription>
+        <value>Campaña</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryEmail</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary row</shortDescription>
+        <value>Correo</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryInvoice</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary row</shortDescription>
+        <value>Factura</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryInvoiceName</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary row</shortDescription>
+        <value>Nombre en la factura</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryList</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary row</shortDescription>
+        <value>En la lista de donantes</value>
+    </labels>
+    <labels>
+        <fullName>Donations_SummaryListAnonymous</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary value</shortDescription>
+        <value>No, anónima</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ThanksText</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Thank-you text: never says the payment is confirmed (US-04 AC2, AC6)</shortDescription>
+        <value>Estamos confirmando tu pago. En cuanto se confirme, te enviaremos tu comprobante al correo que registraste.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ThanksTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Thank-you title</shortDescription>
+        <value>¡Gracias por tu donación!</value>
+    </labels>
+    <labels>
+        <fullName>Donations_TryAgain</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancel page button</shortDescription>
+        <value>Intentar de nuevo</value>
+    </labels>
+    <labels>
+        <fullName>Donations_TypeHint</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Hint while step 2 is incomplete</shortDescription>
+        <value>Responde las dos preguntas para continuar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_TypeTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Step 2 title</shortDescription>
+        <value>¿Cómo quieres donar?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ViewCampaign</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Button that opens a campaign page</shortDescription>
+        <value>Ver campaña</value>
+    </labels>
+    <labels>
+        <fullName>Donations_Yes</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Yes</shortDescription>
+        <value>Sí</value>
+    </labels>
+    <labels>
+        <fullName>Donations_YourDonation</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Form side panel, chosen amount</shortDescription>
+        <value>Tu donación</value>
+    </labels>
+    <labels>
+        <fullName>Stripe_Cancel_Url</fullName>
+        <categories>Stripe</categories>
+        <language>es</language>
+        <protected>true</protected>
+        <shortDescription>Stripe cancel URL</shortDescription>
+        <value>https://example.com/donacion-cancelada</value>
+    </labels>
+    <labels>
+        <fullName>Stripe_Success_Url</fullName>
+        <categories>Stripe</categories>
+        <language>es</language>
+        <protected>true</protected>
+        <shortDescription>Stripe success URL</shortDescription>
+        <value>https://example.com/gracias</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Loading</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Loading state</shortDescription>
+        <value>Cargando…</value>
+    </labels>
+    <labels>
+        <fullName>Staff_LoadError</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Load error</shortDescription>
+        <value>No pudimos cargar la información. Recarga la página en unos minutos.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Refresh</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Refresh button</shortDescription>
+        <value>Actualizar</value>
+    </labels>
+    <labels>
+        <fullName>Staff_FirstRecords</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Shown when there are more than 200 records</shortDescription>
+        <value>Se muestran los primeros 200 registros. Usa las vistas de lista de la pestaña estándar para ver todos.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SituationActive</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign accepting donations today</shortDescription>
+        <value>Activa</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SituationUpcoming</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign whose start date is in the future</shortDescription>
+        <value>Próxima</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SituationFinished</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign whose end date has passed</shortDescription>
+        <value>Finalizada</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SituationInactive</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign marked as inactive</shortDescription>
+        <value>Inactiva</value>
+    </labels>
+    <labels>
+        <fullName>Staff_CampaignsTitle</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign list title</shortDescription>
+        <value>Campañas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_NewCampaign</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>New campaign button</shortDescription>
+        <value>Nueva campaña</value>
+    </labels>
+    <labels>
+        <fullName>Staff_CampaignTabs</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of the campaign tabs</shortDescription>
+        <value>Filtrar campañas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabActive</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Active campaigns tab</shortDescription>
+        <value>Activas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabUpcoming</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Upcoming campaigns tab</shortDescription>
+        <value>Próximas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabFinished</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Finished campaigns tab</shortDescription>
+        <value>Finalizadas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabAll</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>All records tab</shortDescription>
+        <value>Todas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColName</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Name column</shortDescription>
+        <value>Nombre</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColStatus</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Status column</shortDescription>
+        <value>Estado</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColStart</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Start date column</shortDescription>
+        <value>Inicio</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColEnd</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>End date column</shortDescription>
+        <value>Cierre</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColGoal</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Goal column</shortDescription>
+        <value>Meta</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColRaised</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Raised column</shortDescription>
+        <value>Recaudado</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColPercent</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Percentage column</shortDescription>
+        <value>%</value>
+    </labels>
+    <labels>
+        <fullName>Staff_CampaignsEmpty</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Empty campaign tab</shortDescription>
+        <value>No hay campañas en esta vista.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ProgressOf</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of a progress bar</shortDescription>
+        <value>Avance de {0}</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ProgressTitle</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Progress card title</shortDescription>
+        <value>Avance</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ProgressReadOnly</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Progress card note</shortDescription>
+        <value>Solo lectura · se calcula con las donaciones pagadas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SituationToday</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign situation caption</shortDescription>
+        <value>Situación hoy</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Percentage</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Percentage caption</shortDescription>
+        <value>Porcentaje</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ActiveRule</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>How the active state works</shortDescription>
+        <value>Una campaña está activa cuando su estado es activo y hoy cae entre sus fechas.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_GoalPolicy</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Goal policy (US-08 refinement 3)</shortDescription>
+        <value>Una vez activa, la meta no se cambia.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_DonationsTitle</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donation list title</shortDescription>
+        <value>Donaciones</value>
+    </labels>
+    <labels>
+        <fullName>Staff_DonationTabs</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of the donation tabs</shortDescription>
+        <value>Filtrar donaciones</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabPaid</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Paid donations tab</shortDescription>
+        <value>Pagadas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabPending</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Pending donations tab</shortDescription>
+        <value>Pendientes</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabExpired</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Expired donations tab</shortDescription>
+        <value>Expiradas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabInvoice</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Invoice requests tab</shortDescription>
+        <value>Solicitan factura</value>
+    </labels>
+    <labels>
+        <fullName>Staff_TabAnonymous</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Anonymous donations tab</shortDescription>
+        <value>Anónimas</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColId</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donation reference column</shortDescription>
+        <value>ID</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColAmount</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Amount column</shortDescription>
+        <value>Monto</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColType</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donation type column</shortDescription>
+        <value>Tipo</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColCampaign</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign column</shortDescription>
+        <value>Campaña</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColDate</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Date column</shortDescription>
+        <value>Fecha</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColPersonType</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Person type column</shortDescription>
+        <value>Tipo de persona</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColInvoiceName</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Invoice name column</shortDescription>
+        <value>Nombre o empresa</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColRfc</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>RFC column</shortDescription>
+        <value>RFC</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ColConsent</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Invoice consent column</shortDescription>
+        <value>Consentimiento</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Yes</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Yes</shortDescription>
+        <value>Sí</value>
+    </labels>
+    <labels>
+        <fullName>Staff_No</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>No</shortDescription>
+        <value>No</value>
+    </labels>
+    <labels>
+        <fullName>Staff_DonationsEmpty</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Empty donation tab</shortDescription>
+        <value>No hay donaciones en esta vista.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_CampaignDonations</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donations card on the campaign page</shortDescription>
+        <value>Donaciones de la campaña</value>
+    </labels>
+    <labels>
+        <fullName>Staff_StagePaid</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Paid status</shortDescription>
+        <value>Pagada</value>
+    </labels>
+    <labels>
+        <fullName>Staff_StagePending</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Pending status</shortDescription>
+        <value>Pendiente</value>
+    </labels>
+    <labels>
+        <fullName>Staff_StageExpired</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Expired status</shortDescription>
+        <value>Expirada</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SummaryTitle</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Summary card title</shortDescription>
+        <value>Resumen</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Campaign</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Campaign caption</shortDescription>
+        <value>Campaña</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Type</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donation type caption</shortDescription>
+        <value>Tipo</value>
+    </labels>
+    <labels>
+        <fullName>Staff_AmountReadOnly</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Locked amount caption</shortDescription>
+        <value>Monto · solo lectura</value>
+    </labels>
+    <labels>
+        <fullName>Staff_StatusReadOnly</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Locked status caption</shortDescription>
+        <value>Estado · solo lectura</value>
+    </labels>
+    <labels>
+        <fullName>Staff_LockedNote</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Why amount and status are locked</shortDescription>
+        <value>El monto y el estado solo los cambia la integración con la pasarela de pago. Nadie puede editarlos desde aquí.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_BadgeAnonymous</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Anonymous badge</shortDescription>
+        <value>Anónima</value>
+    </labels>
+    <labels>
+        <fullName>Staff_BadgeInvoice</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Invoice badge</shortDescription>
+        <value>Solicita factura</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Badges</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Accessible name of the badges</shortDescription>
+        <value>Marcas de la donación</value>
+    </labels>
+    <labels>
+        <fullName>Staff_PaymentTitle</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Payment card title</shortDescription>
+        <value>Pago</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Reference</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donation reference caption</shortDescription>
+        <value>Referencia de la donación</value>
+    </labels>
+    <labels>
+        <fullName>Staff_DonationDate</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donation date caption</shortDescription>
+        <value>Fecha de la donación</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Confirmation</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Confirmation caption</shortDescription>
+        <value>Confirmación</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ConfirmedBy</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Paid donation confirmation source</shortDescription>
+        <value>Confirmada por: {0}</value>
+    </labels>
+    <labels>
+        <fullName>Staff_NotConfirmed</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Pending donation</shortDescription>
+        <value>Sin confirmar: en espera del aviso de la pasarela</value>
+    </labels>
+    <labels>
+        <fullName>Staff_ExpiredNote</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Expired donation</shortDescription>
+        <value>El pago no se completó y la sesión de la pasarela expiró</value>
+    </labels>
+    <labels>
+        <fullName>Staff_DonorTitle</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donor card title</shortDescription>
+        <value>Donante</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Email</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Donor email caption</shortDescription>
+        <value>Correo</value>
+    </labels>
+    <labels>
+        <fullName>Staff_PublicName</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Public name caption</shortDescription>
+        <value>Nombre público</value>
+    </labels>
+    <labels>
+        <fullName>Staff_PublicNameEditable</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Editable public name caption</shortDescription>
+        <value>Nombre público · editable</value>
+    </labels>
+    <labels>
+        <fullName>Staff_PublicNameLocked</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Public name is read only for this user</shortDescription>
+        <value>Solo el Moderator puede cambiar el nombre público.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_AnonymousNote</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Anonymous donation note</shortDescription>
+        <value>Donación anónima: su nombre no aparece en el sitio.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_NoValue</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Empty value</shortDescription>
+        <value>—</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Save</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Save button</shortDescription>
+        <value>Guardar</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Saving</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Saving state</shortDescription>
+        <value>Guardando…</value>
+    </labels>
+    <labels>
+        <fullName>Staff_Saved</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Saved message</shortDescription>
+        <value>Nombre público guardado.</value>
+    </labels>
+    <labels>
+        <fullName>Staff_SaveError</fullName>
+        <categories>Donations Staff App</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Generic save error</shortDescription>
+        <value>No se pudo guardar el nombre público. Intenta de nuevo.</value>
+    </labels>
+</CustomLabels>

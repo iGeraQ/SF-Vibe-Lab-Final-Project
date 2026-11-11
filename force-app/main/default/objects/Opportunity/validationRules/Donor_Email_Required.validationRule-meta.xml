@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Donor_Email_Required</fullName>
+    <active>true</active>
+    <description>US-02: every donation needs an email to send the receipt.</description>
+    <errorConditionFormula>AND(RecordType.DeveloperName = 'Donation', ISBLANK(Donor_Email__c))</errorConditionFormula>
+    <errorDisplayField>Donor_Email__c</errorDisplayField>
+    <errorMessage>El correo es obligatorio para enviarte tu recibo.</errorMessage>
+</ValidationRule>
