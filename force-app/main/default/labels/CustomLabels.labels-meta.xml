@@ -893,16 +893,16 @@
         <categories>Stripe</categories>
         <language>es</language>
         <protected>true</protected>
-        <shortDescription>Stripe cancel URL</shortDescription>
-        <value>https://example.com/donacion-cancelada</value>
+        <shortDescription>Stripe cancel page: path in the site, or a full https URL</shortDescription>
+        <value>/s/pago-no-completado</value>
     </labels>
     <labels>
         <fullName>Stripe_Success_Url</fullName>
         <categories>Stripe</categories>
         <language>es</language>
         <protected>true</protected>
-        <shortDescription>Stripe success URL</shortDescription>
-        <value>https://example.com/gracias</value>
+        <shortDescription>Stripe success page: path in the site, or a full https URL</shortDescription>
+        <value>/s/gracias</value>
     </labels>
     <labels>
         <fullName>Staff_Loading</fullName>

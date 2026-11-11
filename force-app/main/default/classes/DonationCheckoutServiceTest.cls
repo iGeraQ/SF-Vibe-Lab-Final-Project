@@ -107,8 +107,9 @@ private class DonationCheckoutServiceTest {
         Assert.areEqual(250, sentRequest.amount);
         Assert.areEqual('Donación · Abierta', sentRequest.description);
         Assert.areEqual(donation.Stripe_Session_Expires_At__c, sentRequest.expiresAt);
-        Assert.areEqual(System.Label.Stripe_Success_Url, sentRequest.successUrl);
-        Assert.areEqual(System.Label.Stripe_Cancel_Url, sentRequest.cancelUrl);
+        String site = 'https://' + DomainCreator.getExperienceCloudSitesHostname();
+        Assert.areEqual(site + '/s/gracias', sentRequest.successUrl);
+        Assert.areEqual(site + '/s/pago-no-completado', sentRequest.cancelUrl);
         Assert.areEqual(String.valueOf(campaignId('Abierta')), sentRequest.metadata.get('campaign_id'));
         Assert.areEqual('false', sentRequest.metadata.get('anonymous'));
     }

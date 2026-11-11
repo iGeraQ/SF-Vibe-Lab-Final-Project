@@ -492,3 +492,14 @@ Template:
 - **What we corrected:** _Pending: write access to the Project from its owner, then the Status changes and the "To refine" edits._
 - **AI error:** no
 - **Speed-up:** _Pending_
+
+### 2026-11-11 · Stripe return pages
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-04
+- **What we asked:** after paying in Stripe the donor landed on example.com instead of the thank-you page.
+- **What we got:** the `Stripe_Success_Url` and `Stripe_Cancel_Url` labels held `https://example.com/...` placeholders, and every deploy reset the org to them. The labels now hold the page paths (`/s/gracias`, `/s/pago-no-completado`) and `DonationCheckoutService` adds the org's Experience Cloud domain with `DomainCreator.getExperienceCloudSitesHostname()`; a full `https://` URL in a label is still used as is. No org address is versioned. README and `docs/public-site.md` updated.
+- **What we verified and how:** deployed to the team org with `DonationCheckoutServiceTest` and `StripeClientTest` (20 pass). Anonymous Apex printed `https://<org>.my.site.com/s/gracias`, and that page answers 200. We did not repeat a full payment in this session.
+- **What we corrected:** nothing.
+- **AI error:** none found.
+- **Speed-up:** _Pending_
