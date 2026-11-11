@@ -227,3 +227,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** the first permission sets missed standard field access; it only showed up when we asked how each role works with a minimal profile.
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · Stripe credential in the org
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03 (#49)
+- **What we asked:** the exact Setup steps to store the Stripe key, help with a failed test callout, and a check that the key is not in the repo.
+- **What we got:** the External Credential, Named Credential and principal access steps; the callout failed because nobody had the "Donaciones · Payment Integration" permission set; and a key check that only matches real keys, run over the files and the whole history.
+- **What we verified and how:** the retrieved credential metadata has no key, and the check found nothing in any commit.
+- **What we corrected:** the README's `git grep rk_test_` check matched its own examples; it now uses a pattern for real keys and also searches the history.
+- **AI error:** the first check command we wrote in the README gave false matches.
+- **Speed-up:** _Pending_
