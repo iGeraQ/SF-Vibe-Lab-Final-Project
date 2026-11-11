@@ -4,7 +4,11 @@
         <enabled>true</enabled>
         <name>Donation_Payment_Updates</name>
     </customPermissions>
-    <description>For the site guest user and the integration user that schedules the Apex check (not schedule-triggered flows). Lets them change a donation's amount, status and campaign.</description>
+    <description>For the site guest user and the integration user that schedules the Apex check (not schedule-triggered flows). Lets them change a donation&apos;s amount, status and campaign.</description>
+    <externalCredentialPrincipalAccesses>
+        <enabled>true</enabled>
+        <externalCredentialPrincipal>Stripe-StripeKey</externalCredentialPrincipal>
+    </externalCredentialPrincipalAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Donaciones · Payment Integration</label>
 </PermissionSet>

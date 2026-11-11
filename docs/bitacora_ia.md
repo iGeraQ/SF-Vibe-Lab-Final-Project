@@ -216,3 +216,47 @@ Template:
 - **What we corrected:** the first version implemented `Queueable` and `Schedulable` in one class, which Salesforce rejects; the schedulable part moved to an inner class. One test ran the real Stripe client at `Test.stopTest()` until it got the fake gateway too.
 - **AI error:** the `Queueable` plus `Schedulable` combination above.
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · Staff roles as permission set groups
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-05, US-08, US-09
+- **What we asked:** explain how the roles are covered, and fix the access gap it showed.
+- **What we got:** the role permission sets only granted custom fields, so with a minimal profile a Campaign Manager couldn't fill dates or goal and nobody saw a donation's amount or campaign; with Standard User the profile gave too much. We chose a shared "Donaciones · Staff base" permission set plus one permission set group per role, with the Minimum Access - Salesforce profile for Campaign Manager and Moderator, and `StaffRolesTest` (7 tests in user mode for US-05 AC7, US-08 AC1, AC3, AC6 and US-09 AC1 to AC4).
+- **What we verified and how:** check-only deploy to the team org: the groups validate and the 46 tests pass.
+- **What we corrected:** _Pending_
+- **AI error:** the first permission sets missed standard field access; it only showed up when we asked how each role works with a minimal profile.
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Stripe credential in the org
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03 (#49)
+- **What we asked:** the exact Setup steps to store the Stripe key, help with a failed test callout, and a check that the key is not in the repo.
+- **What we got:** the External Credential, Named Credential and principal access steps; the callout failed because nobody had the "Donaciones · Payment Integration" permission set; and a key check that only matches real keys, run over the files and the whole history.
+- **What we verified and how:** the retrieved credential metadata has no key, and the check found nothing in any commit.
+- **What we corrected:** the README's `git grep rk_test_` check matched its own examples; it now uses a pattern for real keys and also searches the history.
+- **AI error:** the first check command we wrote in the README gave false matches.
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Simulated invoice PDF
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-06 (#29)
+- **What we asked:** send the simulated invoice by email with a PDF attached.
+- **What we got:** when a donation that asked for an invoice becomes paid, the receipt email carries `Factura-simulada-<reference>.pdf` (made with `Blob.toPdf`): folio, date, fictitious issuer, recipient, RFC, person type, concept and total, and "No es un comprobante fiscal (CFDI)". One email per donation, sent once with the receipt's existing flag. 5 new tests in `DonationReceiptServiceTest`, including one that escapes donor text.
+- **What we verified and how:** check-only deploy to the team org: 51 tests pass; `DonationReceiptService` coverage 92%. The PDF is generated inside the trigger without errors.
+- **What we corrected:** one test expected accented text, but `escapeHtml4` turns accents into HTML entities (the PDF shows them correctly); the test now compares the unescaped text.
+- **AI error:** see the correction above.
+- **Speed-up:** _Pending_
+
+### 2026-11-10 · Styled receipt email
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-14, US-06 (#44, #29)
+- **What we asked:** the receipt arrived as bare plain text; make it an email worthy of a donation platform.
+- **What we got:** `DonationEmailTemplate` (new) builds an HTML email with tables and inline styles in Spanish, a plain-text fallback, and a styled simulated invoice PDF. The layout follows a payment-receipt look the team pasted as reference (demo ribbon, strong-blue header, title with receipt number, key data row, summary box, contact and legal lines), with a stronger blue and none of the reference's images, logo or brand name; the PDF has the same look. `DonationReceiptService` keeps only the when and to whom. 12 new tests in `DonationEmailTemplateTest`; donor text is escaped and an anonymous receipt still shows no name.
+- **What we verified and how:** we deployed the classes to the team org and rendered the real email and PDF with a donation already paid there (a desktop and a phone-width view of the email, and the PDF). Check-only deploy: 63 tests pass; `DonationEmailTemplate` coverage 99%. We did not check Gmail, Outlook or dark mode.
+- **What we corrected:** the amount showed as `$500` because `Decimal.format()` drops trailing zeros; it is now built by hand ($500.00, $1,234,567.50), independent of the sender's locale. In the second design a divider came out red: Apex is case-insensitive and a local variable `line` shadowed the `LINE` color constant.
+- **AI error:** the amount format and the shadowed color constant; the preview caught both, the tests did not.
+- **Speed-up:** _Pending_

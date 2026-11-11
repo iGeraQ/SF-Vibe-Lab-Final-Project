@@ -1,8 +1,9 @@
 /**
  * Sends the donor's receipt, in Spanish, once, when a donation becomes paid (US-14 AC2 to AC6, #44). Stripe sends no
- * receipts in test mode. The sender and the support email (US-11 AC6) are the Org-Wide Email Address named
+ * receipts in test mode. DonationEmailTemplate writes the email; this class decides when and to whom it goes. The sender and the support email (US-11 AC6) are the Org-Wide Email Address named
  * SENDER_NAME, set up in Setup so no address lives in the repo. Runs in the context that confirmed the payment
- * (the site guest user or the integration user), so it reads in system mode.
+ * (the site guest user or the integration user), so it reads in system mode. When the donor asked for an invoice,
+ * the same email carries a simulated invoice as a PDF (US-06 AC8): one email per donation, sent once.
  */
 public without sharing class DonationReceiptService {
 
@@ -82,50 +83,39 @@ public without sharing class DonationReceiptService {
     private static List<Opportunity> loadDonations(Set<Id> ids) {
         return [
             SELECT Id, Donation_Reference__c, Donor_Email__c, Amount, CloseDate, Donation_Type__c, Is_Anonymous__c,
-                Donor_First_Name__c, Donor_Last_Name__c, Donor_Company__c, Campaign.Name
+                Donor_First_Name__c, Donor_Last_Name__c, Donor_Company__c, Campaign.Name, Invoice_Requested__c, RFC__c,
+                toLabel(Person_Type__c)
             FROM Opportunity
             WHERE Id IN :ids
             WITH SYSTEM_MODE
         ];
     }
 
+    // The wording and the look live in DonationEmailTemplate; this only puts the email together.
     @TestVisible
     private static Messaging.SingleEmailMessage buildReceipt(Opportunity donation, OrgWideEmailAddress sender) {
-        List<String> lines = new List<String>{
-            'Gracias por tu donación al programa Mexico Dreamin.',
-            '',
-            'Referencia: ' + donation.Donation_Reference__c,
-            'Campaña: ' + donation.Campaign.Name,
-            'Monto: $' + (donation.Amount ?? 0).setScale(2).format() + ' MXN',
-            'Fecha: ' + donation.CloseDate.format(),
-            'Tipo de donación: ' + donation.Donation_Type__c
-        };
-        // An anonymous receipt never shows a name, even when names are stored for the invoice (US-02 AC2).
-        if (!donation.Is_Anonymous__c) {
-            lines.add('Donante: ' + donorName(donation));
-        }
-        lines.add('');
-        lines.add('Este recibo no es un comprobante fiscal (CFDI).');
-        if (sender != null) {
-            lines.add('Si tienes un problema con tu recibo o tu factura, escríbenos a ' + sender.Address + '.');
-        }
-
+        String supportEmail = sender?.Address;
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
         email.setToAddresses(new List<String>{ donation.Donor_Email__c });
-        email.setSubject('Recibo de tu donación ' + donation.Donation_Reference__c);
-        email.setPlainTextBody(String.join(lines, '\n'));
+        email.setSubject(DonationEmailTemplate.subject(donation));
+        email.setHtmlBody(DonationEmailTemplate.receiptHtml(donation, supportEmail));
+        email.setPlainTextBody(DonationEmailTemplate.receiptText(donation, supportEmail));
         email.setSaveAsActivity(false);
         if (sender?.Id != null) {
             email.setOrgWideEmailAddressId(sender.Id);
         }
+        if (donation.Invoice_Requested__c) {
+            email.setFileAttachments(new List<Messaging.EmailFileAttachment>{ invoicePdf(donation) });
+        }
         return email;
     }
 
-    private static String donorName(Opportunity donation) {
-        if (String.isNotBlank(donation.Donor_Company__c)) {
-            return donation.Donor_Company__c;
-        }
-        return ((donation.Donor_First_Name__c ?? '') + ' ' + (donation.Donor_Last_Name__c ?? '')).trim();
+    private static Messaging.EmailFileAttachment invoicePdf(Opportunity donation) {
+        Messaging.EmailFileAttachment pdf = new Messaging.EmailFileAttachment();
+        pdf.setFileName(DonationEmailTemplate.invoiceFileName(donation));
+        pdf.setContentType('application/pdf');
+        pdf.setBody(Blob.toPdf(DonationEmailTemplate.invoiceHtml(donation)));
+        return pdf;
     }
 
     // ponytail: no sender set up yet means the platform's default sender and no support line in the receipt.
