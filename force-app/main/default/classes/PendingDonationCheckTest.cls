@@ -118,9 +118,10 @@ private class PendingDonationCheckTest {
 
     @IsTest
     static void schedulingCreatesOneJobPerQuarterHour() {
-        PendingDonationCheck.scheduleEveryQuarterHour();
+        // Its own prefix: the org may already have the real jobs, and CronTrigger rows are visible to tests.
+        PendingDonationCheck.scheduleEveryQuarterHour('Prueba de programacion');
 
-        Assert.areEqual(4, [SELECT COUNT() FROM CronTrigger WHERE CronJobDetail.Name LIKE 'Donaciones pendientes%']);
+        Assert.areEqual(4, [SELECT COUNT() FROM CronTrigger WHERE CronJobDetail.Name LIKE 'Prueba de programacion%']);
     }
 
     private static void runCheck() {
