@@ -271,3 +271,14 @@ Template:
 - **What we corrected:** _Pending_
 - **AI error:** _Pending_
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · First run of the test plan
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-01 to US-09, US-11, US-12, US-14
+- **What we asked:** start running `docs/test_plan.md`, document the findings and fix what could be fixed.
+- **What we got:** `docs/test_results.md` with the run (Apex 52 of 55 pass, Jest 112 of 112, a 34-case validation matrix and the public controller checks in the org, E2E and Security blocked) and 12 findings. Code fixes, written but not yet validated in the org because deploys are blocked by scheduled jobs: the receipt is sent from the Org-Wide Email Address only when it is verified (it isn't, so no receipt was reaching donors), the schedule test no longer counts the org's real jobs, the Stripe payment carries the donation reference, and `DonationRulesTest` (7 tests) keeps the validation matrix from regressing.
+- **What we verified and how:** the matrix and the public controller checks ran in the team org as anonymous Apex with a rollback (0 records left); the site check ran in the built-in browser as a visitor; the site, the receipt sender, the scheduled jobs and the guest user were read from the org. The code fixes passed Code Analyzer and compile only when deployed: _Pending until the deploy is allowed_.
+- **What we corrected:** the AI first read the 60 "Queued" rows of `AsyncApexJob` as stuck jobs; they are the schedules themselves (`ScheduledApex`). It also gave a wrong clock for when the Stripe session would expire and had to wait; the check by hand then showed the logic works and the schedules are what fails (R-13, cause not determined). It also assumed anonymous Apex could run DML in system mode and call `AuraHandledException` code paths; both fail there, so those checks stayed in Apex tests.
+- **AI error:** the first matrix script didn't compile (a placeholder line, and method declarations aren't allowed in anonymous Apex).
+- **Speed-up:** _Pending_
