@@ -126,10 +126,12 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 - **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous, plus the combined total of paid anonymous donations (US-05 AC8). It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
 - **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand: the `Payment_Fields_Locked` validation rule blocks it unless the user has the `Donation_Payment_Updates` custom permission, which only the "Donaciones · Payment Integration" permission set grants (site guest user and the integration user that schedules the Apex check). The same rule makes every new donation start as `Pending` and blocks changing its campaign. `Donation_Record_Type_Required` keeps every Opportunity on the Donation record type, so no record skips the rules.
 
-| Permission set | Campaign | Donation |
+Each role is a permission set group: "Donaciones · Staff base" (read campaigns and donations, including status, amount, campaign and donor email, and the tabs) plus the role's permission set. Campaign Manager and Moderator users have the Minimum Access - Salesforce profile, so the group is all they get; `StaffRolesTest` checks it.
+
+| Role | Campaign | Donation |
 |---|---|---|
 | System Admin | Full | Read all; edit donor data; amount, status, campaign, Stripe, receipt, consent and public name read-only |
-| Campaign Manager | Create and edit | Read, including email |
+| Campaign Manager | Create and edit, including dates, goal, status and description | Read, including email |
 | Moderator | Read | Read, including email; edit `Public_Name__c` and `Is_Anonymous__c` (to hide a donor from the recognition) |
 
 ## Inventory

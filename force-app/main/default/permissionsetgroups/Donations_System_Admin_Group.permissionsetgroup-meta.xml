@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Assign this to the System Admin: Staff base plus System Admin.</description>
+    <label>Rol · System Admin</label>
+    <permissionSets>Donations_Staff_Base</permissionSets>
+    <permissionSets>Donations_System_Admin</permissionSets>
+</PermissionSetGroup>

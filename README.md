@@ -85,7 +85,11 @@ sf project deploy start --source-dir force-app --target-org donaciones
 ```
 
 5. Optional: relabel the Campaign field "Expected Revenue in Campaign" as "Meta" (Setup → Rename Tabs and Labels).
-6. Users: assign each person the permission set of their role. Campaign managers also need the "Marketing User" checkbox on their user.
+6. Users: give each person one **permission set group**, the one of their role: "Rol · System Admin", "Rol · Campaign Manager" or "Rol · Moderator". Each group is "Donaciones · Staff base" (what the three share) plus the role's own permission set.
+   - Campaign Manager and Moderator users get the **Minimum Access - Salesforce** profile, so they can do only what their group allows. A permission set can add access but never remove what a profile gives.
+   - The System Admin keeps the System Administrator profile.
+   - Campaign managers also need the "Marketing User" checkbox on their user.
+   - The org has one free Salesforce license: for the demo, one "Staff demo" user can switch between the Campaign Manager and Moderator groups and be shown with "Login As".
 7. Once the site exists, set the guest user's time zone to America/Merida and assign it "Donaciones · Sitio público" (campaign pages) and "Donaciones · Payment Integration" (applies Stripe's confirmation). Also assign "Donaciones · Payment Integration" (only that one) and access to the Stripe credential to the integration user, and, logged in as that user, schedule the pending-donations check (US-03 AC5) once from the Developer Console → Execute Anonymous: `PendingDonationCheck.scheduleEveryQuarterHour();` Both are documented in `docs/seguridad.md`.
 8. Connect Stripe (#49). The key only lives in Setup, never in the repo:
    - **External Credential** "Stripe": Custom protocol, a named principal `StripeKey` with an authentication parameter `ApiKey` holding the restricted key (`rk_test_…`), and a custom header `Authorization` = `{!'Bearer ' & $Credential.Stripe.ApiKey}`.
