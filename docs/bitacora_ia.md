@@ -249,3 +249,14 @@ Template:
 - **What we corrected:** one test expected accented text, but `escapeHtml4` turns accents into HTML entities (the PDF shows them correctly); the test now compares the unescaped text.
 - **AI error:** see the correction above.
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · Styled receipt email
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-14, US-06 (#44, #29)
+- **What we asked:** the receipt arrived as bare plain text; make it an email worthy of a donation platform.
+- **What we got:** `DonationEmailTemplate` (new) builds an HTML email with tables and inline styles in Spanish, a plain-text fallback, and a styled simulated invoice PDF. The layout follows a payment-receipt look the team pasted as reference (demo ribbon, strong-blue header, title with receipt number, key data row, summary box, contact and legal lines), with a stronger blue and none of the reference's images, logo or brand name; the PDF has the same look. `DonationReceiptService` keeps only the when and to whom. 12 new tests in `DonationEmailTemplateTest`; donor text is escaped and an anonymous receipt still shows no name.
+- **What we verified and how:** we deployed the classes to the team org and rendered the real email and PDF with a donation already paid there (a desktop and a phone-width view of the email, and the PDF). Check-only deploy: 63 tests pass; `DonationEmailTemplate` coverage 99%. We did not check Gmail, Outlook or dark mode.
+- **What we corrected:** the amount showed as `$500` because `Decimal.format()` drops trailing zeros; it is now built by hand ($500.00, $1,234,567.50), independent of the sender's locale. In the second design a divider came out red: Apex is case-insensitive and a local variable `line` shadowed the `LINE` color constant.
+- **AI error:** the amount format and the shadowed color constant; the preview caught both, the tests did not.
+- **Speed-up:** _Pending_
