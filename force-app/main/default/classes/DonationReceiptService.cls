@@ -101,7 +101,9 @@ public without sharing class DonationReceiptService {
         email.setHtmlBody(DonationEmailTemplate.receiptHtml(donation, supportEmail));
         email.setPlainTextBody(DonationEmailTemplate.receiptText(donation, supportEmail));
         email.setSaveAsActivity(false);
-        if (sender?.Id != null) {
+        // An unverified address can't send: Salesforce would reject the email and the donor would get no receipt.
+        // It still shows as the support contact, and receipts go out from it as soon as it is verified.
+        if (sender?.Id != null && sender.IsVerified == true) {
             email.setOrgWideEmailAddressId(sender.Id);
         }
         if (donation.Invoice_Requested__c) {
@@ -119,9 +121,10 @@ public without sharing class DonationReceiptService {
     }
 
     // ponytail: no sender set up yet means the platform's default sender and no support line in the receipt.
+    // An address that exists but isn't verified gives the support line and the default sender (see buildReceipt).
     private static OrgWideEmailAddress sender() {
         List<OrgWideEmailAddress> senders = [
-            SELECT Id, Address
+            SELECT Id, Address, IsVerified
             FROM OrgWideEmailAddress
             WHERE DisplayName = :SENDER_NAME
             WITH SYSTEM_MODE

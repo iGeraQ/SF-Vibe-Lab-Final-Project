@@ -9,18 +9,31 @@ public without sharing class DonationCheckoutService {
     private static final Integer SESSION_MINUTES = 60;
     private static final Decimal MINIMUM_AMOUNT = 10;
     private static final String GATEWAY_DOWN = 'No pudimos abrir la pasarela de pago. Intenta de nuevo en unos minutos.';
+    private static final String UNREADABLE = 'No pudimos leer los datos de tu donación. Revisa el formulario e intenta de nuevo.';
 
     // The gateway is a dependency: Stripe in production, a fake in tests.
     @TestVisible
     private static PaymentGateway gateway = new StripeClient();
 
     /**
-     * @description Creates the checkout session and saves the donation as Pending (US-03 AC1, AC2).
-     * @param request the donation form
+     * @description Creates the checkout session and saves the donation as Pending (US-03 AC1, AC2). This is what the
+     * site calls. The form arrives as a plain object, so the parameter is a Map with the keys of DonationRequest:
+     * Aura leaves the fields of an Apex class passed as a parameter empty, and every donation was refused as
+     * "campaign closed" (docs/test_results.md R-14).
+     * @param request the donation form, as the site sends it
      * @return the gateway's checkout URL to send the donor to
      */
     @AuraEnabled
-    public static String startCheckout(DonationRequest request) {
+    public static String startCheckout(Map<String, Object> request) {
+        return startCheckoutFor(toRequest(request));
+    }
+
+    /**
+     * @description The same as startCheckout, from an already typed request.
+     * @param request the donation form
+     * @return the gateway's checkout URL to send the donor to
+     */
+    public static String startCheckoutFor(DonationRequest request) {
         String campaignName = validCampaignName(request);
         Opportunity donation = newDonation(request, campaignName);
         // The gateway goes first: Salesforce allows no callout after DML in the same transaction.
@@ -100,6 +113,18 @@ public without sharing class DonationCheckoutService {
         } catch (PaymentGateway.GatewayException e) {
             // Stays Pending; the next run asks again.
             return false;
+        }
+    }
+
+    // Reads the Map the site sends. A request that can't be read says so, rather than blaming the campaign.
+    private static DonationRequest toRequest(Map<String, Object> raw) {
+        if (raw == null || raw.isEmpty()) {
+            throw error(UNREADABLE);
+        }
+        try {
+            return (DonationRequest) JSON.deserialize(JSON.serialize(raw), DonationRequest.class);
+        } catch (JSONException e) {
+            throw error(UNREADABLE);
         }
     }
 
@@ -228,7 +253,7 @@ public without sharing class DonationCheckoutService {
     }
 
     /**
-     * @description The donation form, as the LWC sends it (#23).
+     * @description The donation form (#23). The site sends an object with these keys; startCheckout reads it.
      */
     public class DonationRequest {
         @AuraEnabled public Id campaignId;

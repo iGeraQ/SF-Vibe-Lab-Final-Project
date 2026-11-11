@@ -115,6 +115,34 @@ private class DonationReceiptServiceTest {
     }
 
     @IsTest
+    static void unverifiedSenderStillShowsAsSupportButIsNotUsedToSend() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-CREDITO1').Id })[0];
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, orgWideAddress(false));
+
+        Assert.isNull(email.getOrgWideEmailAddressId(), 'Salesforce rejects an unverified sender, so the receipt would be lost');
+        Assert.isTrue(email.getPlainTextBody().contains('soporte@example.com'), 'The support email still shows');
+    }
+
+    @IsTest
+    static void verifiedSenderSendsTheReceipt() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-CREDITO1').Id })[0];
+        OrgWideEmailAddress verified = orgWideAddress(true);
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, verified);
+
+        Assert.areEqual(verified.Id, email.getOrgWideEmailAddressId());
+    }
+
+    // An Org-Wide Email Address can't be inserted in a test, so this builds one as the platform would return it.
+    private static OrgWideEmailAddress orgWideAddress(Boolean verified) {
+        return (OrgWideEmailAddress) JSON.deserialize(
+            '{"attributes":{"type":"OrgWideEmailAddress"},"Id":"0D2000000000001AAA","Address":"soporte@example.com","IsVerified":' + verified + '}',
+            OrgWideEmailAddress.class
+        );
+    }
+
+    @IsTest
     static void invoiceDonationGetsTheSimulatedInvoiceAttached() {
         Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
 

@@ -99,6 +99,52 @@ private class DonationCheckoutServiceTest {
     }
 
     @IsTest
+    static void siteRequestAsAMapSavesThePendingDonation() {
+        String url = checkoutFromSite(siteRequest(), newSession());
+
+        Assert.areEqual('https://checkout.example.com/cs_test_new', url);
+        Opportunity donation = newDonation();
+        Assert.areEqual('Pending', donation.StageName);
+        Assert.areEqual(250, donation.Amount, 'The amount the site sent');
+        Assert.areEqual(campaignId('Abierta'), donation.CampaignId, 'The campaign the site sent');
+        Assert.areEqual('donante@example.com', donation.Donor_Email__c);
+        Assert.areEqual('Familia Prueba', donation.Public_Name__c);
+        Assert.isFalse(donation.Is_Anonymous__c);
+    }
+
+    @IsTest
+    static void siteRequestKeepsTheCampaignGuard() {
+        Map<String, Object> closed = siteRequest();
+        closed.put('campaignId', String.valueOf(campaignId('Cerrada')));
+
+        Assert.areEqual('Esta campaña ya no recibe donaciones.', siteError(closed, newSession()));
+        Assert.areEqual(0, newDonationCount(), 'Nothing is saved');
+    }
+
+    @IsTest
+    static void siteRequestKeepsTheMinimumAmountGuard() {
+        Map<String, Object> small = siteRequest();
+        small.put('amount', 5);
+
+        Assert.areEqual('El monto mínimo es de $10 MXN.', siteError(small, newSession()));
+    }
+
+    @IsTest
+    static void unreadableSiteRequestSaysSoInsteadOfBlamingTheCampaign() {
+        String unreadable = 'No pudimos leer los datos de tu donación. Revisa el formulario e intenta de nuevo.';
+        Map<String, Object> badId = siteRequest();
+        badId.put('campaignId', 'notanid');
+        Map<String, Object> badAmount = siteRequest();
+        badAmount.put('amount', 'abc');
+
+        Assert.areEqual(unreadable, siteError(null, newSession()), 'No request at all');
+        Assert.areEqual(unreadable, siteError(new Map<String, Object>(), newSession()), 'An empty request');
+        Assert.areEqual(unreadable, siteError(badId, newSession()), 'A campaign id that is not an id');
+        Assert.areEqual(unreadable, siteError(badAmount, newSession()), 'An amount that is not a number');
+        Assert.areEqual(0, newDonationCount(), 'Nothing is saved');
+    }
+
+    @IsTest
     static void startCheckoutSendsTheDonationToTheGateway() {
         checkout(credited(250), newSession());
 
@@ -303,11 +349,54 @@ private class DonationCheckoutServiceTest {
         return changed;
     }
 
-    private static String checkout(DonationCheckoutService.DonationRequest request, PaymentGateway.CheckoutSession answer) {
+    // The site calls startCheckout with a plain object. Aura leaves the fields of an Apex class passed as a
+    // parameter empty (docs/test_results.md R-14), so the method takes a Map, as Aura delivers it: numbers and
+    // booleans typed, nulls for the fields the form leaves empty.
+    private static Map<String, Object> siteRequest() {
+        return new Map<String, Object>{
+            'campaignId' => String.valueOf(campaignId('Abierta')),
+            'amount' => 250,
+            'email' => 'donante@example.com',
+            'anonymous' => false,
+            'publicName' => 'Familia Prueba',
+            'invoice' => false,
+            'personType' => null,
+            'firstName' => 'Zacarias',
+            'lastName' => 'Prueba',
+            'company' => null,
+            'rfc' => null,
+            'invoiceConsent' => false
+        };
+    }
+
+    private static String checkoutFromSite(Map<String, Object> request, PaymentGateway.CheckoutSession answer) {
         String url;
         System.runAs(integrationUser()) {
             DonationCheckoutService.gateway = new FakeGateway(answer);
             url = DonationCheckoutService.startCheckout(request);
+        }
+        return url;
+    }
+
+    private static String siteError(Map<String, Object> request, PaymentGateway.CheckoutSession answer) {
+        String message;
+        System.runAs(integrationUser()) {
+            DonationCheckoutService.gateway = new FakeGateway(answer);
+            try {
+                DonationCheckoutService.startCheckout(request);
+            } catch (AuraHandledException e) {
+                message = e.getMessage();
+            }
+        }
+        Assert.isNotNull(message, 'Expected an error for the donor');
+        return message;
+    }
+
+    private static String checkout(DonationCheckoutService.DonationRequest request, PaymentGateway.CheckoutSession answer) {
+        String url;
+        System.runAs(integrationUser()) {
+            DonationCheckoutService.gateway = new FakeGateway(answer);
+            url = DonationCheckoutService.startCheckoutFor(request);
         }
         return url;
     }
@@ -317,7 +406,7 @@ private class DonationCheckoutServiceTest {
         System.runAs(integrationUser()) {
             DonationCheckoutService.gateway = new FakeGateway(answer);
             try {
-                DonationCheckoutService.startCheckout(request);
+                DonationCheckoutService.startCheckoutFor(request);
             } catch (AuraHandledException e) {
                 message = e.getMessage();
             }

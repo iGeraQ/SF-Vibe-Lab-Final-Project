@@ -56,6 +56,8 @@ private class StripeClientTest {
             'line_items[0][price_data][unit_amount]=25000',
             'line_items[0][price_data][product_data][name]=Donación · Activa',
             'metadata[campaign]=Activa',
+            'payment_intent_data[metadata][donation_reference]=DON-0A1B2C3D',
+            'payment_intent_data[description]=DON-0A1B2C3D · Donación · Activa',
             'expires_at=1893456000',
             'success_url=https://example.com/gracias?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url=https://example.com/cancelada'
