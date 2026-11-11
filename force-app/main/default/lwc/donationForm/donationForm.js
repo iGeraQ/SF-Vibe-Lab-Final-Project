@@ -49,6 +49,8 @@ export default class DonationForm extends LightningElement {
     processing = false;
     submitError = '';
     focusPending = false;
+    // The image did not load (wrong address or blocked host): show the placeholder instead of a broken image.
+    imageFailed = false;
 
     connectedCallback() {
         getActiveCampaigns()
@@ -65,6 +67,14 @@ export default class DonationForm extends LightningElement {
     get campaign() {
         const match = (this.campaigns || []).find((item) => item.id === this.campaignId);
         return match ? toCampaignView(match) : null;
+    }
+
+    get showImage() {
+        return this.campaign.hasImage && !this.imageFailed;
+    }
+
+    handleImageError() {
+        this.imageFailed = true;
     }
 
     get isLoading() {

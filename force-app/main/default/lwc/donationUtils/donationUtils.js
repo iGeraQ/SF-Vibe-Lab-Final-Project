@@ -1,4 +1,5 @@
 import basePath from '@salesforce/community/basePath';
+import CAMPAIGN_IMAGES from '@salesforce/resourceUrl/Donation_Campaign_Images';
 import { LABELS, format } from 'c/donationLabels';
 
 /**
@@ -82,6 +83,25 @@ function getParam(name) {
     }
 }
 
+// A file in the Donation_Campaign_Images static resource, such as "becas.svg".
+const IMAGE_FILE = /^[A-Za-z0-9_-]+\.(svg|png|jpe?g|webp)$/;
+
+/**
+ * Turns a campaign's Image_URL__c into an address the browser can load. A file name points into the
+ * Donation_Campaign_Images static resource, on the same domain as the site, so no Trusted URL is needed
+ * and it works for the guest user. A full https address is kept as is (its host must be a Trusted URL).
+ * Anything else is ignored, so the placeholder shows.
+ * @param {string} value the campaign's Image_URL__c
+ * @returns {string|null} the image address, or null for the placeholder
+ */
+function campaignImageUrl(value) {
+    const image = (value || '').trim();
+    if (IMAGE_FILE.test(image)) {
+        return `${CAMPAIGN_IMAGES}/${image}`;
+    }
+    return /^https:\/\//i.test(image) ? image : null;
+}
+
 /**
  * Adds the display values a card or a campaign page needs to a campaign from PublicCampaignController.
  * Progress is computed from raised and goal: only paid donations count (US-01 AC2), and over 100% the
@@ -112,7 +132,8 @@ function toCampaignView(campaign, past) {
         goalLabel: formatMoney(goal),
         closeLabel,
         progressLabel: format(LABELS.progressOf, campaign.name),
-        hasImage: Boolean(campaign.imageUrl),
+        imageUrl: campaignImageUrl(campaign.imageUrl),
+        hasImage: Boolean(campaignImageUrl(campaign.imageUrl)),
         pageUrl: pageUrl('campaign', { id: campaign.id }),
         donateUrl: pageUrl('donate', { campana: campaign.id })
     };
@@ -178,6 +199,7 @@ export {
     formatDate,
     pageUrl,
     getParam,
+    campaignImageUrl,
     toCampaignView,
     apexMessage,
     validateEmail,

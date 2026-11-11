@@ -13,6 +13,8 @@ export default class CampaignDetail extends LightningElement {
     campaignId = getParam('id');
     campaigns;
     error;
+    // The image did not load (wrong address or blocked host): show the placeholder instead of a broken image.
+    imageFailed = false;
 
     connectedCallback() {
         getActiveCampaigns()
@@ -27,6 +29,14 @@ export default class CampaignDetail extends LightningElement {
     get campaign() {
         const match = (this.campaigns || []).find((item) => item.id === this.campaignId);
         return match ? toCampaignView(match) : null;
+    }
+
+    get showImage() {
+        return this.campaign.hasImage && !this.imageFailed;
+    }
+
+    handleImageError() {
+        this.imageFailed = true;
     }
 
     get isLoading() {

@@ -370,8 +370,8 @@
 
                 <aside class="card side" aria-label={labels.donatingTo}>
                     <div class="side-image image-placeholder" aria-hidden="true">
-                        <template lwc:if={campaign.hasImage}>
-                            <img class="cover" src={campaign.imageUrl} alt="" />
+                        <template lwc:if={showImage}>
+                            <img class="cover" src={campaign.imageUrl} alt="" onerror={handleImageError} />
                         </template>
                         <template lwc:else>
                             <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

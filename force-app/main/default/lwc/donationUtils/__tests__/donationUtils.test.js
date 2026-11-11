@@ -5,6 +5,7 @@ import {
     formatDate,
     pageUrl,
     getParam,
+    campaignImageUrl,
     toCampaignView,
     apexMessage,
     validateEmail,
@@ -93,6 +94,12 @@ describe('c-donation-utils', () => {
             expect(view.donateUrl).toBe(`/s/donar?campana=${CAMPAIGNS[0].id}`);
         });
 
+        it('resolves an image file name to the campaign images static resource', () => {
+            const view = toCampaignView({ ...CAMPAIGNS[0], imageUrl: 'becas.svg' });
+            expect(view.hasImage).toBe(true);
+            expect(view.imageUrl).toMatch(/Donation_Campaign_Images\/becas\.svg$/);
+        });
+
         it('labels the general campaign as always open', () => {
             const view = toCampaignView(CAMPAIGNS[1]);
             expect(view.closeLabel).toBe('c.Donations_AlwaysOpen');
@@ -114,6 +121,26 @@ describe('c-donation-utils', () => {
             const view = toCampaignView({ ...CAMPAIGNS[0], goal: 0, endDate: null });
             expect(view.percent).toBe(0);
             expect(view.closeLabel).toBe('c.Donations_AlwaysOpen');
+        });
+    });
+
+    describe('campaignImageUrl', () => {
+        it('points a file name into the campaign images static resource', () => {
+            expect(campaignImageUrl('viaje.svg')).toMatch(/Donation_Campaign_Images\/viaje\.svg$/);
+            expect(campaignImageUrl(' boletos.png ')).toMatch(/Donation_Campaign_Images\/boletos\.png$/);
+        });
+
+        it('keeps a full https address', () => {
+            expect(campaignImageUrl('https://images.example.com/a.png')).toBe('https://images.example.com/a.png');
+        });
+
+        it('ignores empty, insecure or unsafe values so the placeholder shows', () => {
+            expect(campaignImageUrl(null)).toBeNull();
+            expect(campaignImageUrl('')).toBeNull();
+            expect(campaignImageUrl('http://images.example.com/a.png')).toBeNull();
+            expect(campaignImageUrl(['javascript', 'alert(1)'].join(':'))).toBeNull();
+            expect(campaignImageUrl('../secret.svg')).toBeNull();
+            expect(campaignImageUrl('becas.exe')).toBeNull();
         });
     });
 

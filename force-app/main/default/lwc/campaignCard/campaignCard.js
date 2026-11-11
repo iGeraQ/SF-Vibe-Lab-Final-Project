@@ -11,6 +11,16 @@ export default class CampaignCard extends LightningElement {
     @api past = false;
 
     labels = LABELS;
+    // The image did not load (wrong address or blocked host): show the placeholder instead of a broken image.
+    imageFailed = false;
+
+    get showImage() {
+        return this.campaign.hasImage && !this.imageFailed;
+    }
+
+    handleImageError() {
+        this.imageFailed = true;
+    }
 
     get showActions() {
         return !this.past;
