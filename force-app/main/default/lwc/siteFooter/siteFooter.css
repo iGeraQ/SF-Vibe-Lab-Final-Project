@@ -1,0 +1,14 @@
+@import 'c/donationStyles';
+
+.footer {
+    border-top: 1px solid var(--don-border);
+    background: var(--don-surface);
+}
+
+.footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    font-size: 14px;
+    color: var(--don-muted);
+}

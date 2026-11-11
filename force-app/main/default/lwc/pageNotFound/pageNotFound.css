@@ -1,0 +1,20 @@
+@import 'c/donationStyles';
+
+.eyebrow {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--don-accent);
+}
+
+.lead {
+    font-size: 17px;
+}
+
+.home-link {
+    margin-top: 6px;
+    font-weight: 800;
+    font-size: 17px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}

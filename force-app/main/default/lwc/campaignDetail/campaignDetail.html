@@ -1,0 +1,68 @@
+<template>
+    <section class="page detail-page">
+        <a class="back-link" href={homeUrl}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+            {labels.allCampaigns}
+        </a>
+        <template lwc:if={isLoading}>
+            <p class="status" role="status">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasError}>
+            <p class="alert" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:elseif={notFound}>
+            <div class="center-page">
+                <h1 class="page-title">{labels.campaignNotAvailable}</h1>
+                <a class="btn btn-primary" href={homeUrl}>{labels.goHome}</a>
+            </div>
+        </template>
+        <template lwc:else>
+            <div class="layout">
+                <div class="main">
+                    <div class="hero image-placeholder" aria-hidden="true">
+                        <template lwc:if={campaign.hasImage}>
+                            <img class="cover" src={campaign.imageUrl} alt="" />
+                        </template>
+                        <template lwc:else>
+                            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path>
+                            </svg>
+                        </template>
+                    </div>
+                    <div>
+                        <template lwc:if={campaign.exceeded}>
+                            <span class="badge badge-exceeded badge-gap">{labels.goalExceeded}</span>
+                        </template>
+                        <h1 class="page-title">{campaign.name}</h1>
+                        <p class="muted">{campaign.closeLabel}</p>
+                    </div>
+                    <div>
+                        <h2 class="section-title">{labels.aboutCampaign}</h2>
+                        <p class="text">{campaign.description}</p>
+                    </div>
+                    <div>
+                        <h2 class="section-title">{labels.moneyFor}</h2>
+                        <p class="text">{campaign.purpose}</p>
+                    </div>
+                </div>
+                <aside class="side">
+                    <div class="card summary">
+                        <div>
+                            <p class="raised">{campaign.raisedLabel}</p>
+                            <p class="muted">{raisedOfGoal}</p>
+                        </div>
+                        <div>
+                            <c-progress-bar percent={campaign.percent} label={campaign.progressLabel} size="large"></c-progress-bar>
+                            <p class="percent">{percentOfGoal}</p>
+                        </div>
+                        <a class="btn btn-primary btn-big" href={campaign.donateUrl}>{labels.donate}</a>
+                        <p class="note muted">{labels.externalPayment}</p>
+                    </div>
+                    <c-donor-recognition campaign-id={campaign.id} donate-url={campaign.donateUrl}></c-donor-recognition>
+                </aside>
+            </div>
+        </template>
+    </section>
+</template>

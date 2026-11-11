@@ -1,0 +1,94 @@
+@import 'c/donationStyles';
+
+.campaign-card {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.image {
+    height: 150px;
+}
+
+.image-past {
+    background: #f1ece5;
+    color: #8a7f75;
+}
+
+.body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+}
+
+.heading {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.name {
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.purpose {
+    font-size: 15px;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.percent {
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--don-accent);
+}
+
+.percent-past {
+    color: var(--don-muted);
+}
+
+.close {
+    font-size: 13px;
+    text-align: right;
+}
+
+.figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.caption {
+    font-size: 13px;
+}
+
+.figure {
+    font-weight: 700;
+}
+
+.actions {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.grow {
+    flex: 1;
+}
+
+.actions .btn {
+    min-height: 46px;
+    padding: 0 16px;
+}
