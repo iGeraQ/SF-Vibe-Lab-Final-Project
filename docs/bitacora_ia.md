@@ -260,3 +260,14 @@ Template:
 - **What we corrected:** the amount showed as `$500` because `Decimal.format()` drops trailing zeros; it is now built by hand ($500.00, $1,234,567.50), independent of the sender's locale. In the second design a divider came out red: Apex is case-insensitive and a local variable `line` shadowed the `LINE` color constant.
 - **AI error:** the amount format and the shadowed color constant; the preview caught both, the tests did not.
 - **Speed-up:** _Pending_
+
+### 2026-11-10 · Personal data classification and Stripe notes
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-02, US-05, US-06, US-09, US-12 (#40, #50)
+- **What we asked:** fill section 4 of `docs/seguridad.md` (personal data) and write `docs/stripe.md` with the test cards.
+- **What we got:** the table of what is stored for each kind of donor data, why, and who sees it (staff, the donor, the public site), plus what goes to Stripe and what the email carries; and `docs/stripe.md` with the cards, the Checkout settings and the CLI commands.
+- **What we verified and how:** each row was written from the fields in `force-app/` and from what `PublicCampaignController`, `DonationCheckoutService` and the email templates send. The card numbers come from Stripe's public test list. Not re-checked against a visitor test yet (#40).
+- **What we corrected:** _Pending_
+- **AI error:** _Pending_
+- **Speed-up:** _Pending_
