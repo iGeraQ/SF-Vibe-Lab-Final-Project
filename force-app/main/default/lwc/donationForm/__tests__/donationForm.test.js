@@ -106,6 +106,14 @@ describe('c-donation-form', () => {
             expect($(element, '.back-link').getAttribute('href')).toBe(`/s/campana?id=${CAMPAIGN.id}`);
         });
 
+        it('shows the program logo and name above the steps, hidden from screen readers', async () => {
+            const element = await open();
+
+            expect($(element, '.wizard-logo').getAttribute('aria-hidden')).toBe('true');
+            expect($(element, '.wizard-logo svg')).not.toBeNull();
+            expect($(element, '.wizard-brand-name').textContent).toBe('c.Donations_ProgramName');
+        });
+
         it('does not let anyone donate to a past or unknown campaign (US-01 AC6)', async () => {
             mockLocation({ search: '?campana=701000000000099AAA' });
             const element = await open();

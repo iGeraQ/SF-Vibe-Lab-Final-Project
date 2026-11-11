@@ -19,6 +19,38 @@
     padding: 28px;
 }
 
+/* Logo C, "mano que impulsa": a hand offering a star, the donation as a boost. */
+.wizard-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.wizard-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--don-accent);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wizard-logo-star {
+    stroke: var(--don-focus);
+    fill: var(--don-focus);
+}
+
+.wizard-brand-name {
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1.2;
+    color: var(--don-text);
+}
+
 .steps {
     list-style: none;
     margin: 0 0 28px;
