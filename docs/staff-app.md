@@ -26,7 +26,7 @@ Staff signs in on the org's standard Salesforce login page (My Domain). The desi
 | Donation: Factura (only when requested) and Stripe data | `Donation_Record_Page`, Dynamic Forms with a visibility rule | US-07 AC3 |
 | Avisos de la pasarela | Delivery 2 (`Payment_Notice__c`) | — |
 
-The list views in `objects/*/listViews` stay available on the standard Campaigns and Opportunities tabs, for searches the component tabs don't cover. The component lists show the first 200 records and say so when there are more.
+The app's navigation holds only the two component tabs, so there is no second "Donaciones" tab once Opportunity is renamed, and opening a record adds no temporary tab. The list views in `objects/*/listViews` stay available from the App Launcher (Campaigns and Donaciones), for searches the component tabs don't cover. The component lists show the first 200 records and say so when there are more.
 
 Shared code: `staffLabels` (Custom Labels in the "Donations Staff App" category), `staffUtils` (formatting and mapping), `staffStyles` (CSS), `staffProgressBar` and `staffDonationTable`. Every component has Jest tests (`npm test`).
 

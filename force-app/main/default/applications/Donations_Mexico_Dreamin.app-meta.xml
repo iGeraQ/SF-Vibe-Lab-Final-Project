@@ -39,13 +39,11 @@
     <description>Staff app (US-07, US-08, US-09): campaigns and donations for System Admin, Campaign Manager and Moderator.</description>
     <formFactors>Small</formFactors>
     <formFactors>Large</formFactors>
-    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavAutoTempTabsDisabled>true</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <label>Donaciones Mexico Dreamin</label>
     <navType>Standard</navType>
     <tabs>Staff_Campaigns</tabs>
     <tabs>Staff_Donations</tabs>
-    <tabs>standard-Campaign</tabs>
-    <tabs>standard-Opportunity</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>
