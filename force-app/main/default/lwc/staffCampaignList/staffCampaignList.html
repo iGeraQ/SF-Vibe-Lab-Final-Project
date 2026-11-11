@@ -1,0 +1,88 @@
+<template>
+    <div class="staff-page">
+        <div class="page-header">
+            <h1 class="page-title">{labels.campaignsTitle}</h1>
+            <div class="actions">
+                <button type="button" class="btn refresh" onclick={handleRefresh}>{labels.refresh}</button>
+                <template lwc:if={canCreate}>
+                    <button type="button" class="btn btn-primary new-campaign" onclick={handleNew}>
+                        + {labels.newCampaign}
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label={labels.campaignTabs}>
+            <template for:each={tabs} for:item="tab">
+                <button
+                    key={tab.value}
+                    type="button"
+                    role="tab"
+                    class="tab"
+                    aria-selected={tab.ariaSelected}
+                    data-value={tab.value}
+                    onclick={handleTab}
+                >
+                    {tab.label}<span class="tab-count">{tab.count}</span>
+                </button>
+            </template>
+        </div>
+
+        <div class="table-wrap">
+            <template lwc:if={isLoading}>
+                <p class="state">{labels.loading}</p>
+            </template>
+            <template lwc:elseif={hasError}>
+                <p class="error" role="alert">{labels.loadError}</p>
+            </template>
+            <template lwc:elseif={hasRows}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">{labels.colName}</th>
+                            <th scope="col">{labels.colStatus}</th>
+                            <th scope="col">{labels.colStart}</th>
+                            <th scope="col">{labels.colEnd}</th>
+                            <th scope="col" class="num">{labels.colGoal}</th>
+                            <th scope="col" class="num">{labels.colRaised}</th>
+                            <th scope="col" class="num">{labels.colPercent}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={rows} for:item="row">
+                            <tr key={row.id} class="row" data-id={row.id} onclick={handleOpen}>
+                                <td>
+                                    <button type="button" class="link strong" data-id={row.id} onclick={handleOpen}>
+                                        {row.name}
+                                    </button>
+                                </td>
+                                <td><span class={row.pillClass}>{row.situationLabel}</span></td>
+                                <td>{row.startLabel}</td>
+                                <td>{row.endLabel}</td>
+                                <td class="num">{row.goalLabel}</td>
+                                <td class="num strong">{row.raisedLabel}</td>
+                                <td class="num">
+                                    <div class="percent">
+                                        <c-staff-progress-bar
+                                            percent={row.percent}
+                                            label={row.progressLabel}
+                                            muted={row.muted}
+                                        ></c-staff-progress-bar>
+                                        <span class="strong">{row.percentLabel}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+            <template lwc:else>
+                <p class="state">{labels.campaignsEmpty}</p>
+            </template>
+        </div>
+
+        <template lwc:if={hasMore}>
+            <p class="note">{labels.firstRecords}</p>
+        </template>
+    </div>
+</template>

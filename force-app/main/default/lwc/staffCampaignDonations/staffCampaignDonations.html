@@ -1,0 +1,19 @@
+<template>
+    <section class="card card-flush">
+        <div class="card-head">
+            <h2 class="eyebrow">{labels.campaignDonations} <span class="count">({count})</span></h2>
+        </div>
+        <template lwc:if={isLoading}>
+            <p class="state">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasError}>
+            <p class="error" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:else>
+            <c-staff-donation-table rows={rows} variant="campaign" flush></c-staff-donation-table>
+        </template>
+        <template lwc:if={hasMore}>
+            <p class="note more">{labels.firstRecords}</p>
+        </template>
+    </section>
+</template>
