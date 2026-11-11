@@ -20,7 +20,6 @@ public with sharing class DonationEmailTemplate {
     private static final String LINE = '#E6EBF1';
     private static final String FONT = 'font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Ubuntu,sans-serif;';
     private static final String DISCLAIMER = 'Este recibo no es un comprobante fiscal (CFDI).';
-    private static final String DEMO = 'Proyecto de demostración: el pago se hizo en modo de prueba y no se realizó ningún cargo real.';
 
     /**
      * @description The receipt's subject line.
@@ -37,7 +36,7 @@ public with sharing class DonationEmailTemplate {
      * @return the file name, with the donation reference
      */
     public static String invoiceFileName(Opportunity donation) {
-        return 'Factura-simulada-' + donation.Donation_Reference__c + '.pdf';
+        return 'Factura-' + donation.Donation_Reference__c + '.pdf';
     }
 
     /**
@@ -63,10 +62,9 @@ public with sharing class DonationEmailTemplate {
         }
         lines.add('');
         if (donation.Invoice_Requested__c) {
-            lines.add('Adjuntamos tu factura simulada en PDF (' + invoiceFileName(donation) + '); no es un comprobante fiscal.');
+            lines.add('Adjuntamos tu factura en PDF (' + invoiceFileName(donation) + '); no es un comprobante fiscal.');
         }
         lines.add(DISCLAIMER);
-        lines.add(DEMO);
         if (String.isNotBlank(supportEmail)) {
             lines.add('Si tienes un problema con tu recibo o tu factura, escríbenos a ' + supportEmail + '.');
         }
@@ -74,7 +72,7 @@ public with sharing class DonationEmailTemplate {
     }
 
     /**
-     * @description The receipt as an HTML email, laid out like a payment receipt: a demo ribbon, a blue header, the
+     * @description The receipt as an HTML email, laid out like a payment receipt: a blue header, the
      * title, the key data, a summary box, the invoice note, and the contact and legal lines.
      * @param donation the paid donation
      * @param supportEmail the program's support address, or null if none is set up yet
@@ -97,7 +95,6 @@ public with sharing class DonationEmailTemplate {
             // The preview line some email apps show next to the subject.
             '<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">',
             'Gracias por tu donación de ' + money(donation.Amount) + '. Aquí está tu recibo.</div>',
-            ribbon(),
             '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="' + PAGE
                 + '" style="background-color:' + PAGE + ';"><tr><td align="center" style="padding:32px 12px 48px 12px;">',
             '<table role="presentation" class="card" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" '
@@ -130,14 +127,13 @@ public with sharing class DonationEmailTemplate {
     public static String invoiceHtml(Opportunity donation) {
         String amount = escape(money(donation.Amount));
         List<String> parties = new List<String>{
-            pdfRow('Emisor', 'Programa de donaciones Mexico Dreamin (ficticio)'),
+            pdfRow('Emisor', 'Programa de donaciones Mexico Dreamin'),
             pdfRow('Receptor', donorName(donation)),
             pdfRow('RFC', donation.RFC__c)
         };
         return '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><style>'
             + '@page { size: letter; margin: 0; }'
             + 'body { margin: 0; font-family: Arial Unicode MS, sans-serif; font-size: 11pt; color: ' + BODY + '; }'
-            + '.ribbon { background-color: ' + DEEP + '; color: #FFFFFF; text-align: center; font-size: 9pt; padding: 9pt 36pt; }'
             + '.band { background-color: ' + BLUE + '; color: #FFFFFF; text-align: center; padding: 30pt 36pt; }'
             + '.eyebrow { color: #DCE6FF; font-size: 9pt; letter-spacing: 2pt; }'
             + 'h1 { color: #FFFFFF; font-size: 26pt; margin: 8pt 0 4pt 0; }'
@@ -155,12 +151,11 @@ public with sharing class DonationEmailTemplate {
             + '.box tr.sep td { border-top: 1pt solid ' + LINE + '; font-size: 12pt; color: ' + TITLE + '; }'
             + '.foot { color: ' + MUTED + '; font-size: 8pt; margin: 30pt 0 0 0; }'
             + '</style></head><body>'
-            + '<div class="ribbon">' + DEMO + '</div>'
-            + '<div class="band"><div class="eyebrow">MEXICO DREAMIN 2026</div><h1>Factura simulada</h1>'
+            + '<div class="band"><div class="eyebrow">MEXICO DREAMIN 2026</div><h1>Factura</h1>'
             + '<div class="folio">Folio #' + escape(donation.Donation_Reference__c) + '</div></div>'
             + '<div class="pad">'
-            + '<div class="notice"><b>No es un comprobante fiscal (CFDI).</b> Documento generado para una demostración: '
-            + 'no fue timbrado ante el SAT y no sirve para deducir impuestos.</div>'
+            + '<div class="notice"><b>Este documento no es un comprobante fiscal (CFDI).</b> '
+            + 'No fue timbrado ante el SAT y no sirve para deducir impuestos.</div>'
             + '<table class="blocks" style="margin-top: 22pt;"><tr>'
             + pdfBlock('TOTAL', amount) + pdfBlock('FECHA', escape(spanishDate(donation.CloseDate)))
             + pdfBlock('TIPO DE PERSONA', escape(donation.Person_Type__c)) + '</tr></table>'
@@ -168,14 +163,8 @@ public with sharing class DonationEmailTemplate {
             + '<div class="caption">RESUMEN</div><table class="box">'
             + '<tr><td>Donación · ' + escape(donation.Campaign.Name) + ' × 1</td><td class="r">' + amount + '</td></tr>'
             + '<tr class="sep"><td>Total</td><td class="r">' + amount + '</td></tr></table>'
-            + '<p class="foot">Programa de donaciones Mexico Dreamin · Proyecto de demostración · '
+            + '<p class="foot">Programa de donaciones Mexico Dreamin · '
             + escape(donation.Donation_Reference__c) + '</p></div></body></html>';
-    }
-
-    private static String ribbon() {
-        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="' + DEEP
-            + '" style="background-color:' + DEEP + ';"><tr><td align="center" style="padding:12px 24px;' + FONT
-            + 'font-size:14px;line-height:20px;color:#FFFFFF;">' + DEMO + '</td></tr></table>';
     }
 
     private static String banner() {
@@ -236,8 +225,8 @@ public with sharing class DonationEmailTemplate {
         return textRow('padding:24px 48px 0 48px;',
             '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
             + '<td style="background-color:' + TINT + ';border-left:4px solid ' + BLUE + ';border-radius:6px;padding:14px 16px;'
-            + 'font-size:14px;line-height:21px;color:' + BODY + ';"><b>Tu factura simulada va adjunta.</b><br>Archivo: '
-            + escape(invoiceFileName(donation)) + '. Es un documento de demostración y no es un comprobante fiscal (CFDI).</td></tr></table>');
+            + 'font-size:14px;line-height:21px;color:' + BODY + ';"><b>Tu factura va adjunta.</b><br>Archivo: '
+            + escape(invoiceFileName(donation)) + '. Este documento no es un comprobante fiscal (CFDI).</td></tr></table>');
     }
 
     private static String dividerRow() {

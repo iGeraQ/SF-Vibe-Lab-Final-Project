@@ -16,10 +16,10 @@ private class DonationEmailTemplateTest {
     }
 
     @IsTest
-    static void receiptSaysItIsADemoAndAdaptsToPhones() {
+    static void receiptAdaptsToPhonesAndSoundsReal() {
         String html = DonationEmailTemplate.receiptHtml(donation(false, false), null).unescapeHtml4();
 
-        Assert.isTrue(html.contains('modo de prueba'), 'The ribbon says no real charge was made');
+        Assert.isFalse(html.contains('demostración') || html.contains('simulad'), 'The email reads like a real receipt');
         Assert.isTrue(html.contains('@media'), 'Phones get a full-width card and stacked columns');
         Assert.isTrue(html.contains('Recibo #DON-TEST0001'), 'The receipt number is under the title');
         Assert.isTrue(html.contains('Monto pagado') && html.contains('Resumen'), 'Key data and summary box');
@@ -66,9 +66,9 @@ private class DonationEmailTemplateTest {
 
     @IsTest
     static void invoiceAttachmentIsMentionedOnlyWhenRequested() {
-        Assert.isTrue(DonationEmailTemplate.receiptHtml(donation(false, true), null).contains('Factura-simulada-DON-TEST0001.pdf'));
-        Assert.isFalse(DonationEmailTemplate.receiptHtml(donation(false, false), null).contains('Factura-simulada'));
-        Assert.areEqual('Factura-simulada-DON-TEST0001.pdf', DonationEmailTemplate.invoiceFileName(donation(false, true)));
+        Assert.isTrue(DonationEmailTemplate.receiptHtml(donation(false, true), null).contains('Factura-DON-TEST0001.pdf'));
+        Assert.isFalse(DonationEmailTemplate.receiptHtml(donation(false, false), null).contains('Factura-DON'));
+        Assert.areEqual('Factura-DON-TEST0001.pdf', DonationEmailTemplate.invoiceFileName(donation(false, true)));
     }
 
     @IsTest
@@ -114,7 +114,7 @@ private class DonationEmailTemplateTest {
 
         for (String expected : new List<String>{
             'DON-TEST0001', 'Zacarias Prueba', 'XAXX010101000', 'Persona física', 'Donación · Becas 2026', '250',
-            'No es un comprobante fiscal (CFDI)', 'modo de prueba', 'Folio #DON-TEST0001'
+            'no es un comprobante fiscal (CFDI)', 'Folio #DON-TEST0001'
         }) {
             Assert.isTrue(invoice.contains(expected), 'Missing ' + expected + ' (US-06 AC3, AC8)');
         }

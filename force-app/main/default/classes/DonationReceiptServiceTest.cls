@@ -122,10 +122,10 @@ private class DonationReceiptServiceTest {
 
         Assert.areEqual(1, email.getFileAttachments().size(), 'US-06 AC8: the invoice arrives with the receipt');
         Messaging.EmailFileAttachment pdf = email.getFileAttachments()[0];
-        Assert.areEqual('Factura-simulada-DON-ANONIMA1.pdf', pdf.getFileName());
+        Assert.areEqual('Factura-DON-ANONIMA1.pdf', pdf.getFileName());
         Assert.areEqual('application/pdf', pdf.getContentType());
         Assert.isTrue(pdf.getBody().size() > 0, 'The PDF has content');
-        Assert.isTrue(email.getPlainTextBody().contains('factura simulada'), email.getPlainTextBody());
+        Assert.isTrue(email.getPlainTextBody().contains('factura en PDF'), email.getPlainTextBody());
     }
 
     @IsTest
