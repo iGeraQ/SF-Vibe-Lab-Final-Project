@@ -197,8 +197,8 @@ public without sharing class DonationCheckoutService {
         request.amount = donation.Amount;
         request.description = 'Donación · ' + campaignName;
         request.expiresAt = donation.Stripe_Session_Expires_At__c;
-        request.successUrl = System.Label.Stripe_Success_Url;
-        request.cancelUrl = System.Label.Stripe_Cancel_Url;
+        request.successUrl = siteUrl(System.Label.Stripe_Success_Url);
+        request.cancelUrl = siteUrl(System.Label.Stripe_Cancel_Url);
         request.metadata = new Map<String, String>{
             'donation_reference' => donation.Donation_Reference__c,
             'campaign_id' => String.valueOf(donation.CampaignId),
@@ -206,6 +206,12 @@ public without sharing class DonationCheckoutService {
             'invoice' => String.valueOf(donation.Invoice_Requested__c)
         };
         return request;
+    }
+
+    // The labels hold the page's path in the site ("/s/gracias"), so the address follows the org's own
+    // Experience Cloud domain and a deploy never points Stripe at a placeholder. A full https URL is used as is.
+    private static String siteUrl(String page) {
+        return page.startsWith('https://') ? page : 'https://' + DomainCreator.getExperienceCloudSitesHostname() + page;
     }
 
     private static String openCampaignName(Id campaignId) {

@@ -44,10 +44,12 @@ The form is an LWC rather than a Screen Flow because the four-step design (amoun
 
 ### Stripe return addresses
 
-`DonationCheckoutService` reads them from two Custom Labels that already exist in `develop`. In the org, set them to the site pages:
+`DonationCheckoutService` reads the page paths from two Custom Labels and adds the org's Experience Cloud domain (`DomainCreator.getExperienceCloudSitesHostname()`), so no org address is versioned and a deploy never resets them to a placeholder:
 
-- `Stripe_Success_Url`: `<site URL>/gracias` (the service adds `?session_id={CHECKOUT_SESSION_ID}`)
-- `Stripe_Cancel_Url`: `<site URL>/pago-no-completado`
+- `Stripe_Success_Url`: `/s/gracias` (the service adds `?session_id={CHECKOUT_SESSION_ID}`)
+- `Stripe_Cancel_Url`: `/s/pago-no-completado`
+
+A label that holds a full `https://` URL is used as is.
 
 The cancel address carries no campaign, so "Intentar de nuevo" on that page goes to the home page.
 
