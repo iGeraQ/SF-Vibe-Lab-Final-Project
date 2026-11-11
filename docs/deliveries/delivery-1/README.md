@@ -6,7 +6,7 @@ Checklist: [issue #18](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issue
 
 | | |
 |---|---|
-| Public site | _Pending_ |
+| Public site | https://wise-hawk-g8sj39-dev-ed.trailblaze.my.site.com/s/ |
 | Demo video (5 min) | _Pending_ |
 | Progress | _Pending_ (see the main README) |
 

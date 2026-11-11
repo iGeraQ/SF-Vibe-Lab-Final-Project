@@ -514,3 +514,14 @@ Template:
 - **What we corrected:** nothing.
 - **AI error:** none found.
 - **Speed-up:** _Pending_
+
+### 2026-11-11 · Delivery 1 status in the README
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-01 to US-12
+- **What we asked:** how many Delivery 1 stories are done on `release/delivery-1`, and to write the answer in the README.
+- **What we got:** a per-story table in the README's Progress section. It is based on the code in the branch, `docs/test_results.md` and the issues' acceptance criteria. Ten stories are built and US-12 is not started. None is met yet, because no issue has evidence.
+- **What we verified and how:** the published site's `/s/` page answers 200 without a login. The team confirmed that US-03 works in the org. The board's AC Status field was not read: the `gh` token lacks the `read:project` scope.
+- **What we corrected:** the AI first counted US-03 as failing and US-11 as unpublished, based on the Nov 10 test run. The team corrected both.
+- **AI error:** yes, it relied on an outdated test run.
+- **Speed-up:** _Pending_

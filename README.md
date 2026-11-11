@@ -5,7 +5,7 @@ Final project for SF Vibe Lab (UADY × Salesforce, Mérida). A public Salesforce
 | | |
 |---|---|
 | Backlog board | [GitHub Project](https://github.com/users/iGeraQ/projects/7) |
-| Public site | _Pending_ |
+| Public site | https://wise-hawk-g8sj39-dev-ed.trailblaze.my.site.com/s/ |
 | Delivery 1 (video and checklist) | [docs/deliveries/delivery-1](docs/deliveries/delivery-1/README.md) |
 | Project guide | [Guidelines](https://claude.ai/artifact/92XBSbogpRgFEzUHCS1MZs) (Spanish) |
 
@@ -23,7 +23,7 @@ A story is **met** when all its acceptance criteria are shown with evidence in t
 
 | Delivery | Date | Calculation | Progress |
 |---|---|---|---|
-| Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 11 × 100 | _Pending_ |
+| Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 11 × 100 | 90% met; 10 of 11 built (Nov 10) |
 | Delivery 2 | Tue Nov 17, 2026 | in-scope stories met across the whole backlog ÷ 16 × 100 | _Pending_ |
 
 ## Structure
