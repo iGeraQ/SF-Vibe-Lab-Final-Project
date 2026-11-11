@@ -23,8 +23,7 @@ const MAX_LENGTH = { email: 80, publicName: 120, firstName: 80, lastName: 80, co
  * Step 2 asks two separate questions, as the client approved on Nov 9: whether to appear in the donor
  * list, and whether an invoice is needed. An anonymous donor can request an invoice (US-02 AC3).
  *
- * "Ir a pagar" calls startCheckout (c/donationDataService; DonationCheckoutService.startCheckout once
- * connected), which creates the pending donation and the Stripe Checkout Session and returns the
+ * "Ir a pagar" calls startCheckout (c/donationDataService → DonationCheckoutService.startCheckout), which creates the pending donation and the Stripe Checkout Session and returns the
  * session's URL. The request uses the fields of DonationCheckoutService.DonationRequest. The browser never
  * sends a status, and the service checks the campaign and the amount again (docs/seguridad.md).
  */

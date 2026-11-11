@@ -6,7 +6,7 @@ import { getParam, pageUrl } from 'c/donationUtils';
 /**
  * Thank-you page, Stripe's success_url: "gracias?session_id={CHECKOUT_SESSION_ID}" (US-04).
  *
- * It calls confirmCheckout (c/donationDataService; DonationCheckoutService.confirmCheckout once connected),
+ * It calls confirmCheckout (c/donationDataService → DonationCheckoutService.confirmCheckout),
  * which applies Stripe's status to the donation (Delivery 1 marks it Paid this way). The page does not show
  * that status: it never says the payment is confirmed and never shows the email or any other donor data
  * (US-04 AC2, AC3, AC6). If the check fails, the page still thanks the donor: the scheduled check completes

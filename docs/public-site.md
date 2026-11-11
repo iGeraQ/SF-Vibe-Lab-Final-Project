@@ -24,37 +24,19 @@ Only ids travel in the address: `campana?id=<campaign id>`, `donar?campana=<camp
 
 Colors and spacing follow design proposal A and live in `lwc/donationStyles` (a CSS-only module the components import). Progress bars are the `progressBar` component, which sets the width from JavaScript: templates have no `style={...}` bindings. The font is Nunito with a system fallback; to load Nunito, add it to the site's head markup (Settings → Advanced → Edit Head Markup) and add `fonts.googleapis.com` and `fonts.gstatic.com` to the site's trusted sites. Campaign images are external URLs (`Image_URL__c`): add their domain to the trusted sites too, or the card shows the placeholder.
 
-## Data: mock first, backend later
+## Data
 
-The components never import Apex. They get and send everything through `lwc/donationDataService`, which for now answers with fictitious data from `lwc/donationMockData` (same shapes as `PublicCampaignController` and `DonationCheckoutService`). So the whole site works in the org with no Apex and no guest permissions: campaigns, progress, recognition, the form and the thank-you page.
+The components never import Apex. They get and send everything through `lwc/donationDataService`, the only module that calls the backend:
 
-While it is on mock data:
+| Function | Apex method |
+|---|---|
+| `getActiveCampaigns()` | `PublicCampaignController.getActiveCampaigns` |
+| `getPastCampaigns()` | `PublicCampaignController.getPastCampaigns` |
+| `getRecognition(campaignId)` | `PublicCampaignController.getRecognition` |
+| `startCheckout(request)` | `DonationCheckoutService.startCheckout` |
+| `confirmCheckout(sessionId)` | `DonationCheckoutService.confirmCheckout` |
 
-- "Ir a pagar" goes straight to the thank-you page instead of Stripe. Nothing is saved.
-- To show the other paths in the video: an email that starts with `cancelar@` lands on the payment-not-completed page, and one that starts with `error@` shows the form's error message.
-- The mock checks what `DonationCheckoutService` checks, with its messages: the campaign accepts donations and the amount is at least $10 MXN.
-
-### Connecting the backend
-
-The backend in `develop` already has what the site needs: `PublicCampaignController` (campaigns and recognition) and `DonationCheckoutService` (`startCheckout` and `confirmCheckout`), both open to the guest through "Donaciones · Sitio público". The mock already uses their shapes: the form sends a `DonationCheckoutService.DonationRequest` (`campaignId`, `amount`, `email`, `anonymous`, `invoice`, `publicName`, `personType`, `firstName`, `lastName`, `company`, `rfc`, `invoiceConsent`) and the mock answers with the service's own messages.
-
-To connect, only `donationDataService.js` changes; the components and their tests stay as they are. Each function keeps its name and arguments and returns the Apex call. The calls are imperative because the controller methods are not cacheable (progress must be current right after a payment):
-
-```js
-import apexGetActiveCampaigns from '@salesforce/apex/PublicCampaignController.getActiveCampaigns';
-import apexGetPastCampaigns from '@salesforce/apex/PublicCampaignController.getPastCampaigns';
-import apexGetRecognition from '@salesforce/apex/PublicCampaignController.getRecognition';
-import apexStartCheckout from '@salesforce/apex/DonationCheckoutService.startCheckout';
-import apexConfirmCheckout from '@salesforce/apex/DonationCheckoutService.confirmCheckout';
-
-export const getActiveCampaigns = () => apexGetActiveCampaigns();
-export const getPastCampaigns = () => apexGetPastCampaigns();
-export const getRecognition = (campaignId) => apexGetRecognition({ campaignId });
-export const startCheckout = (request) => apexStartCheckout({ request });
-export const confirmCheckout = (sessionId) => apexConfirmCheckout({ sessionId });
-```
-
-Then delete `donationMockData` and update `donationDataService`'s tests to mock the Apex imports.
+Both classes are open to the guest through "Donaciones · Sitio público". The calls are imperative, not `@wire`, because the controller methods are not cacheable: progress must be current right after a payment. The form sends a `DonationCheckoutService.DonationRequest` (`campaignId`, `amount`, `email`, `anonymous`, `invoice`, `publicName`, `personType`, `firstName`, `lastName`, `company`, `rfc`, `invoiceConsent`). Server errors arrive as the `AuraHandledException` message, which the components show.
 
 The thank-you page calls `confirmCheckout` so the donation gets Stripe's status, but it does not show that status: it never says the payment is confirmed (US-04 AC2).
 
@@ -71,11 +53,13 @@ The cancel address carries no campaign, so "Intentar de nuevo" on that page goes
 
 ## Deploy
 
-The components depend on no Apex class, so they deploy on their own:
+The components call `PublicCampaignController` and `DonationCheckoutService`, so deploy the whole project (classes, objects, permission sets, labels and components) together:
 
 ```bash
-sf project deploy start --source-dir force-app/main/default/labels --source-dir force-app/main/default/lwc --target-org donaciones
+sf project deploy start --source-dir force-app --target-org donaciones
 ```
+
+Then, in the org: assign "Donaciones · Sitio público" to the site's guest user, set up the `Stripe` Named Credential with the test key (never in the repo), and set the two Stripe labels above to the site's URL.
 
 ## Unit tests
 
@@ -88,11 +72,11 @@ npm run test:coverage  # with the coverage report; fails under 90% of lines
 npm run lint           # ESLint with the Salesforce LWC rules
 ```
 
-The component tests mock `c/donationDataService` with `jest.fn()`, so they do not depend on the data source; `donationDataService`'s own tests check the mock data and the mock checkout paths. Shared helpers and sample campaigns are in `jest-mocks/testUtils.js`. Each test names the acceptance criterion it covers.
+The component tests mock `c/donationDataService` with `jest.fn()`, so they do not depend on the data source; `donationDataService`'s own tests mock the Apex imports and check that each function calls the right method with the right arguments. Shared helpers and sample campaigns are in `jest-mocks/testUtils.js`. Each test names the acceptance criterion it covers.
 
 | Component | What the tests check |
 |---|---|
-| `donationDataService` | Same shapes as the controller, raised amounts match the recognition, checkout paths with the backend's messages (thanks, cancel, gateway down, past campaign, amount under $10) |
+| `donationDataService` | Each function calls its Apex method with the right arguments, returns its result and passes server errors through |
 | `donationUtils` | MXN format, dates in Spanish, page addresses, progress over 100%, email and RFC rules (US-03 AC6, US-06 AC2, AC5) |
 | `campaignList` | One card per campaign, opening the only active one (US-01 AC4), past mode without donate button (AC6), loading and error states |
 | `campaignDetail` | Campaign data (US-01 AC5), recognition of the same campaign, unknown or past campaign |
