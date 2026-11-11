@@ -114,6 +114,50 @@ private class DonationReceiptServiceTest {
         Assert.isTrue(body.contains('soporte@example.com'), 'US-11 AC6: the receipt shows the support email');
     }
 
+    @IsTest
+    static void invoiceDonationGetsTheSimulatedInvoiceAttached() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, null);
+
+        Assert.areEqual(1, email.getFileAttachments().size(), 'US-06 AC8: the invoice arrives with the receipt');
+        Messaging.EmailFileAttachment pdf = email.getFileAttachments()[0];
+        Assert.areEqual('Factura-DON-ANONIMA1.pdf', pdf.getFileName());
+        Assert.areEqual('application/pdf', pdf.getContentType());
+        Assert.isTrue(pdf.getBody().size() > 0, 'The PDF has content');
+        Assert.isTrue(email.getPlainTextBody().contains('factura en PDF'), email.getPlainTextBody());
+    }
+
+    @IsTest
+    static void donationWithoutInvoiceGetsNoAttachment() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-CREDITO1').Id })[0];
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, null);
+
+        Assert.isTrue(email.getFileAttachments() == null || email.getFileAttachments().isEmpty());
+    }
+
+    @IsTest
+    static void receiptEmailHasAnHtmlBodyAndAPlainTextFallback() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-CREDITO1').Id })[0];
+
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, new OrgWideEmailAddress(Address = 'soporte@example.com'));
+
+        Assert.isTrue(email.getHtmlBody().startsWith('<!DOCTYPE html>'), 'The receipt is a styled HTML email');
+        Assert.isTrue(email.getHtmlBody().contains('mailto:soporte@example.com'));
+        Assert.isTrue(email.getPlainTextBody().contains('Referencia: DON-CREDITO1'), 'Clients without HTML get the text');
+    }
+
+    @IsTest
+    static void paidInvoiceDonationSendsOneEmail() {
+        System.runAs(integrationUser()) {
+            markPaid('DON-ANONIMA1');
+
+            Assert.areEqual(1, Limits.getEmailInvocations(), 'Receipt and invoice go in one email');
+        }
+        Assert.isTrue(donation('DON-ANONIMA1').Receipt_Sent__c);
+    }
+
     private static void markPaid(String reference) {
         Opportunity record = donation(reference);
         record.StageName = 'Paid';

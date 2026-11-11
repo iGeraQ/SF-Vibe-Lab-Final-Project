@@ -12,7 +12,7 @@ We build the portal with a **hybrid approach**: configuration and Flows for most
 | Donation form | **LWC** | It must send the donor to Stripe's page, which a Screen Flow can't do without an extra component. It shows the conditional fields, the validation and the amount confirmation. |
 | Start the payment | **Apex** (`DonationCheckoutService.startCheckout`) called from the LWC | Creates the Stripe Checkout Session and then the donation in one controlled step, and returns Stripe's URL. Stripe expects form-encoded requests, which Apex handles easily. |
 | Payment confirmation (Delivery 1) | Apex that checks the session with Stripe when the donor returns, plus a **scheduled Apex** job (`PendingDonationCheck`, every 15 minutes) for pending and expired donations, scheduled by the integration user that holds the payment permission. Not a schedule-triggered flow: it runs as Automated Process, which can't get that permission set | The status always comes from Stripe, never from a person. |
-| Receipt and simulated invoice | **Record-triggered Flow** with email templates in Spanish | No code needed. |
+| Receipt and simulated invoice | **Apex trigger** (`DonationTrigger` + `DonationReceiptService`): one email in Spanish when a donation becomes paid, as styled HTML in a payment-receipt layout (tables and inline styles, with a plain-text fallback); if the donor asked for an invoice, it carries a simulated invoice as a PDF (`Blob.toPdf`). `DonationEmailTemplate` writes the email and the PDF; `DonationReceiptService` decides when it goes | Easier to test than a Flow, and one email per donation keeps within the Developer Edition's daily email limit. |
 | Staff app | **Lightning App**, list views, page layouts and **permission sets** | Configuration only. |
 | Webhook (Delivery 2) | **Apex REST** exposed through the site | The only option to receive Stripe's notices and verify their signature. |
 | Stripe credentials | **Named Credential + External Credential** | The key never appears in code or metadata (M3). |
@@ -126,17 +126,18 @@ The suggested amounts ($100 to $20,000) as configuration, so staff can change th
 - **Guest user (visitor):** no object permission on Opportunity. It reads campaigns and recognition only through the LWC's Apex controller, which returns public fields only: name and amount of paid donations that are not anonymous, plus the combined total of paid anonymous donations (US-05 AC8). It creates donations only through the invocable Apex action. This keeps other donors' data out of reach (M2, US-12). Each permission it gets goes in `docs/seguridad.md` section 2.
 - **Staff:** one permission set per role (see `docs/requirements.md`). Nobody edits `Amount` or `StageName` by hand: the `Payment_Fields_Locked` validation rule blocks it unless the user has the `Donation_Payment_Updates` custom permission, which only the "Donaciones · Payment Integration" permission set grants (site guest user and the integration user that schedules the Apex check). The same rule makes every new donation start as `Pending` and blocks changing its campaign. `Donation_Record_Type_Required` keeps every Opportunity on the Donation record type, so no record skips the rules.
 
-| Permission set | Campaign | Donation |
+Each role is a permission set group: "Donaciones · Staff base" (read campaigns and donations, including status, amount, campaign and donor email, and the tabs) plus the role's permission set. Campaign Manager and Moderator users have the Minimum Access - Salesforce profile, so the group is all they get; `StaffRolesTest` checks it.
+
+| Role | Campaign | Donation |
 |---|---|---|
 | System Admin | Full | Read all; edit donor data; amount, status, campaign, Stripe, receipt, consent and public name read-only |
-| Campaign Manager | Create and edit | Read, including email |
+| Campaign Manager | Create and edit, including dates, goal, status and description | Read, including email |
 | Moderator | Read | Read, including email; edit `Public_Name__c` and `Is_Anonymous__c` (to hide a donor from the recognition) |
 
 ## Inventory
 
-**Flows:** receipt and invoice emails (record-triggered).
 
-**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), which receives the payment gateway as a dependency: `PaymentGateway` (abstract: create and read a checkout session) and `StripeClient`, its Stripe implementation through the `Stripe` Named Credential, `PendingDonationCheck` (the scheduled check for pending and expired donations: a Queueable with callouts that calls `DonationCheckoutService.applyGatewayStatus`), `DonationReceiptService` with `DonationTrigger` (the receipt), `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
+**Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), which receives the payment gateway as a dependency: `PaymentGateway` (abstract: create and read a checkout session) and `StripeClient`, its Stripe implementation through the `Stripe` Named Credential, `PendingDonationCheck` (the scheduled check for pending and expired donations: a Queueable with callouts that calls `DonationCheckoutService.applyGatewayStatus`), `DonationReceiptService` with `DonationTrigger` (when the receipt goes) and `DonationEmailTemplate` (what it says and how it looks: HTML email, plain-text fallback and the simulated invoice PDF), `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
 
 **LWC:** campaign list, campaign detail with progress and recognition.
 

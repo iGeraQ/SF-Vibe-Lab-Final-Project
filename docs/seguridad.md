@@ -30,7 +30,7 @@ Another person must be able to repeat each test by following these steps (RF-V2,
 ## 3. Gateway keys
 
 - Where they are stored: only in the `Stripe` External Credential in Setup (principal `StripeKey`). Apex calls Stripe through the `Stripe` Named Credential (`callout:Stripe`), so no key is in code, metadata or the repo.
-- How we checked they are not in the code, the site or the repo history: _Pending_
+- How we checked they are not in the code, the site or the repo history: on Nov 10, after retrieving the `Stripe` External Credential and Named Credential into `force-app/`, `git grep -E '(rk|sk|whsec)_(test|live)_[A-Za-z0-9]{10,}' $(git rev-list --all)` found nothing in the files or in any commit. The retrieved metadata has the principal and the header formula, never the key. The check runs again before each delivery.
 
 ## 4. Personal data classification
 
