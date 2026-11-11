@@ -114,6 +114,18 @@ describe('c-donation-form', () => {
             expect($(element, '.wizard-brand-name').textContent).toBe('c.Donations_ProgramName');
         });
 
+        it('shows the campaign image beside the form, and the placeholder if it fails to load', async () => {
+            mockLocation({ search: `?campana=${CAMPAIGNS[1].id}` });
+            const element = await open();
+            expect($(element, '.side-image img').getAttribute('src')).toBe(CAMPAIGNS[1].imageUrl);
+
+            $(element, '.side-image img').dispatchEvent(new CustomEvent('error'));
+            await flushPromises();
+
+            expect($(element, '.side-image img')).toBeNull();
+            expect($(element, '.side-image svg')).not.toBeNull();
+        });
+
         it('does not let anyone donate to a past or unknown campaign (US-01 AC6)', async () => {
             mockLocation({ search: '?campana=701000000000099AAA' });
             const element = await open();

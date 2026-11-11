@@ -37,6 +37,17 @@ describe('c-campaign-detail', () => {
         expect($(element, '.btn-primary').getAttribute('href')).toBe(`/s/donar?campana=${CAMPAIGNS[0].id}`);
     });
 
+    it('shows the campaign image, and the placeholder if it fails to load', async () => {
+        const element = await open(CAMPAIGNS[1].id);
+        expect($(element, '.hero img').getAttribute('src')).toBe(CAMPAIGNS[1].imageUrl);
+
+        $(element, '.hero img').dispatchEvent(new CustomEvent('error'));
+        await flushPromises();
+
+        expect($(element, '.hero img')).toBeNull();
+        expect($(element, '.hero svg')).not.toBeNull();
+    });
+
     it('loads the donor recognition of the same campaign', async () => {
         const element = await open(CAMPAIGNS[0].id);
         const recognition = $(element, 'c-donor-recognition');

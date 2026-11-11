@@ -77,18 +77,17 @@
     font-weight: 700;
 }
 
+/* Two equal buttons on one line, pinned to the bottom so they line up across the cards of a row. */
 .actions {
     margin-top: auto;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
-}
-
-.grow {
-    flex: 1;
 }
 
 .actions .btn {
     min-height: 46px;
-    padding: 0 16px;
+    padding: 0 10px;
+    font-size: 15px;
+    white-space: nowrap;
 }

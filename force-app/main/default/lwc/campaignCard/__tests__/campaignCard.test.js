@@ -31,6 +31,17 @@ describe('c-campaign-card', () => {
         expect($(element, '.badge-exceeded')).toBeNull();
     });
 
+    it('shows the placeholder instead of a broken image when the image fails to load', async () => {
+        const element = mount('c-campaign-card', CampaignCard, { campaign: toCampaignView(CAMPAIGNS[1]) });
+        await flushPromises();
+
+        $(element, 'img').dispatchEvent(new CustomEvent('error'));
+        await flushPromises();
+
+        expect($(element, 'img')).toBeNull();
+        expect($(element, '.image svg')).not.toBeNull();
+    });
+
     it('has no donate button for a past campaign (US-01 AC6)', async () => {
         const element = mount('c-campaign-card', CampaignCard, {
             campaign: toCampaignView(CAMPAIGNS[0], true),

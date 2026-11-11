@@ -1,8 +1,8 @@
 <template>
     <article class="card campaign-card">
         <div class={imageClass} aria-hidden="true">
-            <template lwc:if={campaign.hasImage}>
-                <img class="cover" src={campaign.imageUrl} alt="" loading="lazy" />
+            <template lwc:if={showImage}>
+                <img class="cover" src={campaign.imageUrl} alt="" loading="lazy" onerror={handleImageError} />
             </template>
             <template lwc:else>
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -40,7 +40,7 @@
             </div>
             <template lwc:if={showActions}>
                 <div class="actions">
-                    <a class="btn btn-primary grow" href={campaign.donateUrl}>{labels.donate}</a>
+                    <a class="btn btn-primary" href={campaign.donateUrl}>{labels.donate}</a>
                     <a class="btn btn-secondary" href={campaign.pageUrl} aria-label={viewLabel}>{labels.viewCampaign}</a>
                 </div>
             </template>
