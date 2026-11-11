@@ -237,17 +237,17 @@ public without sharing class DonationCheckoutService {
      * @description The donation form, as the LWC sends it (#23).
      */
     public class DonationRequest {
-        @AuraEnabled public Id campaignId;
-        @AuraEnabled public Decimal amount;
-        @AuraEnabled public Boolean anonymous;
-        @AuraEnabled public Boolean invoice;
-        @AuraEnabled public String email;
-        @AuraEnabled public String firstName;
-        @AuraEnabled public String lastName;
-        @AuraEnabled public String company;
-        @AuraEnabled public String publicName;
-        @AuraEnabled public String personType;
-        @AuraEnabled public String rfc;
-        @AuraEnabled public Boolean invoiceConsent;
+        @AuraEnabled public Id campaignId { get; set; }
+        @AuraEnabled public Decimal amount { get; set; }
+        @AuraEnabled public Boolean anonymous { get; set; }
+        @AuraEnabled public Boolean invoice { get; set; }
+        @AuraEnabled public String email { get; set; }
+        @AuraEnabled public String firstName { get; set; }
+        @AuraEnabled public String lastName { get; set; }
+        @AuraEnabled public String company { get; set; }
+        @AuraEnabled public String publicName { get; set; }
+        @AuraEnabled public String personType { get; set; }
+        @AuraEnabled public String rfc { get; set; }
+        @AuraEnabled public Boolean invoiceConsent { get; set; }
     }
 }

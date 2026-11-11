@@ -97,6 +97,12 @@ describe('c-staff-donation-list', () => {
         expect($(element, '.note').textContent).toBe('c.Staff_FirstRecords');
         $(element, '.refresh').click();
         expect(refresh).toHaveBeenCalled();
+
+        // A later emission without refresh must not disable the button.
+        emitDonations(DONATIONS, true);
+        await flushPromises();
+        $(element, '.refresh').click();
+        expect(refresh).toHaveBeenCalledTimes(2);
     });
 
     it('falls back to "Todas" for an unknown tab', async () => {

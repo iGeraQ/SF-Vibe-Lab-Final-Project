@@ -503,3 +503,14 @@ Template:
 - **What we corrected:** nothing.
 - **AI error:** none found.
 - **Speed-up:** _Pending_
+
+### 2026-11-11 · Staff "Actualizar" button
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-08, US-09
+- **What we asked:** the "Actualizar" button in the staff donation list did nothing; we had to switch tabs to see new data.
+- **What we got:** `staffDonationList` and `staffCampaignList` called `this.result.refresh()`, but `lightning/graphql` does not put `refresh` on every wire emission, so a later emission without it left the button calling nothing. Both components now keep the last `refresh` they receive, as Salesforce's lwc-recipes `graphqlRefresh` does. The Jest tests now emit a second result without `refresh` and check the button still works.
+- **What we verified and how:** `npm test` (196 pass) and ESLint on both components. _Pending: deploy and click "Actualizar" in the org after a donation changes status._
+- **What we corrected:** nothing.
+- **AI error:** none found.
+- **Speed-up:** _Pending_

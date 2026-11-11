@@ -142,6 +142,12 @@ describe('c-staff-campaign-list', () => {
         expect($(element, '.note').textContent).toBe('c.Staff_FirstRecords');
         $(element, '.refresh').click();
         expect(refresh).toHaveBeenCalled();
+
+        // A later emission without refresh must not disable the button.
+        emitCampaigns(CAMPAIGNS, true);
+        await flushPromises();
+        $(element, '.refresh').click();
+        expect(refresh).toHaveBeenCalledTimes(2);
     });
 
     it('does nothing on refresh before the data arrives', async () => {

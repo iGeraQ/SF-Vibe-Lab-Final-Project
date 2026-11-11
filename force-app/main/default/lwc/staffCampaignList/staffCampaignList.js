@@ -64,6 +64,10 @@ export default class StaffCampaignList extends NavigationMixin(LightningElement)
     })
     wiredCampaigns(result) {
         this.result = result;
+        // Not every emission carries refresh, so keep the last one (as in the lwc-recipes graphqlRefresh).
+        if (result.refresh) {
+            this.refreshCampaigns = result.refresh;
+        }
     }
 
     @wire(getObjectInfo, { objectApiName: CAMPAIGN_OBJECT })
@@ -121,7 +125,7 @@ export default class StaffCampaignList extends NavigationMixin(LightningElement)
     }
 
     handleRefresh() {
-        return this.result?.refresh?.();
+        return this.refreshCampaigns?.();
     }
 
     handleNew() {

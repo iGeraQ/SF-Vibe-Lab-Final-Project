@@ -97,6 +97,10 @@ export default class StaffDonationList extends LightningElement {
     })
     wiredDonations(result) {
         this.result = result;
+        // Not every emission carries refresh, so keep the last one (as in the lwc-recipes graphqlRefresh).
+        if (result.refresh) {
+            this.refreshDonations = result.refresh;
+        }
     }
 
     get connection() {
@@ -143,6 +147,6 @@ export default class StaffDonationList extends LightningElement {
     }
 
     handleRefresh() {
-        return this.result?.refresh?.();
+        return this.refreshDonations?.();
     }
 }
