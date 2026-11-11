@@ -94,7 +94,7 @@ sf project deploy start --source-dir force-app --target-org donaciones
 8. Connect Stripe (#49). The key only lives in Setup, never in the repo:
    - **External Credential** "Stripe": Custom protocol, a named principal `StripeKey` with an authentication parameter `ApiKey` holding the restricted key (`rk_test_…`), and a custom header `Authorization` = `{!'Bearer ' & $Credential.Stripe.ApiKey}`.
    - **Named Credential** "Stripe": URL `https://api.stripe.com`, the External Credential above, "Allow Formulas in HTTP Header" on, "Generate Authorization Header" off.
-   - Give the `Stripe-StripeKey` principal access in "Donaciones · Payment Integration", then retrieve the credential metadata and check `git grep rk_test_` finds nothing.
+   - Give the `Stripe-StripeKey` principal access in "Donaciones · Payment Integration", then retrieve the credential metadata (`sf project retrieve start --metadata ExternalCredential:Stripe --metadata NamedCredential:Stripe --metadata PermissionSet:Donations_Payment_Integration`) and check that no real key is in the repo or its history: `git grep -E '(rk|sk|whsec)_(test|live)_[A-Za-z0-9]{10,}' $(git rev-list --all)` must find nothing. (A plain `git grep rk_test_` also matches this README's own examples.)
    - Change the custom labels `Stripe_Success_Url` (thank-you page) and `Stripe_Cancel_Url` (cancel page) to the site's URLs (Setup → Custom Labels).
    - In the site settings, choose the default owner for records the guest user creates.
 9. Create the general donation campaign with a far end date (for example 2099-12-31), so it is always open (US-08 AC8).
