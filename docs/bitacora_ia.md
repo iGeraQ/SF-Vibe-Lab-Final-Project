@@ -293,3 +293,15 @@ Template:
 - **What we corrected:** the AI first suspected the mock data, then the guest user's time zone and the campaign dates; the replay and the log disproved both.
 - **AI error:** two wrong guesses about the cause before the evidence; the cause itself is only narrowed to how Aura passes the inner-class parameter. Later the same day the user approved the fix: `startCheckout` now takes a `Map<String, Object>` and builds the `DonationRequest` inside (4 new tests, 77 pass), deployed and verified as a visitor with the Aura replay. The new tests were written first but not watched failing one by one: the failure had been reproduced live with the replay before the change, and the same replay passes after it.
 - **Speed-up:** _Pending_
+
+### 2026-11-11 · Testing the button again with curl
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-03, US-04
+- **What we asked:** test with curl whether the donation button works after the fix, before pushing.
+- **What we got:** the visitor's call failed again; the cause of that was a deploy that reverted 8 classes (R-16), fixed by redeploying the committed code. After that, the visitor's `startCheckout` passes the campaign and amount checks but every Stripe call fails for the visitor, while the same code works as the admin (R-15).
+- **What we verified and how:** each class in the org compared with the repo and with every branch; the visitor's Aura calls replayed with curl (no donation is created by the failing ones); Stripe's reply to a 1-cent request read from Apex; the same flow run as the admin, which saved a Pending donation.
+- **What we corrected:** the AI first assumed its own watcher or a stale checkout had deployed the reverting package and blamed the other session; the comparison with the branches showed it came from a pushed branch. It also guessed the guest had lost the Stripe principal after the deploys; the org shows the principal is still granted.
+- **AI error:** the wrong guess about who deployed, and the wrong guess about the principal.
+- **Speed-up:** _Pending_
+
