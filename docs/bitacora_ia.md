@@ -524,4 +524,13 @@ Template:
 - **What we verified and how:** the published site's `/s/` page answers 200 without a login. The team confirmed that US-03 works in the org. The board's AC Status field was not read: the `gh` token lacks the `read:project` scope.
 - **What we corrected:** the AI first counted US-03 as failing and US-11 as unpublished, based on the Nov 10 test run. The team corrected both.
 - **AI error:** yes, it relied on an outdated test run.
+### 2026-11-10 · Deploy of the day and the "Ir a pagar" error
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-03, US-04, US-14
+- **What we asked:** deploy what we have today, and find out why the "Ir a pagar" button answers "Esta campaña ya no recibe donaciones." and whether the scheduled job has anything to do with it.
+- **What we got:** a check of what the deploy would overwrite (labels and permission sets identical to the repo), a dry-run and then the real deploy once a one-off scheduled job stopped blocking Apex deploys (72 components, 73 tests pass), and a diagnosis of the button: the server receives a `DonationRequest` with empty fields. It is not the job.
+- **What we verified and how:** the visitor's Aura call replayed with `curl` against the site, with invalid values to see whether the server reads them; the debug log of the user's click; the same JSON deserialized in anonymous Apex; the Stripe credential probed after the deploy (read-only).
+- **What we corrected:** the AI first suspected the mock data, then the guest user's time zone and the campaign dates; the replay and the log disproved both.
+- **AI error:** two wrong guesses about the cause before the evidence; the cause itself is only narrowed to how Aura passes the inner-class parameter. Later the same day the user approved the fix: `startCheckout` now takes a `Map<String, Object>` and builds the `DonationRequest` inside (4 new tests, 77 pass), deployed and verified as a visitor with the Aura replay. The new tests were written first but not watched failing one by one: the failure had been reproduced live with the replay before the change, and the same replay passes after it.
 - **Speed-up:** _Pending_
