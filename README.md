@@ -6,7 +6,7 @@ Final project for SF Vibe Lab (UADY × Salesforce, Mérida). A public Salesforce
 |---|---|
 | Backlog board | [GitHub Project](https://github.com/users/iGeraQ/projects/7) |
 | Public site | https://wise-hawk-g8sj39-dev-ed.trailblaze.my.site.com/s/ |
-| Delivery 1 (video and checklist) | [docs/deliveries/delivery-1](docs/deliveries/delivery-1/README.md) |
+| Demo video (5 min) | https://youtu.be/LzqVhyUlHzo |
 | Project guide | [Guidelines](https://claude.ai/artifact/92XBSbogpRgFEzUHCS1MZs) (Spanish) |
 
 ## Team
