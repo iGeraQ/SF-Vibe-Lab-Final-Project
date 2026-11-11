@@ -1,0 +1,59 @@
+<template>
+    <section class="card">
+        <h2 class="eyebrow">{labels.donorTitle}</h2>
+        <template lwc:if={isLoading}>
+            <p class="state">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasError}>
+            <p class="error" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:else>
+            <div class="grid">
+                <div>
+                    <p class="caption">{labels.email}</p>
+                    <p class="value email">{email}</p>
+                </div>
+                <div>
+                    <template lwc:if={canEdit}>
+                        <label class="caption editable" for="public-name">
+                            <lightning-icon icon-name="utility:edit" size="xx-small" alternative-text=""></lightning-icon>
+                            {labels.publicNameEditable}
+                        </label>
+                        <div class="edit-row">
+                            <input
+                                id="public-name"
+                                class="input"
+                                type="text"
+                                maxlength="80"
+                                value={inputValue}
+                                oninput={handleInput}
+                            />
+                            <button
+                                type="button"
+                                class="btn btn-primary save"
+                                disabled={saveDisabled}
+                                onclick={handleSave}
+                            >
+                                {saveLabel}
+                            </button>
+                        </div>
+                        <template lwc:if={errorText}>
+                            <p class="error save-error" role="alert">{errorText}</p>
+                        </template>
+                        <template lwc:if={message}>
+                            <p class="success" role="status">{message}</p>
+                        </template>
+                    </template>
+                    <template lwc:else>
+                        <p class="caption">{labels.publicName}</p>
+                        <p class="value public-name">{publicNameText}</p>
+                        <p class="note locked-note">{labels.publicNameLocked}</p>
+                    </template>
+                </div>
+            </div>
+            <template lwc:if={isAnonymous}>
+                <p class="note anonymous">{labels.anonymousNote}</p>
+            </template>
+        </template>
+    </section>
+</template>
