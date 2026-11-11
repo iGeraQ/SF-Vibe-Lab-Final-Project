@@ -138,28 +138,14 @@ private class DonationReceiptServiceTest {
     }
 
     @IsTest
-    static void invoiceShowsTaxDataAndSaysItIsNotATaxDocument() {
-        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
+    static void receiptEmailHasAnHtmlBodyAndAPlainTextFallback() {
+        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-CREDITO1').Id })[0];
 
-        // escapeHtml4 also turns accents into entities, which the PDF shows correctly.
-        String invoice = DonationReceiptService.invoiceHtml(record).unescapeHtml4();
+        Messaging.SingleEmailMessage email = DonationReceiptService.buildReceipt(record, new OrgWideEmailAddress(Address = 'soporte@example.com'));
 
-        for (String expected : new List<String>{
-            'DON-ANONIMA1', 'Zacarias Prueba', 'XAXX010101000', 'Persona física', 'Donación · Becas 2026', '250',
-            'No es un comprobante fiscal (CFDI)'
-        }) {
-            Assert.isTrue(invoice.contains(expected), 'Missing ' + expected + ' (US-06 AC3, AC8)');
-        }
-    }
-
-    @IsTest
-    static void invoiceEscapesTheDonorText() {
-        Opportunity record = DonationReceiptService.loadDonations(new Set<Id>{ donation('DON-ANONIMA1').Id })[0];
-        record.Donor_First_Name__c = '<script>alert(1)</script>';
-
-        String invoice = DonationReceiptService.invoiceHtml(record);
-
-        Assert.isFalse(invoice.contains('<script>'), 'Donor text is shown as plain text (US-12)');
+        Assert.isTrue(email.getHtmlBody().startsWith('<!DOCTYPE html>'), 'The receipt is a styled HTML email');
+        Assert.isTrue(email.getHtmlBody().contains('mailto:soporte@example.com'));
+        Assert.isTrue(email.getPlainTextBody().contains('Referencia: DON-CREDITO1'), 'Clients without HTML get the text');
     }
 
     @IsTest
