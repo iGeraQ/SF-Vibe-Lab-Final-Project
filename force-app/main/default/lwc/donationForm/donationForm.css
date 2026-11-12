@@ -4,12 +4,16 @@
     padding-top: 32px;
 }
 
+/*
+ * wrap-reverse puts the side card above the form on narrow screens. It also flips the cross axis, so
+ * flex-end is the top: the side card stays at the top beside the form at every step.
+ */
 .layout {
     display: flex;
     flex-wrap: wrap-reverse;
     gap: 28px;
     margin-top: 12px;
-    align-items: flex-start;
+    align-items: flex-end;
 }
 
 .form-card {
