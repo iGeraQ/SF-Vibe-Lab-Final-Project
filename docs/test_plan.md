@@ -23,7 +23,7 @@ This plan verifies Delivery 1 against **every acceptance criterion** of its 11 s
 
 | Level | What | Who runs it | Where the result goes |
 |---|---|---|---|
-| **Apex** | Apex unit tests in `force-app/main/default/classes/*Test.cls` | Anyone, with the command in section 3 | Test run ID in the story's Evidence |
+| **Apex** | Apex unit tests in `force-app/main/default/classes/<feature>/*Test.cls` | Anyone, with the command in section 3 | Test run ID in the story's Evidence |
 | **Jest** | LWC unit tests in `force-app/main/default/lwc/*/__tests__` | Anyone, with `npm test` | Output in the story's Evidence |
 | **E2E** | Manual test on the published site, with Stripe in test mode, as a visitor without login | Tester | Screenshot or video timestamp in the story's Evidence |
 | **Staff** | Manual test in Salesforce as a staff user (System Admin, Campaign Manager or Moderator) | Tester | Screenshot in the story's Evidence |
@@ -94,7 +94,7 @@ Cases that deactivate or change a campaign (TC-US01-05, TC-US08-02, TC-US08-07, 
 **Apex**, in the team org (`donaciones` is the README's alias; use yours):
 
 ```bash
-sf apex run test --class-names PublicCampaignControllerTest --class-names DonationCheckoutServiceTest --class-names StripeClientTest --class-names DonationReceiptServiceTest --class-names PendingDonationCheckTest --class-names StaffRolesTest --target-org donaciones --result-format human --code-coverage --wait 20
+sf apex run test --class-names PublicCampaignControllerTest --class-names DonationCheckoutServiceTest --class-names StripeClientTest --class-names DonationReceiptServiceTest --class-names PendingDonationCheckTest --class-names StaffRolesTest --class-names DonationRulesTest --class-names DonationEmailTemplateTest --target-org donaciones --result-format human --code-coverage --wait 20
 ```
 
 Pass: 0 failures, and at least 75% coverage on each class (team rule; the platform itself requires 75% org-wide to deploy to production).
