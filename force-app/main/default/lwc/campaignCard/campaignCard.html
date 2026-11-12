@@ -10,16 +10,19 @@
                 </svg>
             </template>
         </div>
+        <!-- Over the image, so a badge doesn't push this card's progress bar below the others. -->
+        <div class="badges">
+            <template lwc:if={past}>
+                <span class="badge badge-finished">{labels.finished}</span>
+            </template>
+            <template lwc:if={campaign.exceeded}>
+                <span class="badge badge-exceeded">{labels.goalExceeded}</span>
+            </template>
+        </div>
         <div class="body">
             <div class="heading">
-                <template lwc:if={past}>
-                    <span class="badge badge-finished">{labels.finished}</span>
-                </template>
-                <template lwc:if={campaign.exceeded}>
-                    <span class="badge badge-exceeded">{labels.goalExceeded}</span>
-                </template>
-                <h2 class="name">{campaign.name}</h2>
-                <p class="purpose muted">{campaign.purpose}</p>
+                <h2 class="name" title={campaign.name}>{campaign.name}</h2>
+                <p class="purpose muted" title={campaign.purpose}>{campaign.purpose}</p>
             </div>
             <div>
                 <div class="progress-top">

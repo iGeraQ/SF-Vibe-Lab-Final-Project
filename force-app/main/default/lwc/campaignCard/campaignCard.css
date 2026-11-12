@@ -1,10 +1,28 @@
 @import 'c/donationStyles';
 
 .campaign-card {
+    position: relative;
     height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+/*
+ * Every block above the progress bar has a fixed height (badges over the image, two lines for the name,
+ * the purpose and the close date), so the bars and figures line up across the cards of a row.
+ */
+.badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.badges:empty {
+    display: none;
 }
 
 .image {
@@ -30,22 +48,35 @@
     gap: 6px;
 }
 
+.name,
+.purpose {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
 .name {
     font-size: 20px;
     line-height: 1.25;
     font-weight: 800;
+    min-height: 2.5em;
 }
 
 .purpose {
     font-size: 15px;
+    line-height: 1.4;
+    min-height: 2.8em;
 }
 
 .progress-top {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: flex-start;
     gap: 8px;
     margin-bottom: 6px;
+    min-height: 2.6em;
 }
 
 .percent {
@@ -87,7 +118,7 @@
 
 .actions .btn {
     min-height: 46px;
-    padding: 0 10px;
-    font-size: 15px;
+    padding: 0 8px;
+    font-size: 14px;
     white-space: nowrap;
 }
