@@ -34,7 +34,67 @@ describe('c-campaign-detail', () => {
         expect(text).toContain(CAMPAIGNS[0].purpose);
         expect(text).toContain('$1,250 MXN');
         expect($(element, '.badge-exceeded')).not.toBeNull();
-        expect($(element, '.btn-primary').getAttribute('href')).toBe(`/s/donar?campana=${CAMPAIGNS[0].id}`);
+        expect($(element, '.side c-amount-picker')).not.toBeNull();
+    });
+
+    describe('choosing the amount in the side card (fewer clicks)', () => {
+        const picker = (element) => $(element, 'c-amount-picker').shadowRoot;
+        const amounts = (element) => [...picker(element).querySelectorAll('.amount')];
+
+        async function click(node) {
+            node.click();
+            await flushPromises();
+        }
+
+        it('shows only four amounts plus the "Otro monto" field', async () => {
+            const element = await open(CAMPAIGNS[0].id);
+
+            expect(amounts(element).map((node) => node.textContent)).toEqual(['$1,000MXN', '$5,000MXN', '$10,000MXN', '$20,000MXN']);
+            expect(picker(element).querySelector('[data-id="custom-amount"]')).not.toBeNull();
+        });
+
+        it('opens the form at step 2 with the chosen amount', async () => {
+            const element = await open(CAMPAIGNS[0].id);
+            await click(amounts(element)[2]);
+            await click($(element, '.side .btn-primary'));
+
+            expect(window.location.assign).toHaveBeenCalledWith(`/s/donar?campana=${CAMPAIGNS[0].id}&monto=10000`);
+        });
+
+        it('takes a typed amount, with centavos (US-13)', async () => {
+            const element = await open(CAMPAIGNS[0].id);
+            const input = picker(element).querySelector('[data-id="custom-amount"]');
+            input.value = '1,250.50';
+            input.dispatchEvent(new CustomEvent('input'));
+            await flushPromises();
+            await click($(element, '.side .btn-primary'));
+
+            expect(window.location.assign).toHaveBeenCalledWith(`/s/donar?campana=${CAMPAIGNS[0].id}&monto=1250.5`);
+        });
+
+        it('asks for an amount instead of leaving when none is chosen', async () => {
+            const element = await open(CAMPAIGNS[0].id);
+            await click($(element, '.side .btn-primary'));
+
+            expect(window.location.assign).not.toHaveBeenCalled();
+            expect($(element, '.amount-hint').textContent).toBe('c.Donations_AmountHint');
+
+            await click(amounts(element)[0]);
+            expect($(element, '.amount-hint')).toBeNull();
+        });
+
+        it('stays and shows why when the typed amount can not be donated', async () => {
+            const element = await open(CAMPAIGNS[0].id);
+            const input = picker(element).querySelector('[data-id="custom-amount"]');
+            input.value = '5';
+            input.dispatchEvent(new CustomEvent('input'));
+            await flushPromises();
+            await click($(element, '.side .btn-primary'));
+
+            expect(window.location.assign).not.toHaveBeenCalled();
+            expect(picker(element).querySelector('.field-error').textContent).toBe('c.Donations_ErrAmountMin');
+            expect($(element, '.amount-hint')).toBeNull();
+        });
     });
 
     it('shows the campaign image, and the placeholder if it fails to load', async () => {

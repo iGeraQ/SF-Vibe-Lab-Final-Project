@@ -1,0 +1,148 @@
+@import 'c/donationStyles';
+
+/* The eight amounts as an even 4 x 2 grid (2 x 4 on phones), so no row is left half empty. */
+.amounts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 560px) {
+    .amounts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Campaign page side card: four amounts, two per row. */
+.amounts-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.amount {
+    min-height: 64px;
+    border-radius: 16px;
+    border: 2px solid var(--don-border);
+    background: var(--don-surface);
+    color: var(--don-text);
+    font-weight: 800;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+    cursor: pointer;
+}
+
+.amounts-compact .amount {
+    min-height: 52px;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+.amount:hover {
+    border-color: var(--don-accent);
+}
+
+.amount-on {
+    border-color: var(--don-accent);
+    background: var(--don-accent);
+    color: #ffffff;
+}
+
+.amount-currency {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* The typed amount */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+/* Below the grid, as wide as two of its columns, so it lines up with the buttons above. */
+.custom-field {
+    margin-top: 20px;
+    width: calc(50% - 6px);
+}
+
+@media (max-width: 560px) {
+    .custom-field {
+        width: 100%;
+    }
+}
+
+.custom-field-compact {
+    margin-top: 12px;
+    width: 100%;
+}
+
+.custom-field-compact .field-note {
+    font-size: 13px;
+}
+
+.field-label {
+    font-weight: 700;
+}
+
+.money-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.money-prefix,
+.money-suffix {
+    position: absolute;
+    font-weight: 700;
+    color: var(--don-muted);
+    pointer-events: none;
+}
+
+.money-prefix {
+    left: 14px;
+}
+
+.money-suffix {
+    right: 14px;
+    font-size: 14px;
+}
+
+.input {
+    min-height: 48px;
+    border-radius: 12px;
+    border: 2px solid var(--don-border);
+    color: var(--don-text);
+    background: var(--don-surface);
+    width: 100%;
+}
+
+/* The text starts after the "$" and ends before "MXN". */
+.custom-input {
+    padding: 0 56px 0 30px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* A typed amount is the chosen one, so it looks selected like an amount button. */
+.custom-on {
+    border-color: var(--don-accent);
+}
+
+.input-error {
+    border-color: var(--don-error);
+}
+
+.field-note {
+    font-size: 14px;
+}
+
+.field-error {
+    font-size: 14px;
+    color: var(--don-error);
+    font-weight: 700;
+}

@@ -68,6 +68,24 @@
     font-weight: 800;
 }
 
+.side-amount {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.side-amount-title {
+    font-weight: 800;
+    font-size: 17px;
+}
+
+.amount-hint {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--don-error);
+    text-align: center;
+}
+
 .btn-big {
     min-height: 52px;
     font-size: 17px;

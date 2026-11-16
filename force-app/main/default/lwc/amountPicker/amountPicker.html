@@ -1,0 +1,42 @@
+<template>
+    <div class={gridClass} role="group" aria-label={labels.stepAmount}>
+        <template for:each={amountOptions} for:item="option">
+            <button
+                key={option.key}
+                type="button"
+                class={option.className}
+                aria-pressed={option.pressed}
+                data-value={option.value}
+                onclick={handleAmount}
+            >
+                {option.label}<span class="amount-currency">MXN</span>
+            </button>
+        </template>
+    </div>
+    <!-- US-13: always visible, so typing an amount takes no extra click -->
+    <div class={fieldClass}>
+        <label class="field-label" for="custom-amount">{labels.amountOther}</label>
+        <div class="money-input">
+            <span class="money-prefix" aria-hidden="true">$</span>
+            <input
+                id="custom-amount"
+                data-id="custom-amount"
+                class={customInputClass}
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                maxlength="13"
+                value={customText}
+                aria-invalid={customInvalid}
+                aria-describedby="custom-amount-note custom-amount-error"
+                oninput={handleCustomInput}
+                onblur={handleCustomBlur}
+            />
+            <span class="money-suffix" aria-hidden="true">MXN</span>
+        </div>
+        <span id="custom-amount-note" class="field-note muted">{labels.amountCustomNote}</span>
+        <template lwc:if={customError}>
+            <span id="custom-amount-error" class="field-error" role="alert">{customError}</span>
+        </template>
+    </div>
+</template>
