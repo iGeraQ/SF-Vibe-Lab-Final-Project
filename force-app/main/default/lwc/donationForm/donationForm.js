@@ -8,7 +8,9 @@ import {
     formatMoney,
     getParam,
     pageUrl,
+    parseAmount,
     toCampaignView,
+    validateAmount,
     validateEmail,
     validateRfc
 } from 'c/donationUtils';
@@ -51,6 +53,12 @@ export default class DonationForm extends LightningElement {
     focusPending = false;
     // The image did not load (wrong address or blocked host): show the placeholder instead of a broken image.
     imageFailed = false;
+    // US-13: "Otro monto" lets the donor type any amount from $10 MXN.
+    customMode = false;
+    customText = '';
+    // The custom amount's error shows after the donor leaves the field or tries to continue, not while typing.
+    customAttempted = false;
+    focusCustomPending = false;
 
     connectedCallback() {
         getActiveCampaigns()
@@ -140,11 +148,12 @@ export default class DonationForm extends LightningElement {
     }
 
     get nextDisabled() {
-        return (this.step === 1 && !this.amount) || (this.step === 2 && !this.typeChosen);
+        // With "Otro monto" the button stays enabled, so pressing it shows why the typed amount isn't valid.
+        return (this.step === 1 && !this.amount && !this.customMode) || (this.step === 2 && !this.typeChosen);
     }
 
     get nextHint() {
-        if (this.step === 1 && !this.amount) {
+        if (this.step === 1 && !this.amount && !this.customMode) {
             return LABELS.amountHint;
         }
         if (this.step === 2 && !this.typeChosen) {
@@ -155,6 +164,12 @@ export default class DonationForm extends LightningElement {
 
     handleNext() {
         if (this.nextDisabled) {
+            return;
+        }
+        if (this.step === 1 && this.customMode && validateAmount(this.customText)) {
+            // US-13 AC2, AC3, AC5: a typed amount that can't be donated stops here with its reason.
+            this.customAttempted = true;
+            this.focusCustomPending = true;
             return;
         }
         if (this.step === 3) {
@@ -194,7 +209,7 @@ export default class DonationForm extends LightningElement {
 
     get amountOptions() {
         return SUGGESTED_AMOUNTS.map((value) => {
-            const selected = this.amount === value;
+            const selected = !this.customMode && this.amount === value;
             return {
                 key: `amount-${value}`,
                 value,
@@ -206,7 +221,53 @@ export default class DonationForm extends LightningElement {
     }
 
     handleAmount(event) {
+        this.customMode = false;
+        this.customAttempted = false;
         this.amount = Number(event.currentTarget.dataset.value);
+    }
+
+    // ---------- Step 1: custom amount (US-13) ----------
+
+    get customPressed() {
+        return this.customMode ? 'true' : 'false';
+    }
+
+    get customClass() {
+        return this.customMode ? 'amount amount-other amount-on' : 'amount amount-other';
+    }
+
+    get customError() {
+        return this.customAttempted ? validateAmount(this.customText) : null;
+    }
+
+    get customInvalid() {
+        return this.customError ? 'true' : 'false';
+    }
+
+    get customInputClass() {
+        return this.customError ? 'input custom-input input-error' : 'input custom-input';
+    }
+
+    handleCustomAmount() {
+        this.customMode = true;
+        this.setCustomAmount();
+        this.focusCustomPending = true;
+    }
+
+    handleCustomInput(event) {
+        this.customText = event.target.value;
+        this.setCustomAmount();
+    }
+
+    handleCustomBlur() {
+        if (this.customText.trim()) {
+            this.customAttempted = true;
+        }
+    }
+
+    // The amount only counts while the typed text can be donated; otherwise there is no amount yet.
+    setCustomAmount() {
+        this.amount = validateAmount(this.customText) ? null : parseAmount(this.customText);
     }
 
     get hasAmount() {
@@ -416,6 +477,13 @@ export default class DonationForm extends LightningElement {
         if (this.focusPending) {
             this.focusPending = false;
             this.focusInvalidField();
+        }
+        if (this.focusCustomPending) {
+            const input = this.template.querySelector('[data-id="custom-amount"]');
+            if (input) {
+                this.focusCustomPending = false;
+                input.focus();
+            }
         }
     }
 

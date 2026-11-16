@@ -1,7 +1,11 @@
 import {
     SUGGESTED_AMOUNTS,
     HIGHLIGHT_AMOUNT,
+    MINIMUM_AMOUNT,
+    MAXIMUM_AMOUNT,
     formatMoney,
+    parseAmount,
+    validateAmount,
     formatDate,
     pageUrl,
     getParam,
@@ -33,6 +37,44 @@ describe('c-donation-utils', () => {
         it('treats empty values as zero', () => {
             expect(formatMoney(null)).toBe('$0 MXN');
             expect(formatMoney('abc')).toBe('$0 MXN');
+        });
+
+        it('shows centavos only when the amount has them (US-13)', () => {
+            expect(formatMoney(10.5)).toBe('$10.50 MXN');
+            expect(formatMoney(1500.05)).toBe('$1,500.05 MXN');
+            expect(formatMoney(250)).toBe('$250 MXN');
+        });
+    });
+
+    describe('custom amount (US-13)', () => {
+        it('uses the gateway limits: $10 MXN up to 8 digits in centavos', () => {
+            expect(MINIMUM_AMOUNT).toBe(10);
+            expect(MAXIMUM_AMOUNT).toBe(999999.99);
+        });
+
+        it('reads digits, thousands commas, a leading $ and up to two decimals', () => {
+            expect(parseAmount('150')).toBe(150);
+            expect(parseAmount(' $1,500.50 ')).toBe(1500.5);
+            expect(parseAmount('10.5')).toBe(10.5);
+            expect(parseAmount('12,345,678')).toBe(12345678);
+        });
+
+        it('rejects text that is not an amount', () => {
+            ['', null, 'cien', '-50', '10.555', '1,50', '1.000,50', '10 0', '.5', '1e3'].forEach((value) => {
+                expect(parseAmount(value)).toBeNull();
+            });
+        });
+
+        it('explains why an amount cannot be donated (AC2, AC3, AC5)', () => {
+            expect(validateAmount('cien')).toBe('c.Donations_ErrAmountInvalid');
+            expect(validateAmount('0')).toBe('c.Donations_ErrAmountInvalid');
+            expect(validateAmount('9.99')).toBe('c.Donations_ErrAmountMin');
+            expect(validateAmount('1,000,000')).toBe('c.Donations_ErrAmountMax');
+        });
+
+        it('accepts the limits themselves', () => {
+            expect(validateAmount('10')).toBeNull();
+            expect(validateAmount('999,999.99')).toBeNull();
         });
     });
 

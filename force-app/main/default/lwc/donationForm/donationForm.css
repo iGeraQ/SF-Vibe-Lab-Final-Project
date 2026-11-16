@@ -140,6 +140,46 @@
     font-weight: 600;
 }
 
+/* US-13: "Otro monto" card and the typed amount */
+.amount-other {
+    font-size: 16px;
+}
+
+.custom-field {
+    margin-top: 16px;
+    max-width: 320px;
+}
+
+.money-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.money-prefix,
+.money-suffix {
+    position: absolute;
+    font-weight: 700;
+    color: var(--don-muted);
+    pointer-events: none;
+}
+
+.money-prefix {
+    left: 14px;
+}
+
+.money-suffix {
+    right: 14px;
+    font-size: 14px;
+}
+
+/* Two classes, so it wins over the general .input rule defined later and the text clears the "$". */
+.input.custom-input {
+    padding: 0 56px 0 30px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
 /* Step 2 */
 .question {
     border: 0;
