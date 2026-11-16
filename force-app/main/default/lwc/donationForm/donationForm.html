@@ -58,7 +58,44 @@
                                     {option.label}<span class="amount-currency">MXN</span>
                                 </button>
                             </template>
+                            <!-- US-13: any amount from $10 MXN -->
+                            <button
+                                type="button"
+                                class={customClass}
+                                aria-pressed={customPressed}
+                                aria-controls="custom-amount"
+                                onclick={handleCustomAmount}
+                            >
+                                {labels.amountOther}
+                            </button>
                         </div>
+                        <template lwc:if={customMode}>
+                            <div class="field custom-field">
+                                <label class="field-label" for="custom-amount">{labels.amountCustomLabel}</label>
+                                <div class="money-input">
+                                    <span class="money-prefix" aria-hidden="true">$</span>
+                                    <input
+                                        id="custom-amount"
+                                        data-id="custom-amount"
+                                        class={customInputClass}
+                                        type="text"
+                                        inputmode="decimal"
+                                        autocomplete="off"
+                                        maxlength="13"
+                                        value={customText}
+                                        aria-invalid={customInvalid}
+                                        aria-describedby="custom-amount-note custom-amount-error"
+                                        oninput={handleCustomInput}
+                                        onblur={handleCustomBlur}
+                                    />
+                                    <span class="money-suffix" aria-hidden="true">MXN</span>
+                                </div>
+                                <span id="custom-amount-note" class="field-note muted">{labels.amountCustomNote}</span>
+                                <template lwc:if={customError}>
+                                    <span id="custom-amount-error" class="field-error" role="alert">{customError}</span>
+                                </template>
+                            </div>
+                        </template>
                     </template>
 
                     <!-- Step 2: list and invoice, two separate decisions -->

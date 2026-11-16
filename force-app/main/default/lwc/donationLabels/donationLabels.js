@@ -51,6 +51,12 @@ import nextStep from '@salesforce/label/c.Donations_NextStep';
 import amountTitle from '@salesforce/label/c.Donations_AmountTitle';
 import amountIntro from '@salesforce/label/c.Donations_AmountIntro';
 import amountHint from '@salesforce/label/c.Donations_AmountHint';
+import amountOther from '@salesforce/label/c.Donations_AmountOther';
+import amountCustomLabel from '@salesforce/label/c.Donations_AmountCustomLabel';
+import amountCustomNote from '@salesforce/label/c.Donations_AmountCustomNote';
+import errAmountInvalid from '@salesforce/label/c.Donations_ErrAmountInvalid';
+import errAmountMin from '@salesforce/label/c.Donations_ErrAmountMin';
+import errAmountMax from '@salesforce/label/c.Donations_ErrAmountMax';
 import typeTitle from '@salesforce/label/c.Donations_TypeTitle';
 import listQuestion from '@salesforce/label/c.Donations_ListQuestion';
 import listYes from '@salesforce/label/c.Donations_ListYes';
@@ -164,6 +170,12 @@ const LABELS = {
     amountTitle,
     amountIntro,
     amountHint,
+    amountOther,
+    amountCustomLabel,
+    amountCustomNote,
+    errAmountInvalid,
+    errAmountMin,
+    errAmountMax,
     typeTitle,
     listQuestion,
     listYes,

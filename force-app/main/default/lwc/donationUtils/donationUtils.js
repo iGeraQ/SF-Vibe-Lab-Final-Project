@@ -20,6 +20,15 @@ const SUGGESTED_AMOUNTS = [100, 250, 500, 1000, 2000, 5000, 10000, 20000];
 // US-01 refinement 5: amounts from this value up are highlighted in the confirmation.
 const HIGHLIGHT_AMOUNT = 1000;
 
+// US-13 refinement 1: Stripe's minimum charge in MXN, the same minimum DonationCheckoutService checks.
+const MINIMUM_AMOUNT = 10;
+
+// US-13 refinement 2: Stripe takes at most 8 digits in centavos (99,999,999), so $999,999.99 MXN.
+const MAXIMUM_AMOUNT = 999999.99;
+
+// A typed amount: digits with optional thousands commas, and at most two decimals.
+const AMOUNT_TEXT = /^(\d{1,3}(,\d{3})+|\d+)(\.\d{1,2})?$/;
+
 // The general campaign is always open and uses a far end date (docs/architecture.md, e.g. 2099-12-31).
 const ALWAYS_OPEN_YEAR = 2090;
 
@@ -28,6 +37,15 @@ const moneyFormat = new Intl.NumberFormat('es-MX', {
     currency: 'MXN',
     currencyDisplay: 'narrowSymbol',
     maximumFractionDigits: 0
+});
+
+// For amounts with centavos, which a typed amount can have (US-13).
+const centsFormat = new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+    currencyDisplay: 'narrowSymbol',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
 });
 
 const dateFormat = new Intl.DateTimeFormat('es-MX', {
@@ -39,10 +57,41 @@ const dateFormat = new Intl.DateTimeFormat('es-MX', {
 
 /**
  * @param {number} amount an amount in pesos
- * @returns {string} the amount as "$1,000 MXN"
+ * @returns {string} the amount as "$1,000 MXN", or "$10.50 MXN" when it has centavos
  */
 function formatMoney(amount) {
-    return `${moneyFormat.format(Number(amount) || 0)} MXN`;
+    const value = Number(amount) || 0;
+    const formatter = Number.isInteger(value) ? moneyFormat : centsFormat;
+    return `${formatter.format(value)} MXN`;
+}
+
+/**
+ * Reads an amount the donor typed (US-13).
+ * @param {string} text what the donor typed, such as "1,500" or "250.50"
+ * @returns {number|null} the amount in pesos, or null if the text is not a valid amount
+ */
+function parseAmount(text) {
+    const value = (text || '').trim().replace(/^\$/, '').trim();
+    if (!AMOUNT_TEXT.test(value)) {
+        return null;
+    }
+    return Number(value.replace(/,/g, ''));
+}
+
+/**
+ * Checks a typed amount (US-13 AC2, AC3, AC5).
+ * @param {string} text what the donor typed
+ * @returns {string|null} the error message, or null if the amount can be donated
+ */
+function validateAmount(text) {
+    const amount = parseAmount(text);
+    if (amount === null || amount <= 0) {
+        return LABELS.errAmountInvalid;
+    }
+    if (amount < MINIMUM_AMOUNT) {
+        return LABELS.errAmountMin;
+    }
+    return amount > MAXIMUM_AMOUNT ? LABELS.errAmountMax : null;
 }
 
 /**
@@ -195,7 +244,11 @@ export {
     PAGES,
     SUGGESTED_AMOUNTS,
     HIGHLIGHT_AMOUNT,
+    MINIMUM_AMOUNT,
+    MAXIMUM_AMOUNT,
     formatMoney,
+    parseAmount,
+    validateAmount,
     formatDate,
     pageUrl,
     getParam,

@@ -49,6 +49,54 @@
         <value>Elige un monto para continuar.</value>
     </labels>
     <labels>
+        <fullName>Donations_AmountOther</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option to type a custom amount (US-13)</shortDescription>
+        <value>Otro monto</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AmountCustomLabel</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Label of the custom amount field (US-13)</shortDescription>
+        <value>Escribe el monto que quieres donar</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AmountCustomNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Note under the custom amount field (US-13)</shortDescription>
+        <value>Mínimo $10 MXN. Puedes usar hasta dos decimales.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrAmountInvalid</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error: custom amount is not a valid number (US-13 AC5)</shortDescription>
+        <value>Escribe un monto válido, solo con números y hasta dos decimales.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrAmountMin</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error: custom amount under the minimum (US-13 AC2)</shortDescription>
+        <value>El monto mínimo es de $10 MXN.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrAmountMax</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error: custom amount over what Stripe accepts (US-13 AC3)</shortDescription>
+        <value>El monto máximo por donación es de $999,999.99 MXN.</value>
+    </labels>
+    <labels>
         <fullName>Donations_AmountIntro</fullName>
         <categories>Donations Public Site</categories>
         <language>es</language>
