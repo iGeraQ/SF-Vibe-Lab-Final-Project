@@ -45,62 +45,13 @@
                     <template lwc:if={isStep1}>
                         <h1 class="step-title">{labels.amountTitle}</h1>
                         <p class="step-intro muted">{labels.amountIntro}</p>
-                        <div class="amounts" role="group" aria-label={labels.stepAmount}>
-                            <template for:each={amountOptions} for:item="option">
-                                <button
-                                    key={option.key}
-                                    type="button"
-                                    class={option.className}
-                                    aria-pressed={option.pressed}
-                                    data-value={option.value}
-                                    onclick={handleAmount}
-                                >
-                                    {option.label}<span class="amount-currency">MXN</span>
-                                </button>
-                            </template>
-                            <!-- US-13: any amount from $10 MXN -->
-                            <button
-                                type="button"
-                                class={customClass}
-                                aria-pressed={customPressed}
-                                aria-controls="custom-amount"
-                                onclick={handleCustomAmount}
-                            >
-                                {labels.amountOther}
-                            </button>
-                        </div>
-                        <template lwc:if={customMode}>
-                            <div class="field custom-field">
-                                <label class="field-label" for="custom-amount">{labels.amountCustomLabel}</label>
-                                <div class="money-input">
-                                    <span class="money-prefix" aria-hidden="true">$</span>
-                                    <input
-                                        id="custom-amount"
-                                        data-id="custom-amount"
-                                        class={customInputClass}
-                                        type="text"
-                                        inputmode="decimal"
-                                        autocomplete="off"
-                                        maxlength="13"
-                                        value={customText}
-                                        aria-invalid={customInvalid}
-                                        aria-describedby="custom-amount-note custom-amount-error"
-                                        oninput={handleCustomInput}
-                                        onblur={handleCustomBlur}
-                                    />
-                                    <span class="money-suffix" aria-hidden="true">MXN</span>
-                                </div>
-                                <span id="custom-amount-note" class="field-note muted">{labels.amountCustomNote}</span>
-                                <template lwc:if={customError}>
-                                    <span id="custom-amount-error" class="field-error" role="alert">{customError}</span>
-                                </template>
-                            </div>
-                        </template>
+                        <c-amount-picker value={amount} onamountchange={handleAmountChange}></c-amount-picker>
                     </template>
 
-                    <!-- Step 2: list and invoice, two separate decisions -->
+                    <!-- Step 2: two short questions (list and invoice) and the donor data, on one page -->
                     <template lwc:if={isStep2}>
-                        <h1 class="step-title">{labels.typeTitle}</h1>
+                        <h1 class="step-title">{labels.dataTitle}</h1>
+                        <p class="step-intro muted">{labels.dataIntro}</p>
                         <fieldset class="question">
                             <legend class="question-title">{labels.listQuestion}</legend>
                             <div class="choices" role="radiogroup">
@@ -116,13 +67,13 @@
                                         onclick={handleChoice}
                                     >
                                         <span class="choice-ring" aria-hidden="true"><span class="choice-dot"></span></span>
-                                        <span class="choice-text">
-                                            <span class="choice-title">{option.title}</span>
-                                            <span class="choice-line">{option.line}</span>
-                                        </span>
+                                        <span class="choice-title">{option.title}</span>
                                     </button>
                                 </template>
                             </div>
+                            <template lwc:if={listNote}>
+                                <p class="choice-note muted">{listNote}</p>
+                            </template>
                         </fieldset>
                         <fieldset class="question">
                             <legend class="question-title">{labels.invoiceQuestion}</legend>
@@ -139,21 +90,17 @@
                                         onclick={handleChoice}
                                     >
                                         <span class="choice-ring" aria-hidden="true"><span class="choice-dot"></span></span>
-                                        <span class="choice-text">
-                                            <span class="choice-title">{option.title}</span>
-                                            <span class="choice-line">{option.line}</span>
-                                        </span>
+                                        <span class="choice-title">{option.title}</span>
                                     </button>
                                 </template>
                             </div>
+                            <template lwc:if={invoiceNote}>
+                                <p class="choice-note muted">{invoiceNote}</p>
+                            </template>
                         </fieldset>
-                    </template>
 
-                    <!-- Step 3: data -->
-                    <template lwc:if={isStep3}>
-                        <h1 class="step-title">{labels.dataTitle}</h1>
-                        <p class="step-intro muted">{labels.dataIntro}</p>
-                        <template lwc:if={hasStep3Errors}>
+                        <!-- Same step: the donor data, whose fields follow the two answers above -->
+                        <template lwc:if={hasDataErrors}>
                             <p class="alert alert-gap" role="alert">{labels.errFixFields}</p>
                         </template>
                         <div class="fields">
@@ -328,8 +275,8 @@
                         </div>
                     </template>
 
-                    <!-- Step 4: confirmation -->
-                    <template lwc:if={isStep4}>
+                    <!-- Step 3: confirmation -->
+                    <template lwc:if={isStep3}>
                         <h1 class="step-title">{labels.confirmTitle}</h1>
                         <p class="step-intro muted">{labels.confirmIntro}</p>
                         <template lwc:if={submitError}>
@@ -380,7 +327,7 @@
                             <template lwc:if={showBack}>
                                 <button type="button" class="btn btn-secondary" onclick={handleBack}>{labels.back}</button>
                             </template>
-                            <template lwc:if={isStep4}>
+                            <template lwc:if={isStep3}>
                                 <button type="button" class="btn btn-secondary" disabled={processing} onclick={handleChangeAmount}>
                                     {labels.changeAmount}
                                 </button>
@@ -394,7 +341,7 @@
                                 {labels.nextStep}
                             </button>
                         </template>
-                        <template lwc:if={isStep4}>
+                        <template lwc:if={isStep3}>
                             <button type="button" class="btn btn-primary" disabled={processing} aria-live="polite" onclick={handlePay}>
                                 {payLabel}
                             </button>

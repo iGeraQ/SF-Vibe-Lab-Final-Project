@@ -9,8 +9,8 @@ Create these pages in Experience Builder with exactly these URLs; the components
 | Page | URL | Component | Stories |
 |---|---|---|---|
 | Home (active campaigns) | `/` (Home) | `campaignList`, mode `active` | US-01 AC1, AC4 |
-| Campaign | `campana` | `campaignDetail` (includes `donorRecognition`) | US-01 AC5, US-05 |
-| Donation form | `donar` | `donationForm` | US-01 AC3, AC7 to AC10; US-02; US-03; US-06 |
+| Campaign | `campana` | `campaignDetail` (includes `amountPicker` and `donorRecognition`) | US-01 AC5, US-05, US-13 |
+| Donation form | `donar` | `donationForm` (step 1 is `amountPicker`) | US-01 AC3, AC7 to AC10; US-02; US-03; US-06; US-13 |
 | Thank you (Stripe `success_url`) | `gracias` | `donationThanks` | US-04 |
 | Payment not completed (Stripe `cancel_url`) | `pago-no-completado` | `donationCancelled` | US-04 AC5 |
 | Past campaigns | `campanas-pasadas` | `campaignList`, mode `past` | US-01 AC6 |
@@ -18,7 +18,17 @@ Create these pages in Experience Builder with exactly these URLs; the components
 
 `siteHeader` and `siteFooter` go in the theme's header and footer regions.
 
-Only ids travel in the address: `campana?id=<campaign id>`, `donar?campana=<campaign id>`, `pago-no-completado?campana=<campaign id>` and `gracias?session_id=<Stripe session id>`. Never an email, a name or an RFC (US-12).
+Only ids and the chosen amount travel in the address: `campana?id=<campaign id>`, `donar?campana=<campaign id>` (optionally `&monto=<amount>`), `pago-no-completado?campana=<campaign id>` and `gracias?session_id=<Stripe session id>`. Never an email, a name or an RFC (US-12).
+
+### Fewer clicks to donate
+
+- The form has three steps: **1. Monto**, **2. Tus datos** (two short questions, recognition and invoice, followed by the donor data on the same page) and **3. Confirmación**.
+- The amount step shows the eight suggested amounts as a 4 x 2 grid (2 x 4 on phones) and, below it, an always visible "Otro monto" field: typing in it unselects the chosen button and choosing a button clears the field, with no extra click to type.
+- In step 2 each question has one-line answers side by side; only the chosen answer's explanation shows below it.
+- From the home page, "Donar" on a campaign card opens `donar?campana=<id>` at step 1.
+- On the campaign page the side card has the same amount picker with four larger amounts ($1,000, $5,000, $10,000 and $20,000) and the "Otro monto" field. "Donar" opens `donar?campana=<id>&monto=<amount>` at step 2, so the donor skips the amount page. Without an amount it asks for one; with a typed amount that can not be donated it shows why.
+- The form applies the same rules to `monto` as to a typed amount ($10 to $999,999.99 MXN, up to two decimals). Anything else is ignored and the form starts at step 1. The server checks the amount again in any case.
+- `amountPicker` is shared by both pages: it fires `amountchange` with `{ amount, custom }` and its `validate()` shows why a typed amount is not valid.
 
 ### Look
 
@@ -40,7 +50,7 @@ Both classes are open to the guest through "Donaciones · Sitio público". The c
 
 The thank-you page calls `confirmCheckout` so the donation gets Stripe's status, but it does not show that status: it never says the payment is confirmed (US-04 AC2).
 
-The form is an LWC rather than a Screen Flow because the four-step design (amount cards, options with descriptions, highlighted confirmation) does not fit Flow screens; this is the plan B in `docs/architecture.md`.
+The form is an LWC rather than a Screen Flow because the step-by-step design (amount cards, options with descriptions, highlighted confirmation) does not fit Flow screens; this is the plan B in `docs/architecture.md`.
 
 ### Stripe return addresses
 
@@ -81,9 +91,10 @@ The component tests mock `c/donationDataService` with `jest.fn()`, so they do no
 | `donationDataService` | Each function calls its Apex method with the right arguments, returns its result and passes server errors through |
 | `donationUtils` | MXN format, dates in Spanish, page addresses, progress over 100%, email and RFC rules (US-03 AC6, US-06 AC2, AC5) |
 | `campaignList` | One card per campaign, opening the only active one (US-01 AC4), past mode without donate button (AC6), loading and error states |
-| `campaignDetail` | Campaign data (US-01 AC5), recognition of the same campaign, unknown or past campaign |
+| `campaignDetail` | Campaign data (US-01 AC5), recognition of the same campaign, unknown or past campaign, choosing the amount in the side card and opening the form at step 2 |
+| `amountPicker` | Suggested amounts and the always visible "Otro monto" field, only one amount chosen at a time, the amountchange event, validation with its messages and focus, four amounts in compact mode, a given amount shown as chosen (US-13) |
 | `donorRecognition` | Name and amount only, names as text (US-12 AC7), anonymous total (US-05 AC8), automatic scroll (AC4), empty state |
-| `donationForm` | Suggested amounts, two decisions in step 2, fields per type, errors, focus on the first error, highlight from $1,000 (US-01 AC8), change amount (AC9), the request sent to the backend per type, double submit and error messages (US-03 AC4) |
+| `donationForm` | Three steps, the amount from the campaign page (`monto`), custom amounts with centavos (US-13), two decisions and the data in step 2, fields per type, errors, focus on the first error, highlight from $1,000 (US-01 AC8), change amount (AC9), the request sent to the backend per type, double submit and error messages (US-03 AC4) |
 | `donationThanks` | Calls `confirmCheckout` with the session, same text for any status, no "confirmed" and no personal data (US-04 AC2, AC3, AC6), failure tolerance |
 | `progressBar` | Width from the percentage, full bar but real value over 100% (US-08 AC5), sizes |
 | `donationCancelled`, `siteHeader`, `siteFooter`, `pageNotFound`, `campaignCard`, `donationLabels` | Links, current page and texts |

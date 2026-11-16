@@ -102,116 +102,42 @@
     margin-bottom: 20px;
 }
 
-/* Step 1 */
-.amounts {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(130px, 100%), 1fr));
-    gap: 12px;
-}
-
-.amount {
-    min-height: 64px;
-    border-radius: 16px;
-    border: 2px solid var(--don-border);
-    background: var(--don-surface);
-    color: var(--don-text);
-    font-weight: 800;
-    font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.1;
-    cursor: pointer;
-}
-
-.amount:hover {
-    border-color: var(--don-accent);
-}
-
-.amount-on {
-    border-color: var(--don-accent);
-    background: var(--don-accent);
-    color: #ffffff;
-}
-
-.amount-currency {
-    font-size: 12px;
-    font-weight: 600;
-}
-
-/* US-13: "Otro monto" card and the typed amount */
-.amount-other {
-    font-size: 16px;
-}
-
-.custom-field {
-    margin-top: 16px;
-    max-width: 320px;
-}
-
-.money-input {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.money-prefix,
-.money-suffix {
-    position: absolute;
-    font-weight: 700;
-    color: var(--don-muted);
-    pointer-events: none;
-}
-
-.money-prefix {
-    left: 14px;
-}
-
-.money-suffix {
-    right: 14px;
-    font-size: 14px;
-}
-
-/* Two classes, so it wins over the general .input rule defined later and the text clears the "$". */
-.input.custom-input {
-    padding: 0 56px 0 30px;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-/* Step 2 */
+/* Step 2: two short questions, each with one-line answers side by side, then the donor data. */
 .question {
     border: 0;
-    margin: 20px 0 0;
+    margin: 0 0 18px;
     padding: 0;
 }
 
 .question-title {
     padding: 0;
-    margin-bottom: 10px;
-    font-weight: 800;
-    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 16px;
 }
 
 .choices {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .choice {
     text-align: left;
-    min-height: 72px;
-    padding: 16px 18px;
-    border-radius: 16px;
+    min-height: 44px;
+    padding: 8px 16px 8px 12px;
+    border-radius: 999px;
     border: 2px solid var(--don-border);
     background: var(--don-surface);
     color: var(--don-text);
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
     cursor: pointer;
+}
+
+.choice:hover {
+    border-color: var(--don-accent);
 }
 
 .choice-on {
@@ -220,8 +146,8 @@
 }
 
 .choice-ring {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     border-radius: 999px;
     border: 2px solid #a89c90;
     display: flex;
@@ -235,8 +161,8 @@
 }
 
 .choice-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
 }
 
@@ -244,20 +170,15 @@
     background: var(--don-accent);
 }
 
-.choice-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
 .choice-title {
-    font-weight: 800;
-    font-size: 17px;
+    font-weight: 700;
+    font-size: 15px;
 }
 
-.choice-line {
-    font-size: 15px;
-    color: var(--don-muted);
+/* The explanation of the chosen answer only. */
+.choice-note {
+    margin-top: 6px;
+    font-size: 14px;
 }
 
 /* Step 3 */
@@ -266,6 +187,7 @@
 }
 
 .fields {
+    margin-top: 24px;
     display: flex;
     flex-direction: column;
     gap: 20px;

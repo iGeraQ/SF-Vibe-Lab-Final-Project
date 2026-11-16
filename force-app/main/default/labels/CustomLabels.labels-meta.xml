@@ -57,14 +57,6 @@
         <value>Otro monto</value>
     </labels>
     <labels>
-        <fullName>Donations_AmountCustomLabel</fullName>
-        <categories>Donations Public Site</categories>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Label of the custom amount field (US-13)</shortDescription>
-        <value>Escribe el monto que quieres donar</value>
-    </labels>
-    <labels>
         <fullName>Donations_AmountCustomNote</fullName>
         <categories>Donations Public Site</categories>
         <language>es</language>
