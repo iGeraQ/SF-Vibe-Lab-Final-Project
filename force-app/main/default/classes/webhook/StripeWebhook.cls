@@ -9,6 +9,7 @@
 global without sharing class StripeWebhook {
 
     private static final Integer TOLERANCE_SECONDS = 300;
+    private static final Set<String> HANDLED_EVENTS = new Set<String>{ 'checkout.session.completed', 'checkout.session.expired' };
 
     /**
      * @description Stripe's POST. 400 for an unsigned or badly signed notice, 200 for everything else (Stripe
@@ -40,6 +41,11 @@ global without sharing class StripeWebhook {
     private static String handle(Map<String, Object> event) {
         String eventId = (String) event.get('id');
         String type = (String) event.get('type');
+        // The endpoint may receive more event types than we use (payment_intent.*, invoice.*): they are not notices
+        // about a donation, so they are answered 200 and left out of the staff list (US-15).
+        if (!HANDLED_EVENTS.contains(type)) {
+            return 'ignored';
+        }
         if (![SELECT Id FROM Payment_Notice__c WHERE Stripe_Event_Id__c = :eventId WITH SYSTEM_MODE LIMIT 1].isEmpty()) {
             return 'duplicate';
         }

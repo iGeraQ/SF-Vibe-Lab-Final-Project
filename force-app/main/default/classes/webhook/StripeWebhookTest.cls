@@ -85,7 +85,7 @@ private class StripeWebhookTest {
 
     @IsTest
     static void signedButUnreadableBodyIsRejected() {
-        String body = '{"id":"evt_x"}';
+        String body = '{"id":"evt_x","type":"checkout.session.completed"}'; // no data object
         Assert.areEqual(400, post(body, validHeader(body)));
         Assert.areEqual(1, [SELECT COUNT() FROM Payment_Notice__c WHERE Result__c = 'Rejected']);
     }
@@ -116,6 +116,15 @@ private class StripeWebhookTest {
         post(two, validHeader(two));
 
         Assert.areEqual(2, [SELECT COUNT() FROM Opportunity WHERE StageName = 'Paid'], 'US-16 AC3, US-17 AC3');
+    }
+
+    @IsTest
+    static void otherEventTypesAreIgnored() {
+        String body = event('evt_10', 'payment_intent.succeeded', 'DON-AAAA0001', 'cs_one', 'paid', 25000);
+        Assert.areEqual(200, post(body, validHeader(body)));
+
+        Assert.areEqual(0, [SELECT COUNT() FROM Payment_Notice__c], 'Not a notice about a donation');
+        Assert.areEqual('Pending', byReference('DON-AAAA0001').StageName);
     }
 
     @IsTest
