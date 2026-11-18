@@ -80,6 +80,23 @@ function parseAmount(text) {
 }
 
 /**
+ * Keeps only what a positive amount can have while the donor types or pastes: digits and one decimal point
+ * with at most two decimals. A sign, letters, "$" or commas never reach the field (US-13 AC5).
+ * @param {string} text what the donor typed
+ * @returns {string} the text to keep in the field, e.g. "-1,500.509" becomes "1500.50"
+ */
+function cleanAmountText(text) {
+    const [whole, ...decimals] = String(text ?? '')
+        .replace(/[^\d.]/g, '')
+        .split('.');
+    const digits = whole.replace(/^0+(?=\d)/, '');
+    if (decimals.length === 0) {
+        return digits;
+    }
+    return `${digits || '0'}.${decimals.join('').slice(0, 2)}`;
+}
+
+/**
  * Checks a typed amount (US-13 AC2, AC3, AC5).
  * @param {string} text what the donor typed
  * @returns {string|null} the error message, or null if the amount can be donated
@@ -249,6 +266,7 @@ export {
     MAXIMUM_AMOUNT,
     formatMoney,
     parseAmount,
+    cleanAmountText,
     validateAmount,
     formatDate,
     pageUrl,

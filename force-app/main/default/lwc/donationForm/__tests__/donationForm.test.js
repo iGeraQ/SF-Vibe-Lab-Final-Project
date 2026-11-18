@@ -222,18 +222,28 @@ describe('c-donation-form', () => {
             expect(primaryButton(element).disabled).toBe(true);
         });
 
-        it('does not continue with zero, a negative number or text, and says why (AC5)', async () => {
+        it('only lets the donor type a positive number (AC5)', async () => {
             const element = await openCustom();
 
-            for (const value of ['0', '-50', 'cien', '10.555']) {
-                // eslint-disable-next-line no-await-in-loop
-                await typeAmount(element, value);
-                // eslint-disable-next-line no-await-in-loop
-                await next(element);
-                expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
-                expect(pickerErrors(element)).toEqual(['c.Donations_ErrAmountInvalid']);
-                expect(customInput(element).getAttribute('aria-invalid')).toBe('true');
-            }
+            await typeAmount(element, 'cien');
+            expect(customInput(element).value).toBe('');
+            expect(primaryButton(element).disabled).toBe(true);
+
+            await typeAmount(element, '-50');
+            expect(customInput(element).value).toBe('50');
+
+            await typeAmount(element, '10.555');
+            expect(customInput(element).value).toBe('10.55');
+        });
+
+        it('does not continue with zero and says why (AC5)', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '0');
+            await next(element);
+
+            expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+            expect(pickerErrors(element)).toEqual(['c.Donations_ErrAmountInvalid']);
+            expect(customInput(element).getAttribute('aria-invalid')).toBe('true');
         });
 
         it('does not continue under $10 MXN and shows the minimum (AC2)', async () => {

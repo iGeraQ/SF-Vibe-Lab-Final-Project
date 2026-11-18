@@ -5,6 +5,7 @@ import {
     MAXIMUM_AMOUNT,
     formatMoney,
     parseAmount,
+    cleanAmountText,
     validateAmount,
     formatDate,
     pageUrl,
@@ -63,6 +64,20 @@ describe('c-donation-utils', () => {
             ['', null, 'cien', '-50', '10.555', '1,50', '1.000,50', '10 0', '.5', '1e3'].forEach((value) => {
                 expect(parseAmount(value)).toBeNull();
             });
+        });
+
+        it('keeps only the digits and one decimal point with up to two decimals while typing (AC5)', () => {
+            expect(cleanAmountText('-50')).toBe('50');
+            expect(cleanAmountText('$1,500.50')).toBe('1500.50');
+            expect(cleanAmountText('10.555')).toBe('10.55');
+            expect(cleanAmountText('1.2.3')).toBe('1.23');
+            expect(cleanAmountText('.5')).toBe('0.5');
+            expect(cleanAmountText('10.')).toBe('10.');
+            expect(cleanAmountText('007')).toBe('7');
+            expect(cleanAmountText('0')).toBe('0');
+            expect(cleanAmountText('1e3')).toBe('13');
+            expect(cleanAmountText('cien')).toBe('');
+            expect(cleanAmountText(null)).toBe('');
         });
 
         it('explains why an amount cannot be donated (AC2, AC3, AC5)', () => {

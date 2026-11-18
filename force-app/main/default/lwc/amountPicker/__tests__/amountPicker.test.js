@@ -100,6 +100,20 @@ describe('c-amount-picker', () => {
         expect(element.validate()).toBe(true);
     });
 
+    it('drops anything that is not part of a positive amount as it is typed or pasted', async () => {
+        const element = mount('c-amount-picker', AmountPicker);
+        await flushPromises();
+        const changes = listen(element);
+
+        await typeAmount(element, '-$1,500.509abc');
+        expect(input(element).value).toBe('1500.50');
+        expect(changes().at(-1)).toEqual({ amount: 1500.5, custom: true });
+
+        await typeAmount(element, 'e');
+        expect(input(element).value).toBe('');
+        expect(changes().at(-1)).toEqual({ amount: null, custom: false });
+    });
+
     it('waits until the donor leaves the field to show an error, and clears it when the field is emptied', async () => {
         const element = mount('c-amount-picker', AmountPicker);
         await flushPromises();

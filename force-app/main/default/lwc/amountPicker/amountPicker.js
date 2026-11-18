@@ -1,6 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import { LABELS } from 'c/donationLabels';
-import { SUGGESTED_AMOUNTS, formatMoney, parseAmount, validateAmount } from 'c/donationUtils';
+import { SUGGESTED_AMOUNTS, cleanAmountText, formatMoney, parseAmount, validateAmount } from 'c/donationUtils';
 
 // The campaign page's side card shows four larger amounts; the "Otro monto" field covers any other.
 const COMPACT_AMOUNTS = [1000, 5000, 10000, 20000];
@@ -107,7 +107,12 @@ export default class AmountPicker extends LightningElement {
     }
 
     handleCustomInput(event) {
-        this.customText = event.target.value;
+        // Only a positive number can be typed: anything else is dropped as soon as it is typed or pasted.
+        const clean = cleanAmountText(event.target.value);
+        if (event.target.value !== clean) {
+            event.target.value = clean;
+        }
+        this.customText = clean;
         // The amount only counts while the typed text can be donated; an empty field means nothing is chosen.
         this.amount = this.isCustom && !validateAmount(this.customText) ? parseAmount(this.customText) : null;
         if (!this.isCustom) {
