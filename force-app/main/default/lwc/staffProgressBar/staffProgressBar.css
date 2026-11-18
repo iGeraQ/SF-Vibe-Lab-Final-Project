@@ -1,0 +1,25 @@
+@import 'c/staffStyles';
+
+.track {
+    width: 100%;
+    min-width: 60px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--staff-track);
+    overflow: hidden;
+}
+
+.track-large {
+    height: 8px;
+}
+
+.bar {
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--staff-brand);
+}
+
+.bar-muted {
+    background: var(--staff-subtle);
+}

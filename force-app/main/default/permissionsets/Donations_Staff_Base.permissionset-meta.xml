@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationVisibilities>
+        <application>Donations_Mexico_Dreamin</application>
+        <visible>true</visible>
+    </applicationVisibilities>
     <fieldPermissions>
         <editable>false</editable>
         <field>Campaign.Accepts_Donations__c</field>
@@ -164,6 +168,14 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
+        <tab>Staff_Campaigns</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Staff_Donations</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
         <tab>standard-Campaign</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -175,7 +187,7 @@
         <enabled>true</enabled>
         <name>LightningExperienceUser</name>
     </userPermissions>
-    <description>What the three staff roles share: read campaigns and donations, including status, amount, campaign and donor email (US-09 AC1, AC2), and the tabs. Never assigned alone: it is part of each role group.</description>
+    <description>What the three staff roles share: read campaigns and donations, including status, amount, campaign and donor email (US-09 AC1, AC2), the tabs and the staff app with its two component tabs. Never assigned alone: it is part of each role group.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Donaciones · Staff base</label>
 </PermissionSet>

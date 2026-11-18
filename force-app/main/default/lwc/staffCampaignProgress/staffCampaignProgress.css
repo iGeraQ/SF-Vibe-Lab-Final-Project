@@ -1,0 +1,40 @@
+@import 'c/staffStyles';
+
+.situation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--staff-line);
+}
+
+.schedule {
+    margin-left: 8px;
+    font-weight: 500;
+    color: var(--staff-muted);
+}
+
+.rule {
+    margin: 0;
+    max-width: 460px;
+}
+
+.progress {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    align-items: center;
+}
+
+.big {
+    margin: 2px 0 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.bar {
+    flex: 1 1 240px;
+}

@@ -1,0 +1,45 @@
+@import 'c/staffStyles';
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.badges .pill {
+    font-size: 13px;
+    padding: 2px 12px;
+}
+
+.summary .eyebrow,
+.payment .eyebrow {
+    margin-bottom: 16px;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+.locked {
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--staff-locked);
+    border: 1px solid var(--staff-line);
+}
+
+.big {
+    margin: 4px 0 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.link.campaign {
+    font-weight: 600;
+    text-decoration: underline;
+}

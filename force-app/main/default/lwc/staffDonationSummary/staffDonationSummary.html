@@ -1,0 +1,75 @@
+<template>
+    <template lwc:if={isLoading}>
+        <section class="card"><p class="state">{labels.loading}</p></section>
+    </template>
+    <template lwc:elseif={hasError}>
+        <section class="card"><p class="error" role="alert">{labels.loadError}</p></section>
+    </template>
+    <template lwc:else>
+        <template lwc:if={hasBadges}>
+            <ul class="badges" aria-label={labels.badges}>
+                <template lwc:if={isPending}>
+                    <li class="pill pill-warning badge-pending">{labels.stagePending}</li>
+                </template>
+                <template lwc:if={isAnonymous}>
+                    <li class="pill pill-neutral badge-anonymous">{labels.badgeAnonymous}</li>
+                </template>
+                <template lwc:if={invoiceRequested}>
+                    <li class="pill pill-brand badge-invoice">{labels.badgeInvoice}</li>
+                </template>
+            </ul>
+        </template>
+
+        <section class="card summary">
+            <h2 class="eyebrow">{labels.summaryTitle}</h2>
+            <div class="summary-grid">
+                <div>
+                    <p class="caption">{labels.campaign}</p>
+                    <p class="value">
+                        <template lwc:if={campaignId}>
+                            <button type="button" class="link campaign" onclick={handleCampaign}>{campaignName}</button>
+                        </template>
+                        <template lwc:else>{campaignName}</template>
+                    </p>
+                </div>
+                <div>
+                    <p class="caption">{labels.type}</p>
+                    <p class="value type">{typeLabel}</p>
+                </div>
+                <div class="locked">
+                    <p class="caption lock-note">
+                        <lightning-icon icon-name="utility:lock" size="xx-small" alternative-text=""></lightning-icon>
+                        {labels.amountReadOnly}
+                    </p>
+                    <p class="big amount">{amountLabel}</p>
+                </div>
+                <div class="locked">
+                    <p class="caption lock-note">
+                        <lightning-icon icon-name="utility:lock" size="xx-small" alternative-text=""></lightning-icon>
+                        {labels.statusReadOnly}
+                    </p>
+                    <p class="value"><span class={stagePill}>{stageLabel}</span></p>
+                </div>
+            </div>
+            <p class="note">{labels.lockedNote}</p>
+        </section>
+
+        <section class="card payment">
+            <h2 class="eyebrow">{labels.paymentTitle}</h2>
+            <div class="grid">
+                <div>
+                    <p class="caption">{labels.reference}</p>
+                    <p class="value mono reference">{reference}</p>
+                </div>
+                <div>
+                    <p class="caption">{labels.donationDate}</p>
+                    <p class="value date">{dateLabel}</p>
+                </div>
+                <div>
+                    <p class="caption">{labels.confirmation}</p>
+                    <p class="value confirmation">{confirmationLabel}</p>
+                </div>
+            </div>
+        </section>
+    </template>
+</template>
