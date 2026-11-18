@@ -1,0 +1,40 @@
+<template>
+    <div class="staff-page">
+        <div class="page-header">
+            <h1 class="page-title">{labels.donationsTitle}</h1>
+            <div class="actions">
+                <button type="button" class="btn refresh" onclick={handleRefresh}>{labels.refresh}</button>
+            </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label={labels.donationTabs}>
+            <template for:each={tabs} for:item="tab">
+                <button
+                    key={tab.value}
+                    type="button"
+                    role="tab"
+                    class="tab"
+                    aria-selected={tab.ariaSelected}
+                    data-value={tab.value}
+                    onclick={handleTab}
+                >
+                    {tab.label}<span class="tab-count">{tab.count}</span>
+                </button>
+            </template>
+        </div>
+
+        <template lwc:if={isLoading}>
+            <div class="table-wrap"><p class="state">{labels.loading}</p></div>
+        </template>
+        <template lwc:elseif={hasError}>
+            <div class="table-wrap"><p class="error" role="alert">{labels.loadError}</p></div>
+        </template>
+        <template lwc:else>
+            <c-staff-donation-table rows={rows} variant={variant}></c-staff-donation-table>
+        </template>
+
+        <template lwc:if={hasMore}>
+            <p class="note">{labels.firstRecords}</p>
+        </template>
+    </div>
+</template>

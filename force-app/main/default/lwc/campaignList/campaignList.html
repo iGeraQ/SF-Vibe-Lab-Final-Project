@@ -1,0 +1,22 @@
+<template>
+    <section class="page">
+        <h1 class="page-title">{title}</h1>
+        <p class="intro">{intro}</p>
+        <template lwc:if={isLoading}>
+            <p class="status" role="status">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasError}>
+            <p class="alert" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:elseif={isEmpty}>
+            <p class="status">{labels.pastEmpty}</p>
+        </template>
+        <template lwc:else>
+            <div class={gridClass}>
+                <template for:each={campaigns} for:item="campaign">
+                    <c-campaign-card key={campaign.id} campaign={campaign} past={isPast}></c-campaign-card>
+                </template>
+            </div>
+        </template>
+    </section>
+</template>

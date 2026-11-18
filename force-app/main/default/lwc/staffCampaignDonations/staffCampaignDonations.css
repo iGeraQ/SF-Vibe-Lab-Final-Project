@@ -1,0 +1,13 @@
+@import 'c/staffStyles';
+
+.count {
+    font-weight: 500;
+}
+
+.card-flush > .error {
+    margin: 0 20px 20px;
+}
+
+.more {
+    padding: 0 20px 16px;
+}

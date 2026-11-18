@@ -1,0 +1,21 @@
+{
+  "name": "donaciones-mexico-dreamin",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Mexico Dreamin donation portal: LWC unit tests and lint",
+  "scripts": {
+    "test": "sfdx-lwc-jest",
+    "test:watch": "sfdx-lwc-jest --watch",
+    "test:coverage": "sfdx-lwc-jest --coverage",
+    "lint": "eslint force-app/main/default/lwc"
+  },
+  "devDependencies": {
+    "@lwc/eslint-plugin-lwc": "3.5.0",
+    "@salesforce/eslint-config-lwc": "4.1.2",
+    "@salesforce/eslint-plugin-lightning": "2.0.0",
+    "@salesforce/sfdx-lwc-jest": "7.9.0",
+    "eslint": "9.39.5",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-jest": "29.17.0"
+  }
+}

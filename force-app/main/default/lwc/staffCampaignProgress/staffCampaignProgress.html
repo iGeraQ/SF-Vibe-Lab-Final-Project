@@ -1,0 +1,51 @@
+<template>
+    <section class="card">
+        <template lwc:if={isLoading}>
+            <p class="state">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasError}>
+            <p class="error" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:else>
+            <div class="situation">
+                <div>
+                    <p class="caption">{labels.situationToday}</p>
+                    <p class="value">
+                        <span class={pillClass}>{situationLabel}</span>
+                        <span class="schedule">{scheduleLabel}</span>
+                    </p>
+                </div>
+                <p class="note rule">{labels.activeRule} {labels.goalPolicy}</p>
+            </div>
+
+            <div class="card-head progress-head">
+                <h2 class="eyebrow">{labels.progressTitle}</h2>
+                <span class="lock-note">
+                    <lightning-icon icon-name="utility:lock" size="xx-small" alternative-text=""></lightning-icon>
+                    {labels.progressReadOnly}
+                </span>
+            </div>
+            <div class="progress">
+                <div>
+                    <p class="caption">{labels.colRaised}</p>
+                    <p class="big raised">{raisedLabel}</p>
+                </div>
+                <div>
+                    <p class="caption">{labels.percentage}</p>
+                    <p class="big percent">{percentLabel}</p>
+                </div>
+                <div>
+                    <p class="caption">{labels.colGoal}</p>
+                    <p class="big goal">{goalLabel}</p>
+                </div>
+                <c-staff-progress-bar
+                    class="bar"
+                    percent={percent}
+                    label={progressLabel}
+                    muted={muted}
+                    large
+                ></c-staff-progress-bar>
+            </div>
+        </template>
+    </section>
+</template>

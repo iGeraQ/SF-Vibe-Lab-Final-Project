@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Image_URL__c</fullName>
-    <description>Main image shown on the public campaign page (US-01).</description>
+    <description>Main image shown on the public campaign page (US-01). A file name in the Donation_Campaign_Images static resource, or a full https address whose host is a Trusted URL.</description>
+    <inlineHelpText>Escribe el nombre de una imagen del portal, como becas.svg, viaje.svg, boletos.svg o general.svg. También acepta una dirección https completa.</inlineHelpText>
     <label>URL de imagen</label>
     <required>false</required>
     <type>Url</type>
