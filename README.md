@@ -24,7 +24,31 @@ A story is **met** when all its acceptance criteria are shown with evidence in t
 | Delivery | Date | Calculation | Progress |
 |---|---|---|---|
 | Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 11 × 100 | 90% met; 10 of 11 built (Nov 10) |
-| Delivery 2 | Tue Nov 17, 2026 | in-scope stories met across the whole backlog ÷ 16 × 100 | _Pending_ |
+| Delivery 2 | Tue Nov 17, 2026 | in-scope stories met across the whole backlog ÷ 16 × 100 | In progress: 62.5% met; 10 of 16 (Nov 18) |
+
+### Story status
+
+Copied from the board on Nov 18, 2026; update it when a card changes. Only **AC status** counts toward progress: **Board status** tracks the work, not the evidence.
+
+| Story | Delivery | Board status | AC status |
+|---|---|---|---|
+| [US-01](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/1) Choose a campaign and see its progress | 1 | Done | Met |
+| [US-02](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/2) Donate anonymously | 1 | Done | Met |
+| [US-03](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/3) Record the donation before payment | 1 | In Progress | Met |
+| [US-04](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/4) Thank-you page | 1 | Done | Met |
+| [US-05](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/5) Appear as a donor | 1 | In Progress | Met |
+| [US-06](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/6) Enter invoice details | 1 | Done | Met |
+| [US-07](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/7) Flag invoice requests | 1 | Done | Met |
+| [US-08](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/8) Manage campaigns | 1 | Done | Met |
+| [US-09](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/9) View all donations | 1 | Done | Met |
+| [US-11](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/11) Scoped public site | 1 | Done | Met |
+| [US-12](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/12) Visitor security test | 1 | Todo | Not met |
+| [US-13](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/13) Donate any amount | 2 | Done | Not met |
+| [US-14](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/14) Automatic confirmation and receipt | 2 | Done | Not met |
+| [US-15](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/15) View automatic confirmations and rejected notifications | 2 | Done | Not met |
+| [US-16](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/16) Receive the payment notification (minimum level) | 2 | Done | Not met |
+| [US-17](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/17) Only authentic, non-duplicated notifications (second level) | 2 | Done | Not met |
+| **Total** | | | **10 of 16 met (62.5%)** |
 
 ## Structure
 
@@ -39,6 +63,7 @@ docs/
   contribucion.md          contribution log per milestone
   preguntas_y_reportes.md  questions and problem reports log
   deliveries/delivery-1/   checklist, video link and delivery material
+  deliveries/delivery-2/   Delivery 2 evidence
 CLAUDE.md                  context file for the AI
 ```
 
@@ -49,6 +74,7 @@ The four Spanish file names in `docs/` are required by the course guide, so they
 - `main`: delivered work only. Each delivery is tagged `entrega-1` / `entrega-2` (tag names required by the guide).
 - `develop`: day-to-day integration.
 - `release/delivery-1`: Delivery 1 preparation. Merged into `main` through a PR.
+- `release/delivery-2`: Delivery 2 preparation, created from `develop`. Merged into `main` through a PR.
 - `feature/US-XX-short-name`: one branch per story, created from `develop`.
 
 Commit messages are in English and follow [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`. Example: `feat(US-03): create pending donation before checkout`.
