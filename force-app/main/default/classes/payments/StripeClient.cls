@@ -20,6 +20,9 @@ public inherited sharing class StripeClient extends PaymentGateway {
             'line_items[0][price_data][currency]' => 'mxn',
             'line_items[0][price_data][unit_amount]' => String.valueOf((request.amount * 100).setScale(0)),
             'line_items[0][price_data][product_data][name]' => request.description,
+            // The payment carries the reference too, so staff find the donation from the payment in Stripe (US-03 AC2).
+            'payment_intent_data[metadata][donation_reference]' => request.reference,
+            'payment_intent_data[description]' => request.reference + ' · ' + request.description,
             'expires_at' => String.valueOf(request.expiresAt.getTime() / 1000),
             'success_url' => request.successUrl + '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => request.cancelUrl
