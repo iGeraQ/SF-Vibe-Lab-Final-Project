@@ -1,0 +1,14 @@
+@import 'c/donationStyles';
+
+.thanks-icon {
+    background: var(--don-accent-soft);
+}
+
+.lead {
+    font-size: 18px;
+    color: #4a413a;
+}
+
+.btn {
+    margin-top: 8px;
+}

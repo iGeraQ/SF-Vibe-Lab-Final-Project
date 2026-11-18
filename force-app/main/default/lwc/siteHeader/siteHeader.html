@@ -1,0 +1,25 @@
+<template>
+    <header class="header">
+        <div class="header-inner">
+            <a class="brand" href={homeUrl}>
+                <span class="logo" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 17c3-6 15-6 18 0"></path>
+                        <path d="M7 14v5"></path>
+                        <path d="M12 12.5V19"></path>
+                        <path d="M17 14v5"></path>
+                        <path d="M2 19h20"></path>
+                    </svg>
+                </span>
+                <span>
+                    <span class="brand-name">{labels.programName}</span>
+                    <span class="brand-tagline">{labels.programTagline}</span>
+                </span>
+            </a>
+            <nav aria-label={labels.navLabel} class="nav">
+                <a class={homeClass} href={homeUrl} aria-current={homeCurrent}>{labels.navCampaigns}</a>
+                <a class={pastClass} href={pastUrl} aria-current={pastCurrent}>{labels.navPastCampaigns}</a>
+            </nav>
+        </div>
+    </header>
+</template>

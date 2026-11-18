@@ -1,0 +1,219 @@
+/* Shared look of the public site (design proposal A). Components import it with @import 'c/donationStyles'. */
+:host {
+    --don-accent: #0b6e63;
+    --don-accent-dark: #08544c;
+    --don-accent-soft: #e3f2ef;
+    --don-accent-line: #cfe5e0;
+    --don-bg: #fffcf7;
+    --don-surface: #ffffff;
+    --don-border: #e7dccd;
+    --don-track: #f1e8dc;
+    --don-text: #2b2622;
+    --don-muted: #6b6058;
+    --don-error: #b42318;
+    --don-error-bg: #fef3f2;
+    --don-error-line: #f4c7c3;
+    --don-warn-bg: #fce8c3;
+    --don-warn-text: #6e3d00;
+    --don-off: #e2d9cd;
+    --don-focus: #e9a23b;
+    display: block;
+    color: var(--don-text);
+    font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+p {
+    margin: 0;
+}
+
+a {
+    color: var(--don-accent);
+}
+
+a:hover {
+    color: var(--don-accent-dark);
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--don-focus);
+    outline-offset: 2px;
+}
+
+.page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+}
+
+.page-title {
+    font-size: 36px;
+    line-height: 1.15;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.intro {
+    max-width: 680px;
+    margin-bottom: 32px;
+    font-size: 17px;
+    color: var(--don-muted);
+}
+
+.muted {
+    color: var(--don-muted);
+}
+
+.card {
+    background: var(--don-surface);
+    border: 1px solid var(--don-border);
+    border-radius: 20px;
+}
+
+.badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.badge-exceeded {
+    background: var(--don-warn-bg);
+    color: var(--don-warn-text);
+}
+
+.badge-finished {
+    background: #ece6de;
+    color: #4a413a;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    border: 0;
+    background: var(--don-accent);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--don-accent-dark);
+    color: #ffffff;
+}
+
+.btn-primary:disabled {
+    background: var(--don-off);
+    color: var(--don-muted);
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    border: 2px solid var(--don-accent-line);
+    background: var(--don-surface);
+    color: var(--don-accent);
+    font-weight: 700;
+}
+
+.btn-secondary:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.image-placeholder {
+    background: var(--don-accent-soft);
+    color: var(--don-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.alert {
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: var(--don-error-bg);
+    border: 1px solid var(--don-error-line);
+    color: #8a1c12;
+    font-weight: 700;
+}
+
+.status {
+    padding: 48px 0;
+    text-align: center;
+    color: var(--don-muted);
+}
+
+.center-page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 72px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.icon-circle {
+    width: 88px;
+    height: 88px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .page {
+        padding: 32px 16px 48px;
+    }
+
+    .page-title {
+        font-size: 28px;
+    }
+}

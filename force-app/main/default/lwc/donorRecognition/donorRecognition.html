@@ -1,0 +1,53 @@
+<template>
+    <section class="card recognition" aria-labelledby="recognition-title">
+        <h2 id="recognition-title" class="title">{labels.recognitionTitle}</h2>
+        <p class="subtitle muted">{labels.recognitionNote}</p>
+        <template lwc:if={isLoading}>
+            <p class="status" role="status">{labels.loading}</p>
+        </template>
+        <template lwc:elseif={hasError}>
+            <p class="alert" role="alert">{labels.loadError}</p>
+        </template>
+        <template lwc:elseif={isEmpty}>
+            <div class="empty">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0B6E63" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path>
+                </svg>
+                <p class="empty-title">{labels.beFirst}</p>
+                <a class="btn btn-secondary" href={donateUrl}>{labels.donate}</a>
+            </div>
+        </template>
+        <template lwc:else>
+            <template lwc:if={hasDonors}>
+                <div class={listClass} tabindex="0" aria-label={labels.recognitionListLabel}>
+                    <div class="ticker-track">
+                        <ul class="donors">
+                            <template for:each={donors} for:item="donor">
+                                <li key={donor.key} class="donor">
+                                    <span class="donor-name">{donor.name}</span>
+                                    <span class="donor-amount">{donor.amountLabel}</span>
+                                </li>
+                            </template>
+                        </ul>
+                        <template lwc:if={isScrolling}>
+                            <ul class="donors" aria-hidden="true">
+                                <template for:each={donors} for:item="donor">
+                                    <li key={donor.key} class="donor">
+                                        <span class="donor-name">{donor.name}</span>
+                                        <span class="donor-amount">{donor.amountLabel}</span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+                </div>
+            </template>
+            <template lwc:if={hasAnonymous}>
+                <p class="donor anonymous">
+                    <span class="donor-name">{labels.anonymousDonors}</span>
+                    <span class="donor-amount">{anonymousLabel}</span>
+                </p>
+            </template>
+        </template>
+    </section>
+</template>

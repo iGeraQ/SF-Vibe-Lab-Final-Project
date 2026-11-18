@@ -1,0 +1,5 @@
+@import 'c/staffStyles';
+
+.table-wrap > .error {
+    margin: 14px;
+}

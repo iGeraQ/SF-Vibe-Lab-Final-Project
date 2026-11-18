@@ -1,0 +1,342 @@
+/* Shared look of the staff app (design proposal "Staff A"). Components import it with @import 'c/staffStyles'. */
+:host {
+    --staff-brand: #4338ca;
+    --staff-brand-dark: #3730a3;
+    --staff-brand-soft: #e0e7ff;
+    --staff-focus: #818cf8;
+    --staff-bg: #f8fafc;
+    --staff-surface: #ffffff;
+    --staff-line: #e2e8f0;
+    --staff-head: #f8fafc;
+    --staff-hover: #f1f5f9;
+    --staff-locked: #f1f5f9;
+    --staff-text: #0f172a;
+    --staff-muted: #475569;
+    --staff-subtle: #64748b;
+    --staff-track: #e2e8f0;
+    --staff-success-bg: #dcfce7;
+    --staff-success-text: #166534;
+    --staff-success-line: #bbf7d0;
+    --staff-warn-bg: #fef3c7;
+    --staff-warn-text: #92400e;
+    --staff-warn-line: #fde68a;
+    --staff-neutral-bg: #f1f5f9;
+    --staff-neutral-text: #334155;
+    --staff-neutral-line: #cbd5e1;
+    --staff-error-bg: #fef2f2;
+    --staff-error-text: #991b1b;
+    --staff-error-line: #fecaca;
+    display: block;
+    color: var(--staff-text);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Page and cards */
+.staff-page {
+    background: var(--staff-bg);
+    padding: 24px;
+    min-height: 100%;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.card {
+    background: var(--staff-surface);
+    border: 1px solid var(--staff-line);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.card-flush {
+    padding: 0;
+    overflow: hidden;
+}
+
+.card-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.card-flush .card-head {
+    padding: 20px 20px 0;
+}
+
+.eyebrow {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--staff-muted);
+}
+
+.note {
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: var(--staff-muted);
+}
+
+.lock-note {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--staff-muted);
+}
+
+.caption {
+    margin: 0;
+    color: var(--staff-muted);
+}
+
+.value {
+    margin: 4px 0 0;
+    font-weight: 600;
+}
+
+.mono {
+    font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    font-weight: 600;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+/* Status pills and badges */
+.pill {
+    display: inline-block;
+    padding: 1px 9px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pill-success {
+    background: var(--staff-success-bg);
+    color: var(--staff-success-text);
+    border-color: var(--staff-success-line);
+}
+
+.pill-warning {
+    background: var(--staff-warn-bg);
+    color: var(--staff-warn-text);
+    border-color: var(--staff-warn-line);
+}
+
+.pill-neutral {
+    background: var(--staff-neutral-bg);
+    color: var(--staff-neutral-text);
+    border-color: var(--staff-neutral-line);
+}
+
+.pill-brand {
+    background: var(--staff-brand-soft);
+    color: var(--staff-brand-dark);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    min-height: 38px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid var(--staff-line);
+    background: var(--staff-surface);
+    color: var(--staff-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--staff-brand);
+    border-color: var(--staff-brand);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--staff-brand-dark);
+}
+
+.btn:disabled {
+    background: var(--staff-locked);
+    border-color: var(--staff-line);
+    color: var(--staff-subtle);
+    cursor: not-allowed;
+}
+
+.link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--staff-brand);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: var(--staff-brand-dark);
+    text-decoration: underline;
+}
+
+.btn:focus-visible,
+.link:focus-visible,
+.tab:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--staff-focus);
+    outline-offset: 2px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-bottom: 1px solid var(--staff-line);
+}
+
+.tab {
+    padding: 8px 14px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--staff-muted);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tab[aria-selected='true'] {
+    border-bottom-color: var(--staff-brand);
+    color: var(--staff-text);
+}
+
+.tab-count {
+    margin-left: 4px;
+    font-weight: 500;
+    color: var(--staff-subtle);
+}
+
+/* Tables */
+.table-wrap {
+    overflow-x: auto;
+    background: var(--staff-surface);
+    border: 1px solid var(--staff-line);
+    border-top: 0;
+    border-radius: 0 0 10px 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    padding: 10px 14px;
+    background: var(--staff-head);
+    border-bottom: 1px solid var(--staff-line);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--staff-muted);
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--staff-line);
+    vertical-align: middle;
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.row {
+    cursor: pointer;
+}
+
+.row:hover {
+    background: var(--staff-hover);
+}
+
+.num {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.strong {
+    font-weight: 700;
+}
+
+/* States */
+.state {
+    margin: 0;
+    padding: 24px 14px;
+    color: var(--staff-muted);
+}
+
+.error {
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--staff-error-line);
+    border-radius: 6px;
+    background: var(--staff-error-bg);
+    color: var(--staff-error-text);
+    font-weight: 600;
+}
+
+.success {
+    margin: 8px 0 0;
+    color: var(--staff-success-text);
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .staff-page {
+        padding: 16px;
+    }
+}

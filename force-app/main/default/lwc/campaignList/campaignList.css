@@ -1,0 +1,11 @@
+@import 'c/donationStyles';
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+    gap: 24px;
+}
+
+.grid-past {
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+}

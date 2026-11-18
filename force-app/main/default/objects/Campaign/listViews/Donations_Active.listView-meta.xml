@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Donations_Active</fullName>
+    <columns>CAMPAIGN.NAME</columns>
+    <columns>Accepts_Donations__c</columns>
+    <columns>CAMPAIGN.ACTIVE</columns>
+    <columns>CAMPAIGN.START_DATE</columns>
+    <columns>CAMPAIGN.END_DATE</columns>
+    <columns>TOT_AMOUNT_WON</columns>
+    <columns>Progress__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Accepts_Donations__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Activas</label>
+</ListView>

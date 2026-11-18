@@ -1,0 +1,32 @@
+:host {
+    display: block;
+}
+
+.track {
+    background: #f1e8dc;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.track-small {
+    height: 8px;
+}
+
+.track-medium {
+    height: 10px;
+}
+
+.track-large {
+    height: 12px;
+}
+
+.bar {
+    width: 0;
+    height: 100%;
+    background: #0b6e63;
+    border-radius: 999px;
+}
+
+.bar-muted {
+    background: #8a7f75;
+}
