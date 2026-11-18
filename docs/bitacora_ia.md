@@ -601,3 +601,70 @@ Template:
 - **What we corrected:** the first version changed `DonationReceiptService`; we moved the query to the controller instead (see the error below).
 - **AI error:** no in our code. We found that, inside a deploy, `DonationReceiptServiceTest.paidDonationGetsOneReceipt` and `paidInvoiceDonationSendsOneEmail` fail (the test email send fails and the receipt flag resets), while they pass when run normally. _Pending: tell the backend team._
 - **Speed-up:** _Pending_
+
+### 2026-11-16 · Why payments look slow to confirm
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5, then a recheck with Claude Fable 5.2)
+- **Related story:** US-03, US-04
+- **What we asked:** why Stripe takes so long to process a payment, and whether setting "any card" in the configuration fixes it, as a teammate suggested.
+- **What we got:** Stripe is not slow: in the sampled sessions the payment succeeded 5 to 10 seconds after the session was created, and donations confirmed by the thank-you page became `Paid` 10 to 11 seconds after they were created. The delay is on the Salesforce side. Nine donations are paid in Stripe but still `Pending`: four were sent to an `example.com` return URL, and five reached `/s/gracias` but the page's check never saved (cause not determined: there are no logs). The scheduled check that should catch them has no schedule in the org: its jobs were aborted on Nov 11 and never scheduled again (R-03, R-13). Seven expired sessions are also still `Pending`. The recheck found the current cause: since Nov 16, 01:53 UTC, the org's labels `Stripe_Success_Url` and `Stripe_Cancel_Url` hold the `https://example.com/…` placeholders again, so after paying the donor lands outside the site, the thank-you page never runs and nothing confirms the payment. The branch has the right values (`/s/gracias`, `/s/pago-no-completado`); `main`, `develop`, the older feature branches and `Claude outputs/CustomLabels.labels-meta.xml` still have the placeholders, so a deploy from any of them brings the problem back. No donation has become `Paid` since Nov 13. Checkout offers `card` and `link`, so Link is on, against prerequisite P5. No Stripe setting called "any card" was found. Restricting Checkout to cards would remove Link's step on Stripe's page, but it would not fix the confirmations.
+- **What we verified and how:** read-only queries to the org (`sf data query`), and Anonymous Apex that only reads each session from Stripe through the `Stripe` Named Credential and changes no record.
+- **What we corrected:** the first pass called the `example.com` return URL old and counted two donations; the recheck compared the labels in the org with the repo and found the placeholder is the org's current value. Nothing was changed in the org.
+- **AI error:** yes, the first pass did not compare the org's labels with the repo.
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Long wait after paying, and whether being logged in causes it
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-03, US-04
+- **What we asked:** continue the Nov 16 review: why Stripe's green check stays on screen for minutes before `/s/gracias` loads, and whether it happens because the donor was logged in to the site, since receipts seem to arrive only for logged-in donors.
+- **What we got:** the return URLs are fixed: the deploy of Nov 17, 04:23 UTC put back `/s/gracias` and `/s/pago-no-completado`, but `main`, `develop` and the older feature branches still hold the `example.com` placeholders, so a deploy from them breaks the return again. The campaign images are fixed too: the five donation campaigns point to the `.svg` files of `Donation_Campaign_Images`, and the site serves all four. The wait happens on the GET of `/s/gracias`, before our code runs: of 18 donations confirmed by the thank-you page right after paying, 8 became `Paid` 2 to 4 seconds after Stripe completed the session, 2 after 25 and 28 seconds, and 8 after 82 to 231 seconds. A GET from a script, with no cookies, once took 98 seconds. Being logged in is not what causes it: 4 of the 11 payments made as the site's guest user also waited 132 to 231 seconds, and the guest user confirmed all 11. Logged-in payments were slow more often (1 of 7 under 5 seconds, against 7 of 11 as guest), but the sample is too small to say that being logged in makes it worse. `Messaging.sendEmail` reported success for the receipt of every paid donation, guest or not (`Receipt_Sent__c` is true); why guest receipts don't arrive was not reviewed. Ten donations are paid in Stripe and still `Pending` (3 made logged in, 7 as guest), and `PendingDonationCheck` still has no scheduled job, so nothing confirms a payment whose donor closes the tab during the wait.
+- **What we verified and how:** read-only queries with `sf data query` (each donation's creator, last modifier and dates, the labels, the campaigns and `CronTrigger`), Anonymous Apex that lists Stripe's `checkout.session.completed` events through the `Stripe` Named Credential with no DML, and `curl` to the site. The org has no event logs, so the server side of the wait can't be seen. Nothing was changed in the org or in Stripe.
+- **What we corrected:** the Nov 16 entry said donations confirmed by the thank-you page became `Paid` 10 to 11 seconds after they were created; that only holds for the fast half.
+- **AI error:** yes, the Nov 16 pass generalized from a few fast payments.
+- **Speed-up:** _Pending_
+
+
+### 2026-11-17 · Check the "Done" column against its acceptance criteria
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** the 25 issues in the board's Done column (US-01, 02, 04, 06 to 11, their backend tasks and setup #46, #49, #58, #59)
+- **What we asked:** review every Done issue against its acceptance criteria or its "Done when", and take screenshots as evidence.
+- **What we got:** a verdict per issue and 35 screenshots of the public site as a visitor and of the staff app. Gaps found: the org has no Org-Wide Email Address, so receipts go out without the support email (US-11 AC6, #44); the site's theme shows "Home" and "Login" in English (US-11 AC4); no user has the Moderator group and the admin user still holds "Donaciones · Payment Integration" (#58); the guest profile's `UserExternalCredential` read is not in `docs/seguridad.md` (#39); the eight frontend tasks are still Todo while their stories are Done.
+- **What we verified and how:** read-only `sf data query`; Anonymous Apex that calls `PublicCampaignController` and inserts a campaign without fields inside a savepoint and rolls it back; all local Apex tests in the org (our 71 pass; the 4 failures are the org's DreamHouse sample classes); `git grep` of every commit for Stripe keys (none); headless Chromium as an anonymous visitor through the whole donation form up to the confirmation step, without pressing "Ir a pagar", so no donation was created. Staff screenshots mask donor emails, RFCs and user names before capture.
+- **What we corrected:** nothing in the org or in Stripe.
+- **AI error:** no
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Done-check screenshots in the repo and in the issues
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** the 22 checked issues of the Done column
+- **What we asked:** commit the screenshots of the Done check to `docs/evidence/` and leave a comment with the links on each issue.
+- **What we got:** 34 screenshots on branch `docs/done-evidence` (commit `04f7ae4`; one duplicate dropped) and a comment on 22 issues with a table per criterion: result, what was checked and links pinned to that commit. #10, #36 and #37 got no comment: they are out of scope. The screenshots were later moved to `docs/deliveries/delivery-1/evidence/` (PR #78), next to `docs/deliveries/delivery-2/evidence/`.
+- **What we verified and how:** every screenshot was looked at before publishing, since the repo is public; the staff ones mask donor emails, RFCs and user names before capture. Each comment was rendered with the GitHub markdown API before posting. After the move, the old links still answer 200.
+- **What we corrected:** the `git grep` pattern in the #49 comment had `|` inside a table cell, which split the cell; escaped before posting.
+- **AI error:** yes, the unescaped `|`; caught by rendering the comment first.
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Branches out of sync: Delivery 1 into develop
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** none (repository); PRs #74, #76, #78, #79
+- **What we asked:** what to do after `docs/delivery-2-evidence` appeared and screenshots were also pushed to `feature/delivery-2-frontend`; then merge Delivery 1 into `develop`, explain #74 and review the webhook change on `docs/delivery-2-evidence`.
+- **What we got:** `release/delivery-1` had 41 commits that `develop` and `main` didn't (the button fix, the guest profile, the classes folder refactor, the return URLs, the staff app and the public site), so a deploy from `develop` or `main` would take them out of the org again (R-16). PR #76 merges `release/delivery-1` into `develop` from its own branch and leaves `release/delivery-1` unchanged; the only conflict was this log, resolved by keeping every entry of both sides. #74 (`main -> release/delivery-1`) brings no code: its commits are copies of ones `release/delivery-1` already has (three with the same patch, two with other patches but the same final content), so it only conflicts in this log; the advice is to close it. Commit `5328cb7` makes `StripeWebhook` answer 200 "ignored" to event types other than `checkout.session.completed` and `checkout.session.expired`, after the signature check and without saving a `Payment_Notice__c`; it looked correct and merged cleanly (#79). Also found: a stray `.tmp-guest-profile/` folder on `main`, `release/delivery-1` and `develop`.
+- **What we verified and how:** `git merge-tree` for conflicts; `git patch-id` and a tree diff for #74; a check-only deploy of the merged tree (`0Afg700000KCFPZCA5`: 310 of 310 components, 86 of 86 tests of our 9 test classes); Jest 196 of 196 and ESLint clean.
+- **What we corrected:** the conflict resolution first added a blank line inside the template's code block at the top of this log; removed after comparing the file with both sides.
+- **AI error:** yes, that blank line.
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Validation of develop and the daily email limit
+- **Author:** @jeusmateo
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-02 AC2, US-14, #44
+- **What we asked:** why the check-only deploy of `develop` with the webhook change failed.
+- **What we got:** the first failure came from the command the AI suggested: `RunSpecifiedTests` with only `StripeWebhookTest` and `DonationCheckoutServiceTest` requires 75% coverage of every class in `force-app` from those two tests. With the nine test classes, the validation (`0Afg700000KCMR3CAP`) ran 88 tests: 86 pass, including `StripeWebhookTest`. `DonationReceiptServiceTest.paidDonationGetsOneReceipt` and `paidInvoiceDonationSendsOneEmail` fail because the org's daily single-email limit is used up (`SingleEmail` max 15, remaining -1): `Messaging.sendEmail` fails also inside tests and `Receipt_Sent__c` goes back to false. The receipt code had not changed since the validation that passed. Two donations paid that night, `DON-7918AA47` and `DON-838A91AC`, have no receipt, and there is no resend path. Every real payment uses one of the 15 daily emails, which matters for the demo.
+- **What we verified and how:** `sf project deploy report` for the failing assertions, `sf org list limits`, and a read-only query of paid donations without a receipt.
+- **What we corrected:** the validation command, now with the nine test classes.
+- **AI error:** yes, the suggested command named only two test classes.
+- **Speed-up:** _Pending_
