@@ -17,10 +17,19 @@ public without sharing class PendingDonationCheck implements Queueable, Database
     /**
      * @description Schedules the check at minutes 00, 15, 30 and 45 of every hour. Run it once as the integration user.
      */
-    @SuppressWarnings('PMD.OperationWithLimitsInLoop') // four fixed iterations, one per quarter hour
     public static void scheduleEveryQuarterHour() {
+        scheduleEveryQuarterHour(JOB_NAME);
+    }
+
+    /**
+     * @description Same schedule under another job name prefix, so a test never collides with the org's real jobs.
+     * @param namePrefix the start of each of the four job names
+     */
+    @TestVisible
+    @SuppressWarnings('PMD.OperationWithLimitsInLoop') // four fixed iterations, one per quarter hour
+    private static void scheduleEveryQuarterHour(String namePrefix) {
         for (Integer minute = 0; minute < 60; minute += 15) {
-            String name = JOB_NAME + ' :' + String.valueOf(minute).leftPad(2, '0');
+            String name = namePrefix + ' :' + String.valueOf(minute).leftPad(2, '0');
             System.schedule(name, '0 ' + minute + ' * * * ?', new ScheduledRun());
         }
     }

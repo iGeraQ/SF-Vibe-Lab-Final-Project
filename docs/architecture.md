@@ -139,6 +139,8 @@ Each role is a permission set group: "Donaciones · Staff base" (read campaigns 
 
 **Apex:** `DonationCheckoutService` (`startCheckout` creates the Checkout Session and the donation; `confirmCheckout` checks the session when the donor returns), which receives the payment gateway as a dependency: `PaymentGateway` (abstract: create and read a checkout session) and `StripeClient`, its Stripe implementation through the `Stripe` Named Credential, `PendingDonationCheck` (the scheduled check for pending and expired donations: a Queueable with callouts that calls `DonationCheckoutService.applyGatewayStatus`), `DonationReceiptService` with `DonationTrigger` (when the receipt goes) and `DonationEmailTemplate` (what it says and how it looks: HTML email, plain-text fallback and the simulated invoice PDF), `PublicCampaignController` (for the LWC), and the webhook REST class in Delivery 2. Each class has tests with a mocked Stripe callout and goes through Code Analyzer.
 
+The Apex classes are grouped by feature under `force-app/main/default/classes/`, each next to its test: `site/` (`PublicCampaignController`), `checkout/` (`DonationCheckoutService`, `PendingDonationCheck`), `payments/` (`PaymentGateway`, `StripeClient`), `receipts/` (`DonationReceiptService`, `DonationEmailTemplate`), `rules/` (`DonationRulesTest`: validation rules and the donation type formula) and `roles/` (`StaffRolesTest`: what each staff role can do). The Salesforce CLI finds classes by their extension, so the folders don't change the deploy.
+
 **LWC:** campaign list, campaign detail with progress and recognition.
 
 ## Risks to check first
