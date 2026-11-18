@@ -1,0 +1,77 @@
+@import 'c/donationStyles';
+
+:host {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.tip {
+    position: relative;
+    display: inline-flex;
+}
+
+/* 32px target with an 18px icon, so it is easy to tap without looking big. */
+.tip-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: -6px 0;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--don-muted);
+    cursor: help;
+}
+
+.tip-button:hover,
+.tip-button[aria-expanded='true'] {
+    color: var(--don-accent-dark);
+    background: var(--don-accent-soft);
+}
+
+.tip-button:focus-visible {
+    outline: 3px solid var(--don-focus);
+    outline-offset: 1px;
+}
+
+.bubble {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: -8px;
+    z-index: 10;
+    width: max-content;
+    max-width: min(300px, calc(100vw - 32px));
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--don-text);
+    color: #ffffff;
+    font-weight: 400;
+    text-align: left;
+    box-shadow: 0 6px 20px rgba(43, 38, 34, 0.18);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+}
+
+.bubble-right {
+    left: auto;
+    right: -8px;
+}
+
+.bubble-open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tip-item {
+    display: block;
+}
+
+.tip-item + .tip-item {
+    margin-top: 6px;
+}

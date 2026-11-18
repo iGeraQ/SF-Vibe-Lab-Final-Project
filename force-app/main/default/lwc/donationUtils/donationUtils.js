@@ -11,7 +11,8 @@ const PAGES = {
     donate: 'donar',
     thanks: 'gracias',
     cancelled: 'pago-no-completado',
-    past: 'campanas-pasadas'
+    past: 'campanas-pasadas',
+    faq: 'preguntas-frecuentes'
 };
 
 // US-01 AC7. ponytail: could move to Suggested_Amount__mdt so staff can change them (US-01 refinement 6).

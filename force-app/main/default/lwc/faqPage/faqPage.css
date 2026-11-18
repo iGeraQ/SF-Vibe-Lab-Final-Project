@@ -1,0 +1,63 @@
+@import 'c/donationStyles';
+
+.faq {
+    max-width: 820px;
+    padding: 4px 28px;
+}
+
+.faq-item + .faq-item {
+    border-top: 1px solid var(--don-border);
+}
+
+/* The whole row is the target, at least 56px tall. */
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    padding: 14px 0;
+    font-weight: 700;
+    font-size: 17px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-question:hover {
+    color: var(--don-accent-dark);
+}
+
+.faq-question:focus-visible {
+    outline: 3px solid var(--don-focus);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+.faq-chevron {
+    flex-shrink: 0;
+    color: var(--don-muted);
+    transition: transform 0.15s ease;
+}
+
+.faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-width: 680px;
+    padding-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+    .faq {
+        padding: 4px 18px;
+    }
+
+    .faq-question {
+        font-size: 16px;
+    }
+}

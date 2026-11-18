@@ -50,10 +50,9 @@
 
                     <!-- Step 2: two short questions (list and invoice) and the donor data, on one page -->
                     <template lwc:if={isStep2}>
-                        <h1 class="step-title">{labels.dataTitle}</h1>
-                        <p class="step-intro muted">{labels.dataIntro}</p>
+                        <h1 class="step-title step-title-alone">{labels.dataTitle}</h1>
                         <fieldset class="question">
-                            <legend class="question-title">{labels.listQuestion}</legend>
+                            <legend class="question-title">{labels.listQuestion} <c-info-tip items={listHelp}></c-info-tip></legend>
                             <div class="choices" role="radiogroup">
                                 <template for:each={listOptions} for:item="option">
                                     <button
@@ -71,12 +70,9 @@
                                     </button>
                                 </template>
                             </div>
-                            <template lwc:if={listNote}>
-                                <p class="choice-note muted">{listNote}</p>
-                            </template>
                         </fieldset>
                         <fieldset class="question">
-                            <legend class="question-title">{labels.invoiceQuestion}</legend>
+                            <legend class="question-title">{labels.invoiceQuestion} <c-info-tip items={invoiceHelp}></c-info-tip></legend>
                             <div class="choices" role="radiogroup">
                                 <template for:each={invoiceOptions} for:item="option">
                                     <button
@@ -94,9 +90,6 @@
                                     </button>
                                 </template>
                             </div>
-                            <template lwc:if={invoiceNote}>
-                                <p class="choice-note muted">{invoiceNote}</p>
-                            </template>
                         </fieldset>
 
                         <!-- Same step: the donor data, whose fields follow the two answers above -->
@@ -218,7 +211,10 @@
 
                             <template lwc:if={needsPublicName}>
                                 <div class="field">
-                                    <label class="field-label" for="public-name">{labels.publicName}</label>
+                                    <div class="label-row">
+                                        <label class="field-label" for="public-name">{labels.publicName}</label>
+                                        <c-info-tip text={labels.publicNameNote}></c-info-tip>
+                                    </div>
                                     <input
                                         id="public-name"
                                         class={fieldState.publicName.className}
@@ -227,10 +223,8 @@
                                         value={publicName}
                                         data-field="publicName"
                                         aria-invalid={fieldState.publicName.invalid}
-                                        aria-describedby="public-name-note"
                                         oninput={handleInput}
                                     />
-                                    <span id="public-name-note" class="field-note muted">{labels.publicNameNote}</span>
                                     <template lwc:if={fieldState.publicName.error}>
                                         <span class="field-error">{fieldState.publicName.error}</span>
                                     </template>
@@ -239,7 +233,10 @@
 
                             <template lwc:if={isInvoice}>
                                 <div class="field">
-                                    <label class="field-label" for="rfc">{labels.rfc}</label>
+                                    <div class="label-row">
+                                        <label class="field-label" for="rfc">{labels.rfc}</label>
+                                        <c-info-tip text={labels.rfcNote}></c-info-tip>
+                                    </div>
                                     <input
                                         id="rfc"
                                         class={fieldState.rfc.className}
@@ -249,10 +246,8 @@
                                         value={rfc}
                                         data-field="rfc"
                                         aria-invalid={fieldState.rfc.invalid}
-                                        aria-describedby="rfc-note"
                                         oninput={handleInput}
                                     />
-                                    <span id="rfc-note" class="field-note muted">{labels.rfcNote}</span>
                                     <template lwc:if={fieldState.rfc.error}>
                                         <span class="field-error">{fieldState.rfc.error}</span>
                                     </template>
@@ -318,7 +313,6 @@
                                 <dd class="wrap">{trimmedEmail}</dd>
                             </div>
                         </dl>
-                        <p class="gateway-note muted">{labels.gatewayNote}</p>
                     </template>
 
                     <!-- Buttons -->

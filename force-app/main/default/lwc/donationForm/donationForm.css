@@ -98,6 +98,11 @@
     font-weight: 800;
 }
 
+/* A step with no intro under its title. */
+.step-title-alone {
+    margin-bottom: 18px;
+}
+
 .step-intro {
     margin-bottom: 20px;
 }
@@ -175,12 +180,6 @@
     font-size: 15px;
 }
 
-/* The explanation of the chosen answer only. */
-.choice-note {
-    margin-top: 6px;
-    font-size: 14px;
-}
-
 /* Step 3 */
 .alert-gap {
     margin-bottom: 16px;
@@ -213,6 +212,13 @@
 .field-label {
     font-weight: 700;
     padding: 0;
+}
+
+/* A field label with its info tooltip beside it. */
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
 .input {
@@ -330,11 +336,6 @@
 
 .wrap {
     overflow-wrap: anywhere;
-}
-
-.gateway-note {
-    margin-top: 14px;
-    font-size: 14px;
 }
 
 /* Buttons */

@@ -245,18 +245,17 @@ export default class DonationForm extends LightningElement {
         ];
     }
 
-    // The explanation of the chosen answer, shown under its question instead of under every answer.
-    get listNote() {
-        return this.chosenLine(this.listOptions);
+    // What each answer means, shown in the question's tooltip so the answers stay one line.
+    get listHelp() {
+        return this.help(this.listOptions);
     }
 
-    get invoiceNote() {
-        return this.chosenLine(this.invoiceOptions);
+    get invoiceHelp() {
+        return this.help(this.invoiceOptions);
     }
 
-    chosenLine(options) {
-        const chosen = options.find((option) => option.checked === 'true');
-        return chosen ? chosen.line : null;
+    help(options) {
+        return options.map((option) => ({ title: option.title, text: option.line }));
     }
 
     option(group, value, title, line, selected) {

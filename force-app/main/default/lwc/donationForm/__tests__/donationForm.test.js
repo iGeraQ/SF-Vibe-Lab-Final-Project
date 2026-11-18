@@ -320,7 +320,7 @@ describe('c-donation-form', () => {
             await chooseAmount(element, 0);
             await next(element);
 
-            expect($$(element, 'legend.question-title').map((node) => node.textContent)).toEqual([
+            expect($$(element, 'legend.question-title').map((node) => node.textContent.trim())).toEqual([
                 'c.Donations_ListQuestion',
                 'c.Donations_InvoiceQuestion'
             ]);
@@ -333,19 +333,23 @@ describe('c-donation-form', () => {
             expect($$(element, '.choice')[ANONYMOUS].getAttribute('aria-checked')).toBe('true');
         });
 
-        it('keeps the answers short and explains only the chosen one', async () => {
+        it('keeps the answers short and explains them in a tooltip per question', async () => {
             const element = await open();
             await chooseAmount(element, 0);
             await next(element);
 
-            expect($$(element, '.choice-note')).toEqual([]);
-            expect(element.shadowRoot.textContent).not.toContain('c.Donations_ListNoLine');
-
-            await chooseType(element, ANONYMOUS, INVOICE);
-            expect($$(element, '.choice-note').map((node) => node.textContent)).toEqual([
-                'c.Donations_ListNoLine',
-                'c.Donations_InvoiceYesLine'
+            const tips = $$(element, '.question c-info-tip');
+            expect(tips.map((tip) => tip.items)).toEqual([
+                [
+                    { title: 'c.Donations_ListYes', text: 'c.Donations_ListYesLine' },
+                    { title: 'c.Donations_ListNo', text: 'c.Donations_ListNoLine' }
+                ],
+                [
+                    { title: 'c.Donations_InvoiceYes', text: 'c.Donations_InvoiceYesLine' },
+                    { title: 'c.Donations_InvoiceNo', text: 'c.Donations_InvoiceNoLine' }
+                ]
             ]);
+            expect($$(element, '.choice-note')).toEqual([]);
         });
 
         it('goes back to the amount keeping the choice', async () => {

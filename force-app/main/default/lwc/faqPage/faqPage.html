@@ -1,0 +1,19 @@
+<template>
+    <section class="page">
+        <h1 class="page-title">{labels.faqTitle}</h1>
+        <p class="intro">{labels.faqIntro}</p>
+        <div class="card faq">
+            <template for:each={questions} for:item="item">
+                <details key={item.key} class="faq-item">
+                    <summary class="faq-question">
+                        <span>{item.question}</span>
+                        <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6"></path>
+                        </svg>
+                    </summary>
+                    <p class="faq-answer muted">{item.answer}</p>
+                </details>
+            </template>
+        </div>
+    </section>
+</template>
