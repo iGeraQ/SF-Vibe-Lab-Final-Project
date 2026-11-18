@@ -65,4 +65,7 @@ What the portal stores about a donor, in the Opportunity that records the donati
 
 ## 6. Gateway notification (Delivery 2)
 
-_Pending_
+- `StripeWebhook` (Apex REST, `/stripe/webhook`) is reachable by the guest user through `Donations_Public_Site`, so the signature is the only gate: HMAC-SHA256 of `t.<raw body>` with the signing secret, accepted only within 5 minutes (replays). Failures answer 400 and leave a rejected `Payment_Notice__c` for staff (US-15, US-17).
+- The signing secret (`whsec_…`) lives in the `Stripe_Webhook_Config__c` custom setting, typed in Setup and never committed.
+- The status and amount come from the signed body. A repeated `Stripe_Event_Id__c` is ignored; an unknown donation is rejected and still answers 200, because Stripe would retry forever.
+- Known limit: anyone can create rejected notices by posting garbage (no rate limit).

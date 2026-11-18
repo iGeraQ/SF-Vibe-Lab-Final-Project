@@ -305,3 +305,14 @@ Template:
 - **AI error:** the wrong guess about who deployed, and the wrong guess about the principal.
 - **Speed-up:** _Pending_
 
+
+### 2026-11-17 · Stripe webhook receiver (Delivery 2 backend)
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-14, US-15, US-16, US-17, #51
+- **What we asked:** start the pending Delivery 2 backend tickets.
+- **What we got:** `StripeWebhook` (Apex REST at `/stripe/webhook`) that verifies the `Stripe-Signature` header, pays or expires the donation from the signed event, ignores repeated event ids and records a `Payment_Notice__c` for every notice; `Stripe_Webhook_Config__c` custom setting for the signing secret (value typed in Setup); guest class access; `StripeWebhookTest`.
+- **What we verified and how:** dry-run deploy to the personal org running `StripeWebhookTest` (8 of 8 pass). Not yet tested with `stripe trigger` against a real endpoint.
+- **What we corrected:** on review, Code Analyzer (not run the first time) flagged two Moderate issues (a method too complex, a method with too many parameters); a body that was signed but unreadable crashed with a 500 and left no notice; a huge timestamp could overflow. All fixed. The test class now has 9 tests, all passing in the dry-run.
+- **AI error:** it used multi-catch (`catch (A | B e)`), which Apex does not support, and the dry-run caught it; its first sed edit also failed on macOS. It also skipped Code Analyzer at first.
+- **Speed-up:** _Pending_
