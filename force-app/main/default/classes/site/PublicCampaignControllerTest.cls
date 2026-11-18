@@ -116,6 +116,30 @@ private class PublicCampaignControllerTest {
     }
 
     @IsTest
+    static void supportEmailIsTheReceiptSender() {
+        Assert.areEqual(
+            DonationReceiptService.SENDER_NAME,
+            PublicCampaignController.SUPPORT_SENDER_NAME,
+            'The FAQ reads the same sender the receipt is sent from'
+        );
+        // Org-Wide Email Addresses can't be created in a test, so this compares with whatever the org has set up.
+        List<OrgWideEmailAddress> senders = [
+            SELECT Address
+            FROM OrgWideEmailAddress
+            WHERE DisplayName = :DonationReceiptService.SENDER_NAME
+            WITH SYSTEM_MODE
+            LIMIT 1
+        ];
+        String expected = senders.isEmpty() ? null : senders[0].Address;
+
+        Test.startTest();
+        String supportEmail = PublicCampaignController.getSupportEmail();
+        Test.stopTest();
+
+        Assert.areEqual(expected, supportEmail, 'The FAQ shows the same support address as the receipt, or none');
+    }
+
+    @IsTest
     static void recognitionOfHiddenCampaignIsEmpty() {
         PublicCampaignController.Recognition recognition = PublicCampaignController.getRecognition(campaignId('Pausada'));
 

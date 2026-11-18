@@ -29,6 +29,8 @@ import faqQ9 from '@salesforce/label/c.Donations_FaqQ9';
 import faqA9 from '@salesforce/label/c.Donations_FaqA9';
 import faqQ10 from '@salesforce/label/c.Donations_FaqQ10';
 import faqA10 from '@salesforce/label/c.Donations_FaqA10';
+import faqContactTitle from '@salesforce/label/c.Donations_FaqContactTitle';
+import faqContactText from '@salesforce/label/c.Donations_FaqContactText';
 import activeTitle from '@salesforce/label/c.Donations_ActiveTitle';
 import activeIntro from '@salesforce/label/c.Donations_ActiveIntro';
 import pastTitle from '@salesforce/label/c.Donations_PastTitle';
@@ -167,6 +169,8 @@ const LABELS = {
     faqA9,
     faqQ10,
     faqA10,
+    faqContactTitle,
+    faqContactText,
     activeTitle,
     activeIntro,
     pastTitle,

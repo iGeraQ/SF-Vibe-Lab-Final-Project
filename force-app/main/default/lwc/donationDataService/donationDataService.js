@@ -9,6 +9,7 @@
 import apexGetActiveCampaigns from '@salesforce/apex/PublicCampaignController.getActiveCampaigns';
 import apexGetPastCampaigns from '@salesforce/apex/PublicCampaignController.getPastCampaigns';
 import apexGetRecognition from '@salesforce/apex/PublicCampaignController.getRecognition';
+import apexGetSupportEmail from '@salesforce/apex/PublicCampaignController.getSupportEmail';
 import apexStartCheckout from '@salesforce/apex/DonationCheckoutService.startCheckout';
 import apexConfirmCheckout from '@salesforce/apex/DonationCheckoutService.confirmCheckout';
 
@@ -35,6 +36,15 @@ export function getPastCampaigns() {
  */
 export function getRecognition(campaignId) {
     return apexGetRecognition({ campaignId });
+}
+
+/**
+ * The program's support address, the same one the receipt shows (PublicCampaignController.getSupportEmail).
+ * It is read from the org, so it never lives in the public repo.
+ * @returns {Promise<string|null>} the address, or null while none is set up
+ */
+export function getSupportEmail() {
+    return apexGetSupportEmail();
 }
 
 /**

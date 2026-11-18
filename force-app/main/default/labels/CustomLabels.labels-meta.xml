@@ -201,6 +201,22 @@
         <value>Escríbenos al correo de contacto que aparece en tu comprobante y con gusto te ayudamos.</value>
     </labels>
     <labels>
+        <fullName>Donations_FaqContactTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ support box title</shortDescription>
+        <value>¿Tienes alguna otra duda?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqContactText</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ support box text, before the address</shortDescription>
+        <value>Contacta a nuestro equipo de soporte en</value>
+    </labels>
+    <labels>
         <fullName>Donations_ActiveTitle</fullName>
         <categories>Donations Public Site</categories>
         <language>es</language>

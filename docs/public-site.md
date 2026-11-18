@@ -14,7 +14,7 @@ Create these pages in Experience Builder with exactly these URLs; the components
 | Thank you (Stripe `success_url`) | `gracias` | `donationThanks` | US-04 |
 | Payment not completed (Stripe `cancel_url`) | `pago-no-completado` | `donationCancelled` | US-04 AC5 |
 | Achievements (past campaigns, shown as "Logros") | `campanas-pasadas` | `campaignList`, mode `past` | US-01 AC6 |
-| FAQ (shown as "Ayuda" in the header) | `preguntas-frecuentes` | `faqPage` (static answers, no contact form: US-11 AC6) | US-11 |
+| FAQ (shown as "Ayuda" in the header) | `preguntas-frecuentes` | `faqPage` (static answers, then the support address read from the org; hidden while none is set up) | US-11 |
 | Error page (any other address) | the site's error page | `pageNotFound` | US-11 AC5, US-12 AC8 |
 
 `siteHeader` and `siteFooter` go in the theme's header and footer regions.
@@ -44,6 +44,7 @@ The components never import Apex. They get and send everything through `lwc/dona
 | `getActiveCampaigns()` | `PublicCampaignController.getActiveCampaigns` |
 | `getPastCampaigns()` | `PublicCampaignController.getPastCampaigns` |
 | `getRecognition(campaignId)` | `PublicCampaignController.getRecognition` |
+| `getSupportEmail()` | `PublicCampaignController.getSupportEmail` (the receipt sender's address, for the FAQ page) |
 | `startCheckout(request)` | `DonationCheckoutService.startCheckout` |
 | `confirmCheckout(sessionId)` | `DonationCheckoutService.confirmCheckout` |
 
