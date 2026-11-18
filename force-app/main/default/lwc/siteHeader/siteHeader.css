@@ -76,6 +76,10 @@
     background: var(--don-accent-soft);
 }
 
+.nav-link-help {
+    gap: 6px;
+}
+
 .nav-link-current {
     background: var(--don-accent-soft);
     color: var(--don-accent-dark);

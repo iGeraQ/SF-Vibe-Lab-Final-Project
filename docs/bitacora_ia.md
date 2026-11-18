@@ -557,3 +557,47 @@ Template:
 - **What we corrected:** on review, Code Analyzer (not run the first time) flagged two Moderate issues (a method too complex, a method with too many parameters); a body that was signed but unreadable crashed with a 500 and left no notice; a huge timestamp could overflow. All fixed. The test class now has 9 tests, all passing in the dry-run.
 - **AI error:** it used multi-catch (`catch (A | B e)`), which Apex does not support, and the dry-run caught it; its first sed edit also failed on macOS. It also skipped Code Analyzer at first.
 - **Speed-up:** _Pending_
+
+### 2026-11-15 · Custom amount and fewer clicks to donate
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-13, US-01
+- **What we asked:** let donors type any amount, and cut the clicks needed to donate. On Nov 17 we added that the "Otro monto" field must only accept positive numbers while typing, not only when the donor continues.
+- **What we got:** a shared `amountPicker` (eight suggested amounts and an always visible "Otro monto" field, $10 to $999,999.99 MXN, Stripe's limit), a three-step form (type and donor data share step 2), and the campaign page's card choosing the amount so "Donar" opens the form at step 2. Later, `cleanAmountText` drops signs, letters, "$" and commas as they are typed or pasted; the limits are still checked on blur or when continuing. Commits `95b79ec`, `35b16e1`, `6b807e9`.
+- **What we verified and how:** Jest (241 pass) and ESLint; deployed to the team org and checked on the published site: typing `-abc1,250.759` leaves `1250.75`, and $5 and $1,000,000 show the minimum and maximum messages.
+- **What we corrected:** we rejected a first design where "Otro monto" was a button that revealed the field (one more click), and asked for compact one-line answers with even grids.
+- **AI error:** yes. The first version only validated the amount when continuing, so letters and a minus sign could be typed; we caught it testing the site.
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Help tooltips, Logros, header fix and FAQ page
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-11, US-01, US-02, US-06
+- **What we asked:** explain the recognition and invoice answers with tooltips and remove filler text; rename "Campañas pasadas" (the instructors disliked the name); fix the header, which kept "Campañas" highlighted on the past campaigns page; and add an FAQ page.
+- **What we got:** a reusable `infoTip` component (hover, focus or tap; Escape closes) on the two questions, public name and RFC; six filler texts removed and their labels deleted from the org; the section renamed "Logros"; the header now recomputes the current link on every site navigation (`CurrentPageReference`), because the theme keeps it alive between pages; a static `faqPage` with ten questions and an "Ayuda" link. The AI also created the FAQ page and renamed the Logros page in Experience Builder and published the site. Commit `aad9e53`.
+- **What we verified and how:** Jest (238 pass) and ESLint; on the published site: the tooltips open, Campañas → Logros → Campañas moves the highlight, and the FAQ page loads for a visitor without login.
+- **What we corrected:** we kept two texts the AI had removed as filler ("Cualquier monto suma…" and "Confirma que todo está bien…"). We also checked the rules before blocking donations to campaigns over their goal: US-08 AC5 says they keep receiving, so nothing was blocked.
+- **AI error:** yes. Restoring the step intros, it used a `:has()` selector and broke the title's CSS rule; it caught both while reading the file and replaced them with a class. It also said a support email "needs permission", mixing up the technical side (a mail link needs none) with the US-11 AC6 agreement.
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Evidence for the frontend tasks
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5) with Claude in Chrome
+- **Related story:** #13, #19, #21, #23, #25, #26, #28, #30, #32, #34, #38
+- **What we asked:** review the frontend tasks, add evidence with images and move the finished ones.
+- **What we got:** a review of each task's scope against the code and the site, 16 screenshots in `docs/evidence/` (commit `7fd1a4a`) and a comment with images on 11 issues; 8 tasks closed, which the board's automation moved to Done. #23, #25 and #13 stay open until a paid test donation.
+- **What we verified and how:** each comment and state with `gh issue view`; the site works without login, checked in a browser with no session.
+- **What we corrected:** the signed-in user bar was cropped out of every screenshot, and the RFC column of the invoice requests view was masked, because some RFCs looked real and the repo is public. The #21 comment explains that anonymous donations can request an invoice (client approval of Nov 9), unlike the task's original scope.
+- **AI error:** yes. The `gh` token can't comment, but it closed #19 before failing; the comments were then posted through the browser. It also closed #25 by mistake; we reopened it, but its board Status stays Done until the Project owner changes it.
+- **Speed-up:** _Pending_
+
+### 2026-11-17 · Support address on the FAQ page
+- **Author:** @CaballeroEscamilla
+- **Tool:** Claude Code (Claude Opus 5.5)
+- **Related story:** US-11 (AC6 is outdated: the team was later told a support section is allowed)
+- **What we asked:** add "contact the support team" with its email to the FAQ, and estimate a full support section.
+- **What we got:** the address is not in the repo on purpose (#56 forbids writing it there), so `PublicCampaignController.getSupportEmail` reads the Org-Wide Email Address the receipt uses, and the FAQ shows it as a mail link, hidden while none is set up. Estimate: a mail link is under an hour with no backend; a form that creates Cases takes 1 to 2 days and needs backend, guest create access and US-12 tests. Commit `61e20e9`.
+- **What we verified and how:** Apex (10 pass, 100% coverage of the controller), Code Analyzer (0 violations), Jest (244 pass); on the site as a visitor, the box shows the address once Luis set it up in the org.
+- **What we corrected:** the first version changed `DonationReceiptService`; we moved the query to the controller instead (see the error below).
+- **AI error:** no in our code. We found that, inside a deploy, `DonationReceiptServiceTest.paidDonationGetsOneReceipt` and `paidInvoiceDonationSendsOneEmail` fail (the test email send fails and the receipt flag resets), while they pass when run normally. _Pending: tell the backend team._
+- **Speed-up:** _Pending_

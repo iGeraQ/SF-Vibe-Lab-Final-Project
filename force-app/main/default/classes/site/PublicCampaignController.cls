@@ -7,6 +7,10 @@
  */
 public without sharing class PublicCampaignController {
 
+    // The same Org-Wide Email Address DonationReceiptService sends the receipt from (its SENDER_NAME).
+    @TestVisible
+    private static final String SUPPORT_SENDER_NAME = 'Donaciones Mexico Dreamin';
+
     /**
      * @description Campaigns that accept donations today: active and within their dates (US-01 AC1, US-08).
      * @return the campaigns, the one that closes first on top
@@ -65,6 +69,24 @@ public without sharing class PublicCampaignController {
             }
         }
         return result;
+    }
+
+    /**
+     * @description The program's support address for the FAQ page (US-11 AC6): the Org-Wide Email Address the
+     * receipt is sent from, read from the org so it never lives in the public repo. Cacheable: it changes only
+     * when staff sets up a new sender.
+     * @return the address, or null while no sender is set up
+     */
+    @AuraEnabled(cacheable=true)
+    public static String getSupportEmail() {
+        List<OrgWideEmailAddress> senders = [
+            SELECT Address
+            FROM OrgWideEmailAddress
+            WHERE DisplayName = :SUPPORT_SENDER_NAME
+            WITH SYSTEM_MODE
+            LIMIT 1
+        ];
+        return senders.isEmpty() ? null : senders[0].Address;
     }
 
     // Donation campaigns only (Purpose__c is required for them), while open or after they ended while active.

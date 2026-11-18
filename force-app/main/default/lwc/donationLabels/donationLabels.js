@@ -6,7 +6,31 @@ import programTagline from '@salesforce/label/c.Donations_ProgramTagline';
 import navCampaigns from '@salesforce/label/c.Donations_NavCampaigns';
 import navPastCampaigns from '@salesforce/label/c.Donations_NavPastCampaigns';
 import navLabel from '@salesforce/label/c.Donations_NavLabel';
-import footerNote from '@salesforce/label/c.Donations_FooterNote';
+import navHelp from '@salesforce/label/c.Donations_NavHelp';
+import faqTitle from '@salesforce/label/c.Donations_FaqTitle';
+import faqIntro from '@salesforce/label/c.Donations_FaqIntro';
+import faqQ1 from '@salesforce/label/c.Donations_FaqQ1';
+import faqA1 from '@salesforce/label/c.Donations_FaqA1';
+import faqQ2 from '@salesforce/label/c.Donations_FaqQ2';
+import faqA2 from '@salesforce/label/c.Donations_FaqA2';
+import faqQ3 from '@salesforce/label/c.Donations_FaqQ3';
+import faqA3 from '@salesforce/label/c.Donations_FaqA3';
+import faqQ4 from '@salesforce/label/c.Donations_FaqQ4';
+import faqA4 from '@salesforce/label/c.Donations_FaqA4';
+import faqQ5 from '@salesforce/label/c.Donations_FaqQ5';
+import faqA5 from '@salesforce/label/c.Donations_FaqA5';
+import faqQ6 from '@salesforce/label/c.Donations_FaqQ6';
+import faqA6 from '@salesforce/label/c.Donations_FaqA6';
+import faqQ7 from '@salesforce/label/c.Donations_FaqQ7';
+import faqA7 from '@salesforce/label/c.Donations_FaqA7';
+import faqQ8 from '@salesforce/label/c.Donations_FaqQ8';
+import faqA8 from '@salesforce/label/c.Donations_FaqA8';
+import faqQ9 from '@salesforce/label/c.Donations_FaqQ9';
+import faqA9 from '@salesforce/label/c.Donations_FaqA9';
+import faqQ10 from '@salesforce/label/c.Donations_FaqQ10';
+import faqA10 from '@salesforce/label/c.Donations_FaqA10';
+import faqContactTitle from '@salesforce/label/c.Donations_FaqContactTitle';
+import faqContactText from '@salesforce/label/c.Donations_FaqContactText';
 import activeTitle from '@salesforce/label/c.Donations_ActiveTitle';
 import activeIntro from '@salesforce/label/c.Donations_ActiveIntro';
 import pastTitle from '@salesforce/label/c.Donations_PastTitle';
@@ -30,7 +54,6 @@ import aboutCampaign from '@salesforce/label/c.Donations_AboutCampaign';
 import moneyFor from '@salesforce/label/c.Donations_MoneyFor';
 import raisedOfGoal from '@salesforce/label/c.Donations_RaisedOfGoal';
 import percentOfGoal from '@salesforce/label/c.Donations_PercentOfGoal';
-import externalPayment from '@salesforce/label/c.Donations_ExternalPayment';
 import campaignNotAvailable from '@salesforce/label/c.Donations_CampaignNotAvailable';
 import goHome from '@salesforce/label/c.Donations_GoHome';
 import recognitionTitle from '@salesforce/label/c.Donations_RecognitionTitle';
@@ -51,7 +74,13 @@ import nextStep from '@salesforce/label/c.Donations_NextStep';
 import amountTitle from '@salesforce/label/c.Donations_AmountTitle';
 import amountIntro from '@salesforce/label/c.Donations_AmountIntro';
 import amountHint from '@salesforce/label/c.Donations_AmountHint';
+import amountOther from '@salesforce/label/c.Donations_AmountOther';
+import amountCustomNote from '@salesforce/label/c.Donations_AmountCustomNote';
+import errAmountInvalid from '@salesforce/label/c.Donations_ErrAmountInvalid';
+import errAmountMin from '@salesforce/label/c.Donations_ErrAmountMin';
+import errAmountMax from '@salesforce/label/c.Donations_ErrAmountMax';
 import typeTitle from '@salesforce/label/c.Donations_TypeTitle';
+import moreInfo from '@salesforce/label/c.Donations_MoreInfo';
 import listQuestion from '@salesforce/label/c.Donations_ListQuestion';
 import listYes from '@salesforce/label/c.Donations_ListYes';
 import listYesLine from '@salesforce/label/c.Donations_ListYesLine';
@@ -64,7 +93,6 @@ import invoiceNo from '@salesforce/label/c.Donations_InvoiceNo';
 import invoiceNoLine from '@salesforce/label/c.Donations_InvoiceNoLine';
 import typeHint from '@salesforce/label/c.Donations_TypeHint';
 import dataTitle from '@salesforce/label/c.Donations_DataTitle';
-import dataIntro from '@salesforce/label/c.Donations_DataIntro';
 import email from '@salesforce/label/c.Donations_Email';
 import emailNote from '@salesforce/label/c.Donations_EmailNote';
 import personType from '@salesforce/label/c.Donations_PersonType';
@@ -101,7 +129,6 @@ import changeAmount from '@salesforce/label/c.Donations_ChangeAmount';
 import changeData from '@salesforce/label/c.Donations_ChangeData';
 import pay from '@salesforce/label/c.Donations_Pay';
 import processing from '@salesforce/label/c.Donations_Processing';
-import gatewayNote from '@salesforce/label/c.Donations_GatewayNote';
 import submitError from '@salesforce/label/c.Donations_SubmitError';
 import thanksTitle from '@salesforce/label/c.Donations_ThanksTitle';
 import thanksText from '@salesforce/label/c.Donations_ThanksText';
@@ -119,7 +146,31 @@ const LABELS = {
     navCampaigns,
     navPastCampaigns,
     navLabel,
-    footerNote,
+    navHelp,
+    faqTitle,
+    faqIntro,
+    faqQ1,
+    faqA1,
+    faqQ2,
+    faqA2,
+    faqQ3,
+    faqA3,
+    faqQ4,
+    faqA4,
+    faqQ5,
+    faqA5,
+    faqQ6,
+    faqA6,
+    faqQ7,
+    faqA7,
+    faqQ8,
+    faqA8,
+    faqQ9,
+    faqA9,
+    faqQ10,
+    faqA10,
+    faqContactTitle,
+    faqContactText,
     activeTitle,
     activeIntro,
     pastTitle,
@@ -143,7 +194,6 @@ const LABELS = {
     moneyFor,
     raisedOfGoal,
     percentOfGoal,
-    externalPayment,
     campaignNotAvailable,
     goHome,
     recognitionTitle,
@@ -164,7 +214,13 @@ const LABELS = {
     amountTitle,
     amountIntro,
     amountHint,
+    amountOther,
+    amountCustomNote,
+    errAmountInvalid,
+    errAmountMin,
+    errAmountMax,
     typeTitle,
+    moreInfo,
     listQuestion,
     listYes,
     listYesLine,
@@ -177,7 +233,6 @@ const LABELS = {
     invoiceNoLine,
     typeHint,
     dataTitle,
-    dataIntro,
     email,
     emailNote,
     personType,
@@ -214,7 +269,6 @@ const LABELS = {
     changeData,
     pay,
     processing,
-    gatewayNote,
     submitError,
     thanksTitle,
     thanksText,

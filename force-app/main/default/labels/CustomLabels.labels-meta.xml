@@ -14,7 +14,207 @@
         <language>es</language>
         <protected>false</protected>
         <shortDescription>Home page intro</shortDescription>
-        <value>Elige la campaña que quieras apoyar. Cada peso se destina a esa campaña y aquí mismo puedes ver cuánto llevamos.</value>
+        <value>Elige la campaña que quieras apoyar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_NavHelp</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Header link to the FAQ page</shortDescription>
+        <value>Ayuda</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ page title</shortDescription>
+        <value>Preguntas frecuentes</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqIntro</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ page intro</shortDescription>
+        <value>Todo lo que necesitas saber antes y después de donar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ1</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 1</shortDescription>
+        <value>¿Necesito crear una cuenta para donar?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA1</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 1</shortDescription>
+        <value>No. Eliges una campaña, escribes tus datos y pagas. No te pedimos registro ni contraseña.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ2</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 2</shortDescription>
+        <value>¿Cuánto puedo donar?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA2</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 2</shortDescription>
+        <value>Desde $10 MXN hasta $999,999.99 MXN por donación. Puedes elegir un monto sugerido o escribir el tuyo. Todos los montos son en pesos mexicanos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ3</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 3</shortDescription>
+        <value>¿Cómo se realiza el pago?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA3</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 3</shortDescription>
+        <value>Al confirmar tu donación te llevamos a una pasarela de pago externa y segura. Nosotros nunca vemos ni guardamos los datos de tu tarjeta.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ4</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 4</shortDescription>
+        <value>¿Mi nombre aparecerá en el sitio?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA4</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 4</shortDescription>
+        <value>Solo si eliges aparecer en la lista de donantes. En ese caso se muestran el nombre público que escribas y tu monto. Si prefieres una donación anónima, tu nombre no aparece en ningún lugar y tu monto se suma al total de donantes anónimos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ5</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 5</shortDescription>
+        <value>¿Puedo pedir factura?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA5</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 5</shortDescription>
+        <value>Sí. Elige «Sí, quiero factura» y escribe tu nombre o razón social y tu RFC: 13 caracteres para persona física y 12 para persona moral. Recibirás la factura en PDF adjunta a tu comprobante. Tu RFC nunca se muestra en público.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ6</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 6</shortDescription>
+        <value>¿Cuándo recibo mi comprobante?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA6</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 6</shortDescription>
+        <value>En cuanto la pasarela confirma tu pago, te lo enviamos al correo que registraste. Revisa también tu carpeta de spam.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ7</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 7</shortDescription>
+        <value>¿Por qué mi donación todavía no aparece en el avance de la campaña?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA7</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 7</shortDescription>
+        <value>El avance y la lista de donantes solo cuentan donaciones con pago confirmado. Puede tardar unos momentos después de pagar.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ8</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 8</shortDescription>
+        <value>¿Qué pasa si no completo el pago?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA8</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 8</shortDescription>
+        <value>No se hace ningún cargo y la donación no se cuenta. Puedes volver a intentarlo cuando quieras.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ9</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 9</shortDescription>
+        <value>¿Puedo donar a una campaña que ya alcanzó su meta?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA9</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 9</shortDescription>
+        <value>Sí. Las campañas siguen recibiendo donaciones hasta su fecha de cierre, aunque ya hayan superado su meta. Además, la campaña de donación general siempre está abierta.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqQ10</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ question 10</shortDescription>
+        <value>¿Qué hago si hay un problema con mi comprobante o mi factura?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqA10</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ answer 10</shortDescription>
+        <value>Escríbenos al correo de contacto que aparece en tu comprobante y con gusto te ayudamos.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqContactTitle</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ support box title</shortDescription>
+        <value>¿Tienes alguna otra duda?</value>
+    </labels>
+    <labels>
+        <fullName>Donations_FaqContactText</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>FAQ support box text, before the address</shortDescription>
+        <value>Contacta a nuestro equipo de soporte en</value>
     </labels>
     <labels>
         <fullName>Donations_ActiveTitle</fullName>
@@ -49,11 +249,51 @@
         <value>Elige un monto para continuar.</value>
     </labels>
     <labels>
+        <fullName>Donations_AmountOther</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Option to type a custom amount (US-13)</shortDescription>
+        <value>Otro monto</value>
+    </labels>
+    <labels>
+        <fullName>Donations_AmountCustomNote</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Note under the custom amount field (US-13)</shortDescription>
+        <value>Mínimo $10 MXN.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrAmountInvalid</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error: custom amount is not a valid number (US-13 AC5)</shortDescription>
+        <value>Escribe un monto válido, solo con números y hasta dos decimales.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrAmountMin</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error: custom amount under the minimum (US-13 AC2)</shortDescription>
+        <value>El monto mínimo es de $10 MXN.</value>
+    </labels>
+    <labels>
+        <fullName>Donations_ErrAmountMax</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error: custom amount over what Stripe accepts (US-13 AC3)</shortDescription>
+        <value>El monto máximo por donación es de $999,999.99 MXN.</value>
+    </labels>
+    <labels>
         <fullName>Donations_AmountIntro</fullName>
         <categories>Donations Public Site</categories>
         <language>es</language>
         <protected>false</protected>
-        <shortDescription>Step 1 intro</shortDescription>
+        <shortDescription>Amount step intro</shortDescription>
         <value>Cualquier monto suma. Todos los montos son en pesos mexicanos.</value>
     </labels>
     <labels>
@@ -173,8 +413,8 @@
         <categories>Donations Public Site</categories>
         <language>es</language>
         <protected>false</protected>
-        <shortDescription>Step 4 intro</shortDescription>
-        <value>Confirma que todo esté bien antes de ir a pagar.</value>
+        <shortDescription>Confirmation step intro</shortDescription>
+        <value>Confirma que todo está bien antes de ir a pagar.</value>
     </labels>
     <labels>
         <fullName>Donations_ConfirmTitle</fullName>
@@ -191,14 +431,6 @@
         <protected>false</protected>
         <shortDescription>Invoice consent checkbox</shortDescription>
         <value>Autorizo que se usen mis datos para emitir la factura de esta donación.</value>
-    </labels>
-    <labels>
-        <fullName>Donations_DataIntro</fullName>
-        <categories>Donations Public Site</categories>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Step 3 intro</shortDescription>
-        <value>No necesitas crear una cuenta.</value>
     </labels>
     <labels>
         <fullName>Donations_DataTitle</fullName>
@@ -297,14 +529,6 @@
         <value>Para persona física el RFC tiene 13 caracteres.</value>
     </labels>
     <labels>
-        <fullName>Donations_ExternalPayment</fullName>
-        <categories>Donations Public Site</categories>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Note under the donate button</shortDescription>
-        <value>El pago se realiza en una pasarela externa. No necesitas crear una cuenta.</value>
-    </labels>
-    <labels>
         <fullName>Donations_FinalAmount</fullName>
         <categories>Donations Public Site</categories>
         <language>es</language>
@@ -327,22 +551,6 @@
         <protected>false</protected>
         <shortDescription>First name field</shortDescription>
         <value>Nombre(s)</value>
-    </labels>
-    <labels>
-        <fullName>Donations_FooterNote</fullName>
-        <categories>Donations Public Site</categories>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Footer text</shortDescription>
-        <value>Los pagos se procesan en una pasarela externa. No necesitas crear una cuenta.</value>
-    </labels>
-    <labels>
-        <fullName>Donations_GatewayNote</fullName>
-        <categories>Donations Public Site</categories>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Step 4 note</shortDescription>
-        <value>Al continuar irás a una pasarela de pago externa.</value>
     </labels>
     <labels>
         <fullName>Donations_Goal</fullName>
@@ -433,6 +641,14 @@
         <value>Tu nombre no aparecerá en ningún lugar público. Tu monto se suma al total de donantes anónimos.</value>
     </labels>
     <labels>
+        <fullName>Donations_MoreInfo</fullName>
+        <categories>Donations Public Site</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Info tooltip button</shortDescription>
+        <value>Más información</value>
+    </labels>
+    <labels>
         <fullName>Donations_ListQuestion</fullName>
         <categories>Donations Public Site</categories>
         <language>es</language>
@@ -510,7 +726,7 @@
         <language>es</language>
         <protected>false</protected>
         <shortDescription>Header link to past campaigns</shortDescription>
-        <value>Campañas pasadas</value>
+        <value>Logros</value>
     </labels>
     <labels>
         <fullName>Donations_NextStep</fullName>
@@ -574,7 +790,7 @@
         <language>es</language>
         <protected>false</protected>
         <shortDescription>Past campaigns title</shortDescription>
-        <value>Campañas pasadas</value>
+        <value>Logros</value>
     </labels>
     <labels>
         <fullName>Donations_Pay</fullName>

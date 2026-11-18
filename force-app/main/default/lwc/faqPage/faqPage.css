@@ -1,0 +1,104 @@
+@import 'c/donationStyles';
+
+.faq {
+    max-width: 820px;
+    padding: 4px 28px;
+}
+
+.faq-item + .faq-item {
+    border-top: 1px solid var(--don-border);
+}
+
+/* The whole row is the target, at least 56px tall. */
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    padding: 14px 0;
+    font-weight: 700;
+    font-size: 17px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-question:hover {
+    color: var(--don-accent-dark);
+}
+
+.faq-question:focus-visible {
+    outline: 3px solid var(--don-focus);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+.faq-chevron {
+    flex-shrink: 0;
+    color: var(--don-muted);
+    transition: transform 0.15s ease;
+}
+
+.faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-width: 680px;
+    padding-bottom: 18px;
+}
+
+/* The support team's address, below the questions. */
+.contact {
+    max-width: 820px;
+    margin-top: 20px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--don-accent-soft);
+    border-color: var(--don-accent-line);
+}
+
+.contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--don-accent);
+    color: #ffffff;
+}
+
+.contact-title {
+    font-weight: 800;
+    font-size: 17px;
+    margin-bottom: 2px;
+}
+
+/* The template drops the space between the text and the link, so the gap is set here. */
+.contact-link {
+    margin-left: 0.3em;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .faq {
+        padding: 4px 18px;
+    }
+
+    .contact {
+        padding: 18px;
+    }
+
+    .faq-question {
+        font-size: 16px;
+    }
+}

@@ -2,9 +2,11 @@ import {
     getActiveCampaigns,
     getPastCampaigns,
     getRecognition,
+    getSupportEmail,
     startCheckout,
     confirmCheckout
 } from 'c/donationDataService';
+import apexGetSupportEmail from '@salesforce/apex/PublicCampaignController.getSupportEmail';
 import apexGetActiveCampaigns from '@salesforce/apex/PublicCampaignController.getActiveCampaigns';
 import apexGetPastCampaigns from '@salesforce/apex/PublicCampaignController.getPastCampaigns';
 import apexGetRecognition from '@salesforce/apex/PublicCampaignController.getRecognition';
@@ -18,6 +20,9 @@ jest.mock('@salesforce/apex/PublicCampaignController.getPastCampaigns', () => ({
     virtual: true
 });
 jest.mock('@salesforce/apex/PublicCampaignController.getRecognition', () => ({ default: jest.fn() }), {
+    virtual: true
+});
+jest.mock('@salesforce/apex/PublicCampaignController.getSupportEmail', () => ({ default: jest.fn() }), {
     virtual: true
 });
 jest.mock('@salesforce/apex/DonationCheckoutService.startCheckout', () => ({ default: jest.fn() }), {
@@ -65,6 +70,13 @@ describe('c-donation-data-service (Apex)', () => {
 
         await expect(getRecognition(CAMPAIGN.id)).resolves.toEqual(recognition);
         expect(apexGetRecognition).toHaveBeenCalledWith({ campaignId: CAMPAIGN.id });
+    });
+
+    it('gets the support address from the org, with no parameters (US-11 AC6)', async () => {
+        apexGetSupportEmail.mockResolvedValue('soporte@example.com');
+
+        await expect(getSupportEmail()).resolves.toBe('soporte@example.com');
+        expect(apexGetSupportEmail).toHaveBeenCalledWith();
     });
 
     it('sends the form as the DonationRequest and returns the Stripe address (US-03 AC1)', async () => {

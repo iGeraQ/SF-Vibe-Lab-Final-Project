@@ -2,23 +2,29 @@ import { LightningElement } from 'lwc';
 import { getActiveCampaigns, startCheckout } from 'c/donationDataService';
 import { LABELS } from 'c/donationLabels';
 import {
-    SUGGESTED_AMOUNTS,
     HIGHLIGHT_AMOUNT,
     apexMessage,
     formatMoney,
     getParam,
     pageUrl,
+    parseAmount,
     toCampaignView,
+    validateAmount,
     validateEmail,
     validateRfc
 } from 'c/donationUtils';
 
-const STEP_NAMES = [LABELS.stepAmount, LABELS.stepType, LABELS.stepData, LABELS.stepConfirm];
+// Three steps: the donation type and the donor data share step 2, so the donor clicks less.
+const STEP_NAMES = [LABELS.stepAmount, LABELS.stepData, LABELS.stepConfirm];
 const MAX_LENGTH = { email: 80, publicName: 120, firstName: 80, lastName: 80, company: 255 };
 
 /**
- * Donation form at "donar?campana=<campaign id>", in four steps: amount, type, data and confirmation
+ * Donation form at "donar?campana=<campaign id>", in three steps: amount, type and data, and confirmation
  * (US-01 AC3, AC7 to AC10; US-02; US-03; US-05 AC3; US-06).
+ *
+ * The campaign page lets the donor choose the amount in its side card and opens
+ * "donar?campana=<id>&monto=<amount>": with a valid amount the form starts at step 2, so the donor skips a
+ * page. From the home page (no amount) it starts at step 1. Step 1 is c-amount-picker (US-13).
  *
  * Step 2 asks two separate questions, as the client approved on Nov 9: whether to appear in the donor
  * list, and whether an invoice is needed. An anonymous donor can request an invoice (US-02 AC3).
@@ -51,8 +57,16 @@ export default class DonationForm extends LightningElement {
     focusPending = false;
     // The image did not load (wrong address or blocked host): show the placeholder instead of a broken image.
     imageFailed = false;
+    // Whether "Otro monto" is selected in the picker, even before its typed amount is valid (US-13).
+    amountCustom = false;
 
     connectedCallback() {
+        // An amount chosen on the campaign page; the same rules as a typed amount, so a bad link starts at step 1.
+        const preset = getParam('monto');
+        if (preset && !validateAmount(preset)) {
+            this.amount = parseAmount(preset);
+            this.step = 2;
+        }
         getActiveCampaigns()
             .then((data) => {
                 this.campaigns = data;
@@ -112,10 +126,6 @@ export default class DonationForm extends LightningElement {
         return this.step === 3;
     }
 
-    get isStep4() {
-        return this.step === 4;
-    }
-
     get steps() {
         return STEP_NAMES.map((label, index) => {
             const number = index + 1;
@@ -132,19 +142,20 @@ export default class DonationForm extends LightningElement {
     }
 
     get showBack() {
-        return this.step === 2 || this.step === 3;
+        return this.step === 2;
     }
 
     get showNext() {
-        return this.step < 4;
+        return this.step < 3;
     }
 
     get nextDisabled() {
-        return (this.step === 1 && !this.amount) || (this.step === 2 && !this.typeChosen);
+        // With "Otro monto" the button stays enabled, so pressing it shows why the typed amount isn't valid.
+        return (this.step === 1 && !this.amount && !this.amountCustom) || (this.step === 2 && !this.typeChosen);
     }
 
     get nextHint() {
-        if (this.step === 1 && !this.amount) {
+        if (this.step === 1 && !this.amount && !this.amountCustom) {
             return LABELS.amountHint;
         }
         if (this.step === 2 && !this.typeChosen) {
@@ -157,7 +168,11 @@ export default class DonationForm extends LightningElement {
         if (this.nextDisabled) {
             return;
         }
-        if (this.step === 3) {
+        if (this.step === 1 && !this.template.querySelector('c-amount-picker').validate()) {
+            // US-13 AC2, AC3, AC5: a typed amount that can't be donated stops here with its reason.
+            return;
+        }
+        if (this.step === 2) {
             this.attempted = true;
             if (Object.keys(this.errors).length > 0) {
                 this.focusFirstError();
@@ -177,7 +192,7 @@ export default class DonationForm extends LightningElement {
     }
 
     handleChangeData() {
-        this.goToStep(3);
+        this.goToStep(2);
     }
 
     goToStep(step) {
@@ -192,21 +207,9 @@ export default class DonationForm extends LightningElement {
 
     // ---------- Step 1: amount ----------
 
-    get amountOptions() {
-        return SUGGESTED_AMOUNTS.map((value) => {
-            const selected = this.amount === value;
-            return {
-                key: `amount-${value}`,
-                value,
-                label: formatMoney(value).replace(' MXN', ''),
-                pressed: selected ? 'true' : 'false',
-                className: selected ? 'amount amount-on' : 'amount'
-            };
-        });
-    }
-
-    handleAmount(event) {
-        this.amount = Number(event.currentTarget.dataset.value);
+    handleAmountChange(event) {
+        this.amount = event.detail.amount;
+        this.amountCustom = event.detail.custom;
     }
 
     get hasAmount() {
@@ -240,6 +243,19 @@ export default class DonationForm extends LightningElement {
             this.option('invoice', 'yes', LABELS.invoiceYes, LABELS.invoiceYesLine, this.invoiceRequested === true),
             this.option('invoice', 'no', LABELS.invoiceNo, LABELS.invoiceNoLine, this.invoiceRequested === false)
         ];
+    }
+
+    // What each answer means, shown in the question's tooltip so the answers stay one line.
+    get listHelp() {
+        return this.help(this.listOptions);
+    }
+
+    get invoiceHelp() {
+        return this.help(this.invoiceOptions);
+    }
+
+    help(options) {
+        return options.map((option) => ({ title: option.title, text: option.line }));
     }
 
     option(group, value, title, line, selected) {
@@ -378,7 +394,7 @@ export default class DonationForm extends LightningElement {
         return this.attempted ? this.errors : {};
     }
 
-    get hasStep3Errors() {
+    get hasDataErrors() {
         return Object.keys(this.shownErrors).length > 0;
     }
 
@@ -451,7 +467,7 @@ export default class DonationForm extends LightningElement {
         // US-03 AC4: nothing is created if a field is missing or invalid.
         if (!this.amount || !this.typeChosen || Object.keys(this.errors).length > 0) {
             this.attempted = true;
-            this.goToStep(3);
+            this.goToStep(2);
             return;
         }
         this.processing = true;

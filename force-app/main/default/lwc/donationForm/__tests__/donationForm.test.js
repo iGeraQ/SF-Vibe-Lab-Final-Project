@@ -50,8 +50,13 @@ describe('c-donation-form', () => {
         await click(primaryButton(element));
     }
 
+    // The amount buttons and the typed amount live in c-amount-picker.
+    const picker = (element) => $(element, 'c-amount-picker').shadowRoot;
+    const amounts = (element) => [...picker(element).querySelectorAll('.amount')];
+    const pickerErrors = (element) => [...picker(element).querySelectorAll('.field-error')].map((node) => node.textContent);
+
     async function chooseAmount(element, index) {
-        await click($$(element, '.amount')[index]);
+        await click(amounts(element)[index]);
     }
 
     async function chooseType(element, list, invoice) {
@@ -88,12 +93,11 @@ describe('c-donation-form', () => {
     const errors = (element) => $$(element, '.field-error').map((node) => node.textContent);
     const currentStep = (element) => $(element, '[aria-current="step"]').textContent;
 
-    /** Goes to step 3 with the given amount and type. */
+    /** Goes to step 2 with the given amount and answers its two type questions (the data is on the same step). */
     async function toData(element, amountIndex, list, invoice) {
         await chooseAmount(element, amountIndex);
         await next(element);
         await chooseType(element, list, invoice);
-        await next(element);
     }
 
     // ---------- campaign ----------
@@ -155,7 +159,7 @@ describe('c-donation-form', () => {
     describe('step 1: amount', () => {
         it('offers the eight suggested amounts (US-01 AC7)', async () => {
             const element = await open();
-            const labels = $$(element, '.amount').map((button) => button.textContent);
+            const labels = amounts(element).map((button) => button.textContent);
 
             expect(labels).toEqual([
                 '$100MXN',
@@ -177,8 +181,144 @@ describe('c-donation-form', () => {
             expect($(element, '.hint').textContent).toBe('c.Donations_AmountHint');
             await chooseAmount(element, 2);
             expect(primaryButton(element).disabled).toBe(false);
-            expect($$(element, '.amount')[2].getAttribute('aria-pressed')).toBe('true');
+            expect(amounts(element)[2].getAttribute('aria-pressed')).toBe('true');
             expect(element.shadowRoot.textContent).toContain('$500 MXN');
+        });
+    });
+
+    // ---------- step 1: custom amount ----------
+
+    describe('step 1: custom amount (US-13)', () => {
+        const customInput = (element) => picker(element).querySelector('[data-id="custom-amount"]');
+
+        async function typeAmount(element, value) {
+            const input = customInput(element);
+            input.value = value;
+            input.dispatchEvent(new CustomEvent('input'));
+            await flushPromises();
+        }
+
+        async function blurAmount(element) {
+            customInput(element).dispatchEvent(new CustomEvent('blur'));
+            await flushPromises();
+        }
+
+        // The field is always on screen, so typing needs no extra click.
+        const openCustom = open;
+
+        it('always shows the "Otro monto" field, ready to type in', async () => {
+            const element = await open();
+
+            expect(customInput(element)).not.toBeNull();
+            expect(picker(element).querySelector('.custom-field .field-label').textContent).toBe('c.Donations_AmountOther');
+            expect(picker(element).querySelector('.custom-field .field-note').textContent).toBe('c.Donations_AmountCustomNote');
+
+            await typeAmount(element, '7');
+            expect($(element, '.hint')).toBeNull();
+            expect(primaryButton(element).disabled).toBe(false);
+
+            await typeAmount(element, '');
+            expect($(element, '.hint').textContent).toBe('c.Donations_AmountHint');
+            expect(primaryButton(element).disabled).toBe(true);
+        });
+
+        it('only lets the donor type a positive number (AC5)', async () => {
+            const element = await openCustom();
+
+            await typeAmount(element, 'cien');
+            expect(customInput(element).value).toBe('');
+            expect(primaryButton(element).disabled).toBe(true);
+
+            await typeAmount(element, '-50');
+            expect(customInput(element).value).toBe('50');
+
+            await typeAmount(element, '10.555');
+            expect(customInput(element).value).toBe('10.55');
+        });
+
+        it('does not continue with zero and says why (AC5)', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '0');
+            await next(element);
+
+            expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+            expect(pickerErrors(element)).toEqual(['c.Donations_ErrAmountInvalid']);
+            expect(customInput(element).getAttribute('aria-invalid')).toBe('true');
+        });
+
+        it('does not continue under $10 MXN and shows the minimum (AC2)', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '9.99');
+            await next(element);
+
+            expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+            expect(pickerErrors(element)).toEqual(['c.Donations_ErrAmountMin']);
+        });
+
+        it('does not continue with more digits than Stripe accepts (AC3)', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '1000000');
+            await next(element);
+
+            expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+            expect(pickerErrors(element)).toEqual(['c.Donations_ErrAmountMax']);
+            expect(startCheckout).not.toHaveBeenCalled();
+        });
+
+        it('waits until the donor leaves the field before showing an error', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '5');
+            expect(pickerErrors(element)).toEqual([]);
+
+            await blurAmount(element);
+            expect(pickerErrors(element)).toEqual(['c.Donations_ErrAmountMin']);
+
+            await typeAmount(element, '50');
+            expect(pickerErrors(element)).toEqual([]);
+        });
+
+        it('keeps only one amount chosen: typing unselects the button and a button clears the field', async () => {
+            const element = await open();
+            await chooseAmount(element, 1);
+            await typeAmount(element, '75');
+
+            expect(amounts(element)[1].getAttribute('aria-pressed')).toBe('false');
+            expect(element.shadowRoot.textContent).toContain('$75 MXN');
+
+            await chooseAmount(element, 1);
+            expect(customInput(element).value).toBe('');
+            expect(amounts(element)[1].getAttribute('aria-pressed')).toBe('true');
+            expect(element.shadowRoot.textContent).toContain('$250 MXN');
+        });
+
+        it('confirms and sends exactly the typed amount, with centavos (AC1, AC4, AC6)', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '$1,500.50');
+            expect(element.shadowRoot.textContent).toContain('$1,500.50 MXN');
+            await next(element);
+            await chooseType(element, ANONYMOUS, INVOICE);
+            await type(element, 'email', 'ana@dominio.com');
+            await choosePerson(element, 'Company');
+            await type(element, 'company', 'Software del Sureste');
+            await type(element, 'rfc', 'ABC010101AB1');
+            await tickConsent(element);
+            await next(element);
+
+            expect(currentStep(element)).toBe('3. c.Donations_StepConfirm');
+            expect($(element, '.summary-big dd').textContent).toBe('$1,500.50 MXN');
+
+            await click(primaryButton(element));
+            expect(startCheckout).toHaveBeenCalledWith(expect.objectContaining({ amount: 1500.5 }));
+        });
+
+        it('keeps the typed amount when the donor comes back to change it', async () => {
+            const element = await openCustom();
+            await typeAmount(element, '120');
+            await next(element);
+            await click($(element, '.buttons .btn-secondary'));
+
+            expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+            expect(customInput(element).value).toBe('120');
         });
     });
 
@@ -190,7 +330,7 @@ describe('c-donation-form', () => {
             await chooseAmount(element, 0);
             await next(element);
 
-            expect($$(element, 'legend.question-title').map((node) => node.textContent)).toEqual([
+            expect($$(element, 'legend.question-title').map((node) => node.textContent.trim())).toEqual([
                 'c.Donations_ListQuestion',
                 'c.Donations_InvoiceQuestion'
             ]);
@@ -203,6 +343,25 @@ describe('c-donation-form', () => {
             expect($$(element, '.choice')[ANONYMOUS].getAttribute('aria-checked')).toBe('true');
         });
 
+        it('keeps the answers short and explains them in a tooltip per question', async () => {
+            const element = await open();
+            await chooseAmount(element, 0);
+            await next(element);
+
+            const tips = $$(element, '.question c-info-tip');
+            expect(tips.map((tip) => tip.items)).toEqual([
+                [
+                    { title: 'c.Donations_ListYes', text: 'c.Donations_ListYesLine' },
+                    { title: 'c.Donations_ListNo', text: 'c.Donations_ListNoLine' }
+                ],
+                [
+                    { title: 'c.Donations_InvoiceYes', text: 'c.Donations_InvoiceYesLine' },
+                    { title: 'c.Donations_InvoiceNo', text: 'c.Donations_InvoiceNoLine' }
+                ]
+            ]);
+            expect($$(element, '.choice-note')).toEqual([]);
+        });
+
         it('goes back to the amount keeping the choice', async () => {
             const element = await open();
             await chooseAmount(element, 4);
@@ -210,13 +369,76 @@ describe('c-donation-form', () => {
             await click($(element, '.buttons-left .btn-secondary'));
 
             expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
-            expect($$(element, '.amount')[4].getAttribute('aria-pressed')).toBe('true');
+            expect(amounts(element)[4].getAttribute('aria-pressed')).toBe('true');
         });
     });
 
-    // ---------- step 3 ----------
+    // ---------- fewer clicks ----------
 
-    describe('step 3: data', () => {
+    describe('fewer clicks', () => {
+        it('has three steps, with the type questions and the data on the same page', async () => {
+            const element = await open();
+            expect($$(element, '.step').map((node) => node.textContent)).toEqual([
+                '1. c.Donations_StepAmount',
+                '2. c.Donations_StepData',
+                '3. c.Donations_StepConfirm'
+            ]);
+
+            await chooseAmount(element, 0);
+            await next(element);
+            expect($$(element, 'legend.question-title').length).toBe(2);
+            expect($(element, '[data-field="email"]')).not.toBeNull();
+            expect($(element, 'h1').textContent).toBe('c.Donations_DataTitle');
+            expect(element.shadowRoot.textContent).not.toContain('c.Donations_TypeTitle');
+        });
+
+        it('starts at step 2 with the amount chosen on the campaign page', async () => {
+            mockLocation({ search: `?campana=${CAMPAIGN.id}&monto=750` });
+            const element = await open();
+
+            expect(currentStep(element)).toBe('2. c.Donations_StepData');
+            expect($(element, '.side').textContent).toContain('$750 MXN');
+
+            await click($(element, '.buttons-left .btn-secondary'));
+            expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+            expect(picker(element).querySelector('[data-id="custom-amount"]').value).toBe('750');
+        });
+
+        it('marks a suggested amount from the campaign page as chosen when going back', async () => {
+            mockLocation({ search: `?campana=${CAMPAIGN.id}&monto=500` });
+            const element = await open();
+            await click($(element, '.buttons-left .btn-secondary'));
+
+            expect(amounts(element)[2].getAttribute('aria-pressed')).toBe('true');
+        });
+
+        it('ignores an amount in the address that can not be donated and starts at step 1', async () => {
+            for (const monto of ['5', 'abc', '1000000', '-20']) {
+                cleanup();
+                mockLocation({ search: `?campana=${CAMPAIGN.id}&monto=${monto}` });
+                // eslint-disable-next-line no-await-in-loop
+                const element = await open();
+                expect(currentStep(element)).toBe('1. c.Donations_StepAmount');
+                expect(primaryButton(element).disabled).toBe(true);
+            }
+        });
+
+        it('sends the amount chosen on the campaign page, centavos included', async () => {
+            mockLocation({ search: `?campana=${CAMPAIGN.id}&monto=1250.5` });
+            const element = await open();
+            await chooseType(element, ANONYMOUS, NO_INVOICE);
+            await type(element, 'email', 'ana@dominio.com');
+            await next(element);
+
+            expect(currentStep(element)).toBe('3. c.Donations_StepConfirm');
+            await click(primaryButton(element));
+            expect(startCheckout).toHaveBeenCalledWith(expect.objectContaining({ amount: 1250.5 }));
+        });
+    });
+
+    // ---------- step 2: data, on the same page as the type ----------
+
+    describe('step 2: data', () => {
         it('anonymous without invoice asks only for the email (US-02 AC5, AC6)', async () => {
             const element = await open();
             await toData(element, 0, ANONYMOUS, NO_INVOICE);
@@ -230,7 +452,7 @@ describe('c-donation-form', () => {
             await next(element);
             expect(errors(element)).toEqual(['c.Donations_ErrRequired']);
             expect($(element, '.alert').textContent).toBe('c.Donations_ErrFixFields');
-            expect(currentStep(element)).toBe('3. c.Donations_StepData');
+            expect(currentStep(element)).toBe('2. c.Donations_StepData');
         });
 
         it('rejects an email without a valid format (US-03 AC6)', async () => {
@@ -342,9 +564,9 @@ describe('c-donation-form', () => {
         });
     });
 
-    // ---------- step 4 ----------
+    // ---------- step 3 ----------
 
-    describe('step 4: confirmation and payment', () => {
+    describe('step 3: confirmation and payment', () => {
         async function toConfirmation(element, amountIndex = 3) {
             await toData(element, amountIndex, ANONYMOUS, INVOICE);
             await type(element, 'email', ' ana@dominio.com ');
@@ -359,7 +581,7 @@ describe('c-donation-form', () => {
             const element = await open();
             await toConfirmation(element, 3);
 
-            expect(currentStep(element)).toBe('4. c.Donations_StepConfirm');
+            expect(currentStep(element)).toBe('3. c.Donations_StepConfirm');
             expect($(element, '.summary-big dd').textContent).toBe('$1,000 MXN');
             const values = $$(element, '.summary dd').map((node) => node.textContent);
             expect(values).toEqual([
@@ -394,7 +616,7 @@ describe('c-donation-form', () => {
             await toConfirmation(element);
             await click($$(element, '.buttons-left .btn-secondary')[1]);
 
-            expect(currentStep(element)).toBe('3. c.Donations_StepData');
+            expect(currentStep(element)).toBe('2. c.Donations_StepData');
             expect($(element, '[data-field="company"]').value).toBe('Software del Sureste');
         });
 

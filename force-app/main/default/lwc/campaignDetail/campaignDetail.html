@@ -57,8 +57,15 @@
                             <c-progress-bar percent={campaign.percent} label={campaign.progressLabel} size="large"></c-progress-bar>
                             <p class="percent">{percentOfGoal}</p>
                         </div>
-                        <a class="btn btn-primary btn-big" href={campaign.donateUrl}>{labels.donate}</a>
-                        <p class="note muted">{labels.externalPayment}</p>
+                        <!-- The amount is chosen here, so "Donar" opens the form at step 2 (fewer clicks). -->
+                        <div class="side-amount">
+                            <p class="side-amount-title">{labels.amountTitle}</p>
+                            <c-amount-picker compact onamountchange={handleAmountChange}></c-amount-picker>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-big" onclick={handleDonate}>{labels.donate}</button>
+                        <template lwc:if={showAmountHint}>
+                            <p class="amount-hint" role="status">{labels.amountHint}</p>
+                        </template>
                     </div>
                     <c-donor-recognition campaign-id={campaign.id} donate-url={campaign.donateUrl}></c-donor-recognition>
                 </aside>
