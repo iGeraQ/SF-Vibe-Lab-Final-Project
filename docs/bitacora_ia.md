@@ -668,3 +668,14 @@ Template:
 - **What we corrected:** the validation command, now with the nine test classes.
 - **AI error:** yes, the suggested command named only two test classes.
 - **Speed-up:** _Pending_
+
+### 2026-11-18 · Campaign photos and names
+- **Author:** @iGeraQ
+- **Tool:** Claude Code (Claude Sonnet 5.5)
+- **Related story:** US-01, US-08
+- **What we asked:** make the current campaigns look like the ones we would publish, check why their images had reset, and find free photos.
+- **What we got:** a likely cause for the reset (a deploy replaces the whole `Donation_Campaign_Images` static resource, so an image added only in the org is lost); 5 free Pexels photos cropped to 1600×800 and added to the static resource, with credits in `docs/image_credits.md`; the campaigns renamed with new images, the "Mexico Dreamin 2026" purpose fixed, and three end dates moved to 2026-12-31 (data changes in the org, not in the repo).
+- **What we verified and how:** the resource deployed to the personal org; a query of the five campaigns after the update; the public site only lists campaigns with a purpose, so the four Developer Edition sample campaigns never show. The photos were looked at one by one before use.
+- **What we corrected:** the AI's first draft used the test plan's campaign names ("Campaña A", …), which do not exist in the org; it re-read the org and redid the draft. Unsplash blocked automated downloads, so all photos come from Pexels. The first crop of the Angel of Independence cut the statue and was replaced.
+- **AI error:** the wrong campaign names in the first draft, a date filter that matched no sample campaign, and a first crop that lost the subject. The reset cause is a hypothesis: the previous version of the resource could not be recovered.
+- **Speed-up:** _Pending_
