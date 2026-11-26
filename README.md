@@ -24,11 +24,11 @@ A story is **met** when all its acceptance criteria are shown with evidence in t
 | Delivery | Date | Calculation | Progress |
 |---|---|---|---|
 | Delivery 1 | Tue Nov 10, 2026 | Delivery 1 stories met ÷ 11 × 100 | 90% met; 10 of 11 built (Nov 10) |
-| Delivery 2 | Tue Nov 17, 2026 | in-scope stories met across the whole backlog ÷ 16 × 100 | In progress: 62.5% met; 10 of 16 (Nov 18) |
+| Delivery 2 | Tue Nov 17, 2026 | in-scope stories met across the whole backlog ÷ 16 × 100 | In progress: 100% met; 16 of 16 (Nov 18) |
 
 ### Story status
 
-Copied from the board on Nov 18, 2026; update it when a card changes. Only **AC status** counts toward progress: **Board status** tracks the work, not the evidence.
+Updated from the issues on Nov 25, 2026; update it when a card changes. Only **AC status** counts toward progress: **Board status** tracks the work, not the evidence.
 
 | Story | Delivery | Board status | AC status |
 |---|---|---|---|
@@ -42,13 +42,13 @@ Copied from the board on Nov 18, 2026; update it when a card changes. Only **AC 
 | [US-08](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/8) Manage campaigns | 1 | Done | Met |
 | [US-09](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/9) View all donations | 1 | Done | Met |
 | [US-11](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/11) Scoped public site | 1 | Done | Met |
-| [US-12](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/12) Visitor security test | 1 | Todo | Not met |
-| [US-13](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/13) Donate any amount | 2 | Done | Not met |
-| [US-14](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/14) Automatic confirmation and receipt | 2 | Done | Not met |
-| [US-15](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/15) View automatic confirmations and rejected notifications | 2 | Done | Not met |
-| [US-16](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/16) Receive the payment notification (minimum level) | 2 | Done | Not met |
-| [US-17](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/17) Only authentic, non-duplicated notifications (second level) | 2 | Done | Not met |
-| **Total** | | | **10 of 16 met (62.5%)** |
+| [US-12](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/12) Visitor security test | 1 | Done | Met |
+| [US-13](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/13) Donate any amount | 2 | Done | Met |
+| [US-14](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/14) Automatic confirmation and receipt | 2 | Done | Met |
+| [US-15](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/15) View automatic confirmations and rejected notifications | 2 | Done | Met |
+| [US-16](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/16) Receive the payment notification (minimum level) | 2 | Done | Met |
+| [US-17](https://github.com/iGeraQ/SF-Vibe-Lab-Final-Project/issues/17) Only authentic, non-duplicated notifications (second level) | 2 | Done | Met |
+| **Total** | | | **16 of 16 met (100%)** |
 
 ## Structure
 
